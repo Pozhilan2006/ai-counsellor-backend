@@ -13,6 +13,7 @@ uvicorn main:app --host 0.0.0.0 --port $PORT
 ## Environment Variables
 Set in Render Dashboard:
 - `PORT` - Auto-set by Render (usually 10000)
+- `GEMINI_API_KEY` - Your Google Gemini API key for AI counseling
 - `DATABASE_URL` - Your PostgreSQL connection string (if using database)
 
 ## Health Check
