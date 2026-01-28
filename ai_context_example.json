@@ -1,0 +1,56 @@
+{
+  "user_profile": {
+    "name": "John Doe",
+    "budget": 30000,
+    "preferred_countries": ["United States", "Canada"],
+    "academic_score": 85
+  },
+  "available_universities": [
+    {
+      "id": 1,
+      "name": "Massachusetts Institute of Technology",
+      "country": "United States",
+      "rank": 1,
+      "ranking_band": "Top 50",
+      "competitiveness": "HIGH",
+      "avg_tuition_usd": 40000
+    },
+    {
+      "id": 2,
+      "name": "Stanford University",
+      "country": "United States",
+      "rank": 2,
+      "ranking_band": "Top 50",
+      "competitiveness": "HIGH",
+      "avg_tuition_usd": 40000
+    },
+    {
+      "id": 15,
+      "name": "University of Toronto",
+      "country": "Canada",
+      "rank": 21,
+      "ranking_band": "Top 50",
+      "competitiveness": "HIGH",
+      "avg_tuition_usd": 25000
+    },
+    {
+      "id": 23,
+      "name": "University of British Columbia",
+      "country": "Canada",
+      "rank": 38,
+      "ranking_band": "Top 50",
+      "competitiveness": "HIGH",
+      "avg_tuition_usd": 25000
+    },
+    {
+      "id": 45,
+      "name": "McGill University",
+      "country": "Canada",
+      "rank": 54,
+      "ranking_band": "50-100",
+      "competitiveness": "MEDIUM",
+      "avg_tuition_usd": 25000
+    }
+  ],
+  "instructions": "Recommend universities from the available_universities list only. Do not invent or suggest universities outside this list. Consider the user's budget and academic score when making recommendations."
+}

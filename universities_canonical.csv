@@ -1,0 +1,2192 @@
+name,country,rank,ranking_band,competitiveness,avg_tuition_usd
+University of Oxford,United Kingdom,1,Top 50,HIGH,30000
+Massachusetts Institute of Technology,United States,2,Top 50,HIGH,40000
+Princeton University,United States,3,Top 50,HIGH,40000
+University of Cambridge,United Kingdom,4,Top 50,HIGH,30000
+Stanford University,United States,5,Top 50,HIGH,40000
+Harvard University,United States,6,Top 50,HIGH,40000
+California Institute of Technology,United States,7,Top 50,HIGH,40000
+Imperial College London,United Kingdom,8,Top 50,HIGH,30000
+"University of California, Berkeley",United States,9,Top 50,HIGH,40000
+Yale University,United States,10,Top 50,HIGH,40000
+ETH Zurich,Switzerland,11,Top 50,HIGH,20000
+Tsinghua University,China,12,Top 50,HIGH,20000
+Peking University,China,13,Top 50,HIGH,20000
+University of Pennsylvania,United States,14,Top 50,HIGH,40000
+The University of Chicago,United States,15,Top 50,HIGH,40000
+Johns Hopkins University,United States,16,Top 50,HIGH,40000
+National University of Singapore,Singapore,17,Top 50,HIGH,20000
+"University of California, Los Angeles",United States,18,Top 50,HIGH,40000
+Cornell University,United States,19,Top 50,HIGH,40000
+Columbia University,United States,20,Top 50,HIGH,40000
+University of Toronto,Canada,21,Top 50,HIGH,25000
+UCL,United Kingdom,22,Top 50,HIGH,30000
+University of Michigan-Ann Arbor,United States,23,Top 50,HIGH,40000
+Carnegie Mellon University,United States,24,Top 50,HIGH,40000
+University of Washington,United States,25,Top 50,HIGH,40000
+The University of Tokyo,Japan,26,Top 50,HIGH,20000
+Technical University of Munich,Germany,27,Top 50,HIGH,2000
+Duke University,United States,28,Top 50,HIGH,40000
+University of Edinburgh,United Kingdom,29,Top 50,HIGH,30000
+Northwestern University,United States,30,Top 50,HIGH,40000
+"Nanyang Technological University, Singapore",Singapore,31,Top 50,HIGH,20000
+New York University,United States,32,Top 50,HIGH,40000
+University of Hong Kong,Hong Kong,33,Top 50,HIGH,20000
+LMU Munich,Germany,34,Top 50,HIGH,2000
+École Polytechnique Fédérale de Lausanne,Switzerland,35,Top 50,HIGH,20000
+Fudan University,China,36,Top 50,HIGH,20000
+University of Melbourne,Australia,37,Top 50,HIGH,28000
+King’s College London,United Kingdom,38,Top 50,HIGH,30000
+Zhejiang University,China,39,Top 50,HIGH,20000
+Shanghai Jiao Tong University,China,40,Top 50,HIGH,20000
+McGill University,Canada,41,Top 50,HIGH,25000
+Georgia Institute of Technology,United States,42,Top 50,HIGH,40000
+University of Illinois at Urbana-Champaign,United States,43,Top 50,HIGH,40000
+The Chinese University of Hong Kong,Hong Kong,44,Top 50,HIGH,20000
+University of British Columbia,Canada,45,Top 50,HIGH,25000
+KU Leuven,Belgium,46,Top 50,HIGH,20000
+"University of California, San Diego",United States,47,Top 50,HIGH,40000
+Paris Sciences et Lettres – PSL Research University Paris,France,48,Top 50,HIGH,20000
+Universität Heidelberg,Germany,49,Top 50,HIGH,2000
+University of Texas at Austin,United States,50,Top 50,HIGH,40000
+University of Science and Technology of China,China,51,50-100,MEDIUM,20000
+London School of Economics and Political Science,United Kingdom,52,50-100,MEDIUM,30000
+The University of Sydney,Australia,53,50-100,MEDIUM,28000
+University of Wisconsin-Madison,United States,54,50-100,MEDIUM,40000
+Karolinska Institute,Sweden,55,50-100,MEDIUM,20000
+University of Manchester,United Kingdom,56,50-100,MEDIUM,30000
+Delft University of Technology,Netherlands,57,50-100,MEDIUM,20000
+The Hong Kong University of Science and Technology,Hong Kong,58,50-100,MEDIUM,20000
+Seoul National University,South Korea,59,50-100,MEDIUM,20000
+Monash University,Australia,60,50-100,MEDIUM,28000
+Kyoto University,Japan,61,50-100,MEDIUM,20000
+University of Amsterdam,Netherlands,62,50-100,MEDIUM,20000
+Nanjing University,China,63,50-100,MEDIUM,20000
+"University of California, Davis",United States,64,50-100,MEDIUM,40000
+Brown University,United States,65,50-100,MEDIUM,40000
+Wageningen University & Research,Netherlands,66,50-100,MEDIUM,20000
+Washington University in St Louis,United States,67,50-100,MEDIUM,40000
+Université Paris-Saclay,France,68,50-100,MEDIUM,20000
+Institut Polytechnique de Paris,France,69,50-100,MEDIUM,20000
+Leiden University,Netherlands,70,50-100,MEDIUM,20000
+Korea Advanced Institute of Science and Technology (KAIST),South Korea,71,50-100,MEDIUM,20000
+"University of California, Santa Barbara",United States,72,50-100,MEDIUM,40000
+City University of Hong Kong,Hong Kong,73,50-100,MEDIUM,20000
+Australian National University,Australia,74,50-100,MEDIUM,28000
+University of Southern California,United States,75,50-100,MEDIUM,40000
+Sorbonne University,France,76,50-100,MEDIUM,20000
+Boston University,United States,77,50-100,MEDIUM,40000
+University of North Carolina at Chapel Hill,United States,78,50-100,MEDIUM,40000
+UNSW Sydney,Australia,79,50-100,MEDIUM,28000
+University of Bristol,United Kingdom,80,50-100,MEDIUM,30000
+The University of Queensland,Australia,81,50-100,MEDIUM,28000
+The Hong Kong Polytechnic University,Hong Kong,82,50-100,MEDIUM,20000
+University of Groningen,Netherlands,83,50-100,MEDIUM,20000
+University of Glasgow,United Kingdom,84,50-100,MEDIUM,30000
+Purdue University West Lafayette,United States,85,50-100,MEDIUM,40000
+Yonsei University (Seoul campus),South Korea,86,50-100,MEDIUM,20000
+Sungkyunkwan University (SKKU),South Korea,87,50-100,MEDIUM,20000
+University of Minnesota,United States,88,50-100,MEDIUM,40000
+Humboldt University of Berlin,Germany,89,50-100,MEDIUM,2000
+University of Copenhagen,Denmark,90,50-100,MEDIUM,20000
+Charité - Universitätsmedizin Berlin,Germany,91,50-100,MEDIUM,2000
+RWTH Aachen University,Germany,92,50-100,MEDIUM,2000
+Vanderbilt University,United States,93,50-100,MEDIUM,40000
+University of Bonn,Germany,94,50-100,MEDIUM,2000
+University of Vienna,Austria,95,50-100,MEDIUM,20000
+Lund University,Sweden,96,50-100,MEDIUM,20000
+"University of California, Irvine",United States,97,50-100,MEDIUM,40000
+University of Tübingen,Germany,98,50-100,MEDIUM,2000
+KTH Royal Institute of Technology,Sweden,99,50-100,MEDIUM,20000
+University of Birmingham,United Kingdom,100,50-100,MEDIUM,30000
+Aarhus University,Denmark,101,100-300,LOW,20000
+Emory University,United States,102,100-300,LOW,40000
+Rice University,United States,103,100-300,LOW,40000
+University of Helsinki,Finland,104,100-300,LOW,20000
+Tohoku University,Japan,105,100-300,LOW,20000
+Michigan State University,United States,106,100-300,LOW,40000
+Erasmus University Rotterdam,Netherlands,107,100-300,LOW,20000
+Ohio State University (Main campus),United States,108,100-300,LOW,40000
+University of Bern,Switzerland,109,100-300,LOW,20000
+Penn State (Main campus),United States,110,100-300,LOW,40000
+University of Sheffield,United Kingdom,111,100-300,LOW,30000
+University of Massachusetts,United States,112,100-300,LOW,40000
+Free University of Berlin,Germany,113,100-300,LOW,2000
+University of Oslo,Norway,114,100-300,LOW,20000
+Ghent University,Belgium,115,100-300,LOW,20000
+McMaster University,Canada,116,100-300,LOW,25000
+"University of Maryland, College Park",United States,117,100-300,LOW,40000
+University of Leeds,United Kingdom,118,100-300,LOW,30000
+University of Alberta,Canada,119,100-300,LOW,25000
+University of Basel,Switzerland,120,100-300,LOW,20000
+Technical University of Denmark,Denmark,121,100-300,LOW,20000
+University of Göttingen,Germany,122,100-300,LOW,2000
+University of Warwick,United Kingdom,123,100-300,LOW,30000
+Wuhan University,China,124,100-300,LOW,20000
+University of Lausanne,Switzerland,125,100-300,LOW,20000
+University of Hamburg,Germany,126,100-300,LOW,2000
+University of Rochester,United States,127,100-300,LOW,40000
+Uppsala University,Sweden,128,100-300,LOW,20000
+University of Southampton,United Kingdom,129,100-300,LOW,30000
+University of Bologna,Italy,130,100-300,LOW,20000
+Maastricht University,Netherlands,131,100-300,LOW,20000
+Harbin Institute of Technology,China,132,100-300,LOW,20000
+Lomonosov Moscow State University,Russian Federation,133,100-300,LOW,20000
+Adelaide University,Australia,134,100-300,LOW,28000
+University of Florida,United States,135,100-300,LOW,40000
+Beijing Normal University,China,136,100-300,LOW,20000
+Queen Mary University of London,United Kingdom,137,100-300,LOW,30000
+Scuola Normale Superiore di Pisa,Italy,138,100-300,LOW,20000
+University of Freiburg,Germany,139,100-300,LOW,2000
+University of Arizona,United States,140,100-300,LOW,40000
+National Taiwan University (NTU),Taiwan,141,100-300,LOW,20000
+Pohang University of Science and Technology (POSTECH),South Korea,142,100-300,LOW,20000
+Tongji University,China,143,100-300,LOW,20000
+University of Liverpool,United Kingdom,144,100-300,LOW,30000
+Newcastle University,United Kingdom,145,100-300,LOW,30000
+University of Nottingham,United Kingdom,146,100-300,LOW,30000
+University of Macau,Macao,147,100-300,LOW,20000
+Case Western Reserve University,United States,148,100-300,LOW,40000
+University of Technology Sydney,Australia,149,100-300,LOW,28000
+University of Barcelona,Spain,150,100-300,LOW,20000
+Université de Montréal,Canada,151,100-300,LOW,25000
+The University of Osaka,Japan,152,100-300,LOW,20000
+Texas A&M University,United States,153,100-300,LOW,40000
+The University of Western Australia,Australia,154,100-300,LOW,28000
+Radboud University Nijmegen,Netherlands,155,100-300,LOW,20000
+University of York,United Kingdom,156,100-300,LOW,30000
+University of Pittsburgh-Pittsburgh campus,United States,157,100-300,LOW,40000
+University of Auckland,New Zealand,158,100-300,LOW,20000
+Korea University,South Korea,159,100-300,LOW,20000
+University of Colorado Boulder,United States,160,100-300,LOW,40000
+Technical University of Berlin,Germany,161,100-300,LOW,2000
+Southern University of Science and Technology (SUSTech),China,162,100-300,LOW,20000
+University of Waterloo,Canada,163,100-300,LOW,25000
+University of St Andrews,United Kingdom,164,100-300,LOW,30000
+University of Cologne,Germany,165,100-300,LOW,2000
+University of Cape Town,South Africa,166,100-300,LOW,20000
+Karlsruhe Institute of Technology,Germany,167,100-300,LOW,2000
+University of Geneva,Switzerland,168,100-300,LOW,20000
+Macquarie University,Australia,169,100-300,LOW,28000
+Institute of Science Tokyo,Japan,170,100-300,LOW,20000
+University of Virginia (Main campus),United States,171,100-300,LOW,40000
+Sapienza University of Rome,Italy,172,100-300,LOW,20000
+University of Antwerp,Belgium,173,100-300,LOW,20000
+University of Exeter,United Kingdom,174,100-300,LOW,30000
+Trinity College Dublin,Ireland,175,100-300,LOW,20000
+TU Dresden,Germany,176,100-300,LOW,2000
+Durham University,United Kingdom,177,100-300,LOW,30000
+Huazhong University of Science and Technology,China,178,100-300,LOW,20000
+Vrije Universiteit Amsterdam,Netherlands,179,100-300,LOW,20000
+University of Würzburg,Germany,180,100-300,LOW,2000
+Dartmouth College,United States,181,100-300,LOW,40000
+"University of California, Santa Cruz",United States,182,100-300,LOW,40000
+Medical University of Vienna,Austria,183,100-300,LOW,20000
+Universitat Autònoma de Barcelona (UAB),Spain,184,100-300,LOW,20000
+Lancaster University,United Kingdom,185,100-300,LOW,30000
+King Fahd University of Petroleum and Minerals,Saudi Arabia,186,100-300,LOW,20000
+Université Catholique de Louvain,Belgium,187,100-300,LOW,20000
+University of Ottawa,Canada,188,100-300,LOW,25000
+Pompeu Fabra University,Spain,189,100-300,LOW,20000
+Tufts University,United States,190,100-300,LOW,40000
+University of Twente,Netherlands,191,100-300,LOW,20000
+Université Paris Cité,France,192,100-300,LOW,20000
+University of Leicester,United Kingdom,193,100-300,LOW,30000
+Eindhoven University of Technology,Netherlands,194,100-300,LOW,20000
+University of Notre Dame,United States,195,100-300,LOW,40000
+Aalto University,Finland,196,100-300,LOW,20000
+The Education University of Hong Kong,Hong Kong,197,100-300,LOW,20000
+University of Münster,Germany,198,100-300,LOW,2000
+Indiana University,United States,199,100-300,LOW,40000
+Queen’s University Belfast,United Kingdom,200,100-300,LOW,30000
+University of Reading,United Kingdom,201,100-300,LOW,30000
+University of Calgary,Canada,202,100-300,LOW,25000
+Friedrich Schiller University Jena,Germany,203,100-300,LOW,2000
+Stockholm University,Sweden,204,100-300,LOW,20000
+Universiti Teknologi Petronas,Malaysia,205,100-300,LOW,20000
+University of Mannheim,Germany,206,100-300,LOW,2000
+University of Erlangen-Nuremberg,Germany,207,100-300,LOW,2000
+Tianjin University,China,208,100-300,LOW,20000
+Georgetown University,United States,209,100-300,LOW,40000
+Deakin University,Australia,210,100-300,LOW,28000
+Queensland University of Technology,Australia,210,100-300,LOW,28000
+University of Gothenburg,Sweden,212,100-300,LOW,20000
+Arizona State University (Tempe),United States,213,100-300,LOW,40000
+Hong Kong Baptist University,Hong Kong,214,100-300,LOW,20000
+Western University,Canada,215,100-300,LOW,25000
+Politecnico di Milano,Italy,216,100-300,LOW,20000
+Tel Aviv University,Israel,217,100-300,LOW,20000
+Nagoya University,Japan,218,100-300,LOW,20000
+Goethe University Frankfurt,Germany,219,100-300,LOW,2000
+University of Surrey,United Kingdom,220,100-300,LOW,30000
+Qatar University,Qatar,221,100-300,LOW,20000
+University of São Paulo,Brazil,222,100-300,LOW,20000
+University College Dublin,Ireland,223,100-300,LOW,20000
+Université Libre de Bruxelles,Belgium,224,100-300,LOW,20000
+Sun Yat-sen University,China,225,100-300,LOW,20000
+George Washington University,United States,226,100-300,LOW,40000
+University of Miami,United States,227,100-300,LOW,40000
+Xi’an Jiaotong University,China,228,100-300,LOW,20000
+Sichuan University,China,229,100-300,LOW,20000
+University of Potsdam,Germany,230,100-300,LOW,2000
+Sant’Anna School of Advanced Studies – Pisa,Italy,231,100-300,LOW,20000
+Cardiff University,United Kingdom,232,100-300,LOW,30000
+Abu Dhabi University,United Arab Emirates,233,100-300,LOW,20000
+Vrije Universiteit Brussel,Belgium,234,100-300,LOW,20000
+United Arab Emirates University,United Arab Emirates,235,100-300,LOW,20000
+University of Wollongong,Australia,236,100-300,LOW,28000
+University of Sussex,United Kingdom,237,100-300,LOW,30000
+Beijing Institute of Technology,China,238,100-300,LOW,20000
+University of Utah,United States,239,100-300,LOW,40000
+Chalmers University of Technology,Sweden,240,100-300,LOW,20000
+Linköping University,Sweden,241,100-300,LOW,20000
+University of Padua,Italy,242,100-300,LOW,20000
+Ulsan National Institute of Science and Technology (UNIST),South Korea,243,100-300,LOW,20000
+University of Malaya,Malaysia,244,100-300,LOW,20000
+"Northeastern University, US",United States,245,100-300,LOW,40000
+Medical University of Innsbruck,Austria,246,100-300,LOW,20000
+Khalifa University,United Arab Emirates,247,100-300,LOW,20000
+Medical University of Graz,Austria,248,100-300,LOW,20000
+University of Aberdeen,United Kingdom,249,100-300,LOW,30000
+University of Illinois Chicago,United States,250,100-300,LOW,40000
+Indian Institute of Science,India,251,100-300,LOW,20000
+Beihang University,China,252,100-300,LOW,20000
+Nankai University,China,253,100-300,LOW,20000
+Kyung Hee University,South Korea,254,100-300,LOW,20000
+University of Tasmania,Australia,255,100-300,LOW,28000
+Swinburne University of Technology,Australia,256,100-300,LOW,28000
+Vita-Salute San Raffaele University,Italy,257,100-300,LOW,20000
+Humanitas University,Italy,258,100-300,LOW,20000
+Aalborg University,Denmark,259,100-300,LOW,20000
+Macau University of Science and Technology,Macao,260,100-300,LOW,20000
+Hebrew University of Jerusalem,Israel,261,100-300,LOW,20000
+Università della Svizzera italiana,Switzerland,262,100-300,LOW,20000
+University of Bath,United Kingdom,263,100-300,LOW,30000
+La Trobe University,Australia,264,100-300,LOW,28000
+University of Luxembourg,Luxembourg,265,100-300,LOW,20000
+King Saud University,Saudi Arabia,266,100-300,LOW,20000
+RMIT University,Australia,267,100-300,LOW,28000
+Lebanese American University,Lebanon,268,100-300,LOW,20000
+Sejong University,South Korea,269,100-300,LOW,20000
+Central European University,Austria,270,100-300,LOW,20000
+Ruhr University Bochum,Germany,271,100-300,LOW,2000
+University of Oulu,Finland,272,100-300,LOW,20000
+Semmelweis University,Hungary,273,100-300,LOW,20000
+Northwestern Polytechnical University,China,274,100-300,LOW,20000
+Shandong University,China,275,100-300,LOW,20000
+Xiamen University,China,276,100-300,LOW,20000
+Southern Medical University,China,277,100-300,LOW,20000
+Technical University of Darmstadt,Germany,278,100-300,LOW,2000
+Virginia Polytechnic Institute and State University,United States,279,100-300,LOW,40000
+South China University of Technology,China,280,100-300,LOW,20000
+University of Southern Denmark,Denmark,281,100-300,LOW,20000
+Boston College,United States,282,100-300,LOW,40000
+University of Konstanz,Germany,283,100-300,LOW,2000
+Ulm University,Germany,284,100-300,LOW,2000
+Curtin University,Australia,285,100-300,LOW,28000
+East China Normal University,China,286,100-300,LOW,20000
+University of Bergen,Norway,287,100-300,LOW,20000
+RCSI University of Medicine and Health Sciences,Ireland,288,100-300,LOW,20000
+University of Newcastle,Australia,289,100-300,LOW,28000
+University of East Anglia,United Kingdom,290,100-300,LOW,30000
+Griffith University,Australia,291,100-300,LOW,28000
+Southeast University,China,292,100-300,LOW,20000
+University of Navarra,Spain,293,100-300,LOW,20000
+University of Stuttgart,Germany,294,100-300,LOW,2000
+Hanyang University,South Korea,295,100-300,LOW,20000
+Hunan University,China,296,100-300,LOW,20000
+Central South University,China,297,100-300,LOW,20000
+Università Cattolica del Sacro Cuore,Italy,298,100-300,LOW,20000
+Heinrich Heine University Düsseldorf,Germany,299,100-300,LOW,2000
+University of Hawai’i at Mānoa,United States,300,100-300,LOW,40000
+LUT University,Finland,301,300+,VERY_LOW,20000
+King Khalid University,Saudi Arabia,302,300+,VERY_LOW,20000
+North Carolina State University,United States,303,300+,VERY_LOW,40000
+Queen’s University,Canada,304,300+,VERY_LOW,25000
+"City St George's, University of London",United Kingdom,305,300+,VERY_LOW,30000
+Western Sydney University,Australia,306,300+,VERY_LOW,28000
+Sunway University,Malaysia,307,300+,VERY_LOW,20000
+TU Wien,Austria,308,300+,VERY_LOW,20000
+University of Iowa,United States,309,300+,VERY_LOW,40000
+Dublin City University,Ireland,310,300+,VERY_LOW,20000
+Lingnan University Hong Kong,Hong Kong,311,300+,VERY_LOW,20000
+University of Duisburg-Essen,Germany,312,300+,VERY_LOW,2000
+Stony Brook University,United States,313,300+,VERY_LOW,40000
+University of Liège,Belgium,314,300+,VERY_LOW,20000
+École Normale Supérieure de Lyon,France,315,300+,VERY_LOW,20000
+University of Victoria,Canada,316,300+,VERY_LOW,25000
+University at Buffalo,United States,317,300+,VERY_LOW,40000
+University of the Witwatersrand,South Africa,318,300+,VERY_LOW,20000
+Kyushu University,Japan,319,300+,VERY_LOW,20000
+Flinders University,Australia,320,300+,VERY_LOW,28000
+Swansea University,United Kingdom,321,300+,VERY_LOW,30000
+Rutgers University–New Brunswick,United States,322,300+,VERY_LOW,40000
+University of Milan,Italy,323,300+,VERY_LOW,20000
+"China Medical University, Taiwan",Taiwan,324,300+,VERY_LOW,20000
+University of Dundee,United Kingdom,325,300+,VERY_LOW,30000
+Stellenbosch University,South Africa,326,300+,VERY_LOW,20000
+University of Bayreuth,Germany,327,300+,VERY_LOW,2000
+University of Bremen,Germany,328,300+,VERY_LOW,2000
+"University of California, Riverside",United States,329,300+,VERY_LOW,40000
+Tilburg University,Netherlands,330,300+,VERY_LOW,20000
+Norwegian University of Science and Technology,Norway,331,300+,VERY_LOW,20000
+University of Innsbruck,Austria,332,300+,VERY_LOW,20000
+University of Electronic Science and Technology of China,China,333,300+,VERY_LOW,20000
+University of Hohenheim,Germany,334,300+,VERY_LOW,2000
+Simon Fraser University,Canada,335,300+,VERY_LOW,25000
+Illinois Institute of Technology,United States,336,300+,VERY_LOW,40000
+University of Rome II – Tor Vergata,Italy,337,300+,VERY_LOW,20000
+University of Sharjah,United Arab Emirates,338,300+,VERY_LOW,20000
+Loughborough University,United Kingdom,339,300+,VERY_LOW,30000
+Bauman Moscow State Technical University,Russian Federation,340,300+,VERY_LOW,20000
+Florida State University,United States,341,300+,VERY_LOW,40000
+Johannes Gutenberg University of Mainz,Germany,342,300+,VERY_LOW,2000
+Technion Israel Institute of Technology,Israel,343,300+,VERY_LOW,20000
+University of Turku,Finland,344,300+,VERY_LOW,20000
+Hasselt University,Belgium,345,300+,VERY_LOW,20000
+Tampere University,Finland,346,300+,VERY_LOW,20000
+Universiti Kebangsaan Malaysia,Malaysia,347,300+,VERY_LOW,20000
+University of Naples Federico II,Italy,348,300+,VERY_LOW,20000
+"Birkbeck, University of London",United Kingdom,349,300+,VERY_LOW,30000
+University of Essex,United Kingdom,350,300+,VERY_LOW,30000
+Koç University,Turkey,351,300+,VERY_LOW,20000
+Prince Mohammad Bin Fahd University,Saudi Arabia,352,300+,VERY_LOW,20000
+University of Tartu,Estonia,353,300+,VERY_LOW,20000
+Dalhousie University,Canada,354,300+,VERY_LOW,25000
+University of Florence,Italy,355,300+,VERY_LOW,20000
+University of Galway,Ireland,356,300+,VERY_LOW,20000
+James Cook University,Australia,357,300+,VERY_LOW,28000
+Sharif University of Technology,Iran,358,300+,VERY_LOW,20000
+Oregon Health and Science University,United States,359,300+,VERY_LOW,40000
+University of Trento,Italy,360,300+,VERY_LOW,20000
+University of Kiel,Germany,361,300+,VERY_LOW,2000
+University of Strathclyde,United Kingdom,362,300+,VERY_LOW,30000
+Daegu Gyeongbuk Institute of Science and Technology (DGIST),South Korea,363,300+,VERY_LOW,20000
+Justus Liebig University Giessen,Germany,364,300+,VERY_LOW,2000
+University of Tsukuba,Japan,365,300+,VERY_LOW,20000
+Swedish University of Agricultural Sciences,Sweden,366,300+,VERY_LOW,20000
+University College Cork,Ireland,367,300+,VERY_LOW,20000
+University of Pavia,Italy,368,300+,VERY_LOW,20000
+University of Colorado Denver/Anschutz Medical Campus,United States,369,300+,VERY_LOW,40000
+Moscow Institute of Physics and Technology (MIPT),Russian Federation,370,300+,VERY_LOW,20000
+University of Siena,Italy,371,300+,VERY_LOW,20000
+Saveetha Institute of Medical and Technical Sciences,India,372,300+,VERY_LOW,20000
+University of Southern Queensland,Australia,373,300+,VERY_LOW,28000
+Universiti Brunei Darussalam,Brunei Darussalam,374,300+,VERY_LOW,20000
+University of Kansas,United States,375,300+,VERY_LOW,40000
+Hokkaido University,Japan,376,300+,VERY_LOW,20000
+University of Otago,New Zealand,377,300+,VERY_LOW,20000
+Leibniz University Hannover,Germany,378,300+,VERY_LOW,2000
+University of Campinas,Brazil,379,300+,VERY_LOW,20000
+University of St Gallen,Switzerland,380,300+,VERY_LOW,20000
+Edith Cowan University,Australia,381,300+,VERY_LOW,28000
+Shenzhen University,China,382,300+,VERY_LOW,20000
+University of South Florida,United States,383,300+,VERY_LOW,40000
+Autonomous University of Madrid,Spain,384,300+,VERY_LOW,20000
+Middle East Technical University,Turkey,385,300+,VERY_LOW,20000
+Amirkabir University of Technology,Iran,385,300+,VERY_LOW,20000
+Kermanshah University of Medical Sciences,Iran,387,300+,VERY_LOW,20000
+University of Johannesburg,South Africa,388,300+,VERY_LOW,20000
+Chongqing University,China,389,300+,VERY_LOW,20000
+Prince Sultan University (PSU),Saudi Arabia,390,300+,VERY_LOW,20000
+University of Georgia (USA),United States,391,300+,VERY_LOW,40000
+University of Brescia,Italy,391,300+,VERY_LOW,20000
+Sabancı University,Turkey,393,300+,VERY_LOW,20000
+University of Pisa,Italy,394,300+,VERY_LOW,20000
+University of Connecticut,United States,395,300+,VERY_LOW,40000
+Université Grenoble Alpes,France,396,300+,VERY_LOW,20000
+University of Saskatchewan,Canada,397,300+,VERY_LOW,25000
+Verona University,Italy,398,300+,VERY_LOW,20000
+King Abdulaziz University,Saudi Arabia,399,300+,VERY_LOW,20000
+Mohammed VI Polytechnic University,Morocco,400,300+,VERY_LOW,20000
+Institut Agro,France,401,300+,VERY_LOW,20000
+Gwangju Institute of Science and Technology (GIST),South Korea,402,300+,VERY_LOW,20000
+Montpellier University,France,403,300+,VERY_LOW,20000
+Dalian University of Technology,China,404,300+,VERY_LOW,20000
+Umeå University,Sweden,405,300+,VERY_LOW,20000
+Murdoch University,Australia,406,300+,VERY_LOW,28000
+"University of California, Merced",United States,407,300+,VERY_LOW,40000
+National Tsing Hua University,Taiwan,408,300+,VERY_LOW,20000
+University of Marburg,Germany,409,300+,VERY_LOW,2000
+University of Genoa,Italy,410,300+,VERY_LOW,20000
+Ajman University,United Arab Emirates,411,300+,VERY_LOW,20000
+Universiti Sains Malaysia,Malaysia,412,300+,VERY_LOW,20000
+Université Laval,Canada,413,300+,VERY_LOW,25000
+Brunel University of London,United Kingdom,414,300+,VERY_LOW,30000
+University of Porto,Portugal,415,300+,VERY_LOW,20000
+Iran University of Science and Technology,Iran,416,300+,VERY_LOW,20000
+Temple University,United States,417,300+,VERY_LOW,40000
+Taipei Medical University,Taiwan,418,300+,VERY_LOW,20000
+Johannes Kepler University of Linz,Austria,419,300+,VERY_LOW,20000
+"Royal Holloway, University of London",United Kingdom,420,300+,VERY_LOW,30000
+Drexel University,United States,421,300+,VERY_LOW,40000
+York University,Canada,422,300+,VERY_LOW,25000
+University of Fribourg,Switzerland,423,300+,VERY_LOW,20000
+Iowa State University,United States,424,300+,VERY_LOW,40000
+Australian Catholic University,Australia,425,300+,VERY_LOW,28000
+University of Lisbon,Portugal,426,300+,VERY_LOW,20000
+Aston University,United Kingdom,427,300+,VERY_LOW,30000
+Al Ain University,United Arab Emirates,428,300+,VERY_LOW,20000
+University of Vaasa,Finland,429,300+,VERY_LOW,20000
+IMT Atlantique,France,430,300+,VERY_LOW,20000
+Wake Forest University,United States,431,300+,VERY_LOW,40000
+Free University of Bozen-Bolzano,Italy,432,300+,VERY_LOW,20000
+Tulane University,United States,433,300+,VERY_LOW,40000
+Victoria University of Wellington,New Zealand,434,300+,VERY_LOW,20000
+Washington State University,United States,435,300+,VERY_LOW,40000
+National Yang Ming Chiao Tung University (NYCU Taiwan),Taiwan,436,300+,VERY_LOW,20000
+Universiti Teknologi Malaysia,Malaysia,437,300+,VERY_LOW,20000
+University of Kent,United Kingdom,438,300+,VERY_LOW,30000
+George Mason University,United States,439,300+,VERY_LOW,40000
+Prince Sattam Bin Abdulaziz University,Saudi Arabia,440,300+,VERY_LOW,20000
+Al-Ahliyya Amman University,Jordan,441,300+,VERY_LOW,20000
+University of Canberra,Australia,442,300+,VERY_LOW,28000
+University of Kentucky,United States,443,300+,VERY_LOW,40000
+University of Jyväskylä,Finland,444,300+,VERY_LOW,20000
+Brandeis University,United States,445,300+,VERY_LOW,40000
+University of Guelph,Canada,446,300+,VERY_LOW,25000
+Universiti Utara Malaysia,Malaysia,447,300+,VERY_LOW,20000
+University of Portsmouth,United Kingdom,448,300+,VERY_LOW,30000
+University of Delaware,United States,449,300+,VERY_LOW,40000
+The University of Tennessee-Knoxville,United States,450,300+,VERY_LOW,40000
+Beijing University of Chemical Technology,China,451,300+,VERY_LOW,20000
+University of Regensburg,Germany,452,300+,VERY_LOW,2000
+University of Coimbra,Portugal,453,300+,VERY_LOW,20000
+Shoolini University of Biotechnology and Management Sciences,India,454,300+,VERY_LOW,20000
+Virginia Commonwealth University,United States,455,300+,VERY_LOW,40000
+Chung-Ang University,South Korea,456,300+,VERY_LOW,20000
+University of Milan-Bicocca,Italy,457,300+,VERY_LOW,20000
+University of Oregon,United States,458,300+,VERY_LOW,40000
+University of Houston,United States,459,300+,VERY_LOW,40000
+Syracuse University,United States,460,300+,VERY_LOW,40000
+University of Waikato,New Zealand,461,300+,VERY_LOW,20000
+Bond University,Australia,462,300+,VERY_LOW,28000
+National Taiwan University of Science and Technology (Taiwan Tech),Taiwan,463,300+,VERY_LOW,20000
+Arabian Gulf University,Bahrain,464,300+,VERY_LOW,20000
+Charles University,Czechia,465,300+,VERY_LOW,20000
+Northumbria University,United Kingdom,466,300+,VERY_LOW,30000
+Charles Darwin University,Australia,467,300+,VERY_LOW,28000
+Pontificia Universidad Católica de Chile,Chile,468,300+,VERY_LOW,20000
+University of Turin,Italy,468,300+,VERY_LOW,20000
+Colorado School of Mines,United States,470,300+,VERY_LOW,40000
+Bournemouth University,United Kingdom,471,300+,VERY_LOW,30000
+University of Bordeaux,France,472,300+,VERY_LOW,20000
+Central Queensland University,Australia,473,300+,VERY_LOW,28000
+Ajou University,South Korea,474,300+,VERY_LOW,20000
+Polytechnic University of Turin,Italy,475,300+,VERY_LOW,20000
+University of Texas at Dallas,United States,476,300+,VERY_LOW,40000
+SOAS University of London,United Kingdom,477,300+,VERY_LOW,30000
+University of Central Florida,United States,478,300+,VERY_LOW,40000
+Roskilde University,Denmark,479,300+,VERY_LOW,20000
+Donghua University,China,480,300+,VERY_LOW,20000
+Rush University,United States,481,300+,VERY_LOW,40000
+University of Eastern Finland,Finland,482,300+,VERY_LOW,20000
+Near East University,Northern Cyprus,483,300+,VERY_LOW,20000
+Quaid-i-Azam University,Pakistan,484,300+,VERY_LOW,20000
+Nazarbayev University,Kazakhstan,485,300+,VERY_LOW,20000
+Boğaziçi University,Turkey,486,300+,VERY_LOW,20000
+Jamia Millia Islamia,India,487,300+,VERY_LOW,20000
+University of South Carolina-Columbia,United States,488,300+,VERY_LOW,40000
+Florida International University,United States,489,300+,VERY_LOW,40000
+University of Tehran,Iran,490,300+,VERY_LOW,20000
+Umm Al-Qura University,Saudi Arabia,491,300+,VERY_LOW,20000
+"Asia University, Taiwan",Taiwan,492,300+,VERY_LOW,20000
+University of Cyprus,Cyprus,493,300+,VERY_LOW,20000
+University of Greifswald,Germany,494,300+,VERY_LOW,2000
+Marche Polytechnic University,Italy,495,300+,VERY_LOW,20000
+Applied Science Private University,Jordan,496,300+,VERY_LOW,20000
+Zayed University,United Arab Emirates,497,300+,VERY_LOW,20000
+Leuphana University of Lüneburg,Germany,498,300+,VERY_LOW,2000
+Southern Cross University,Australia,499,300+,VERY_LOW,28000
+University of Nizwa,Oman,500,300+,VERY_LOW,20000
+Heriot-Watt University,United Kingdom,501,300+,VERY_LOW,30000
+National and Kapodistrian University of Athens,Greece,502,300+,VERY_LOW,20000
+Saint Louis University,United States,503,300+,VERY_LOW,40000
+Princess Nourah bint Abdulrahman University,Saudi Arabia,504,300+,VERY_LOW,20000
+Complutense University of Madrid,Spain,505,300+,VERY_LOW,20000
+Tehran University of Medical Sciences,Iran,506,300+,VERY_LOW,20000
+Bangor University,United Kingdom,507,300+,VERY_LOW,30000
+Shanghai University,China,508,300+,VERY_LOW,20000
+University of Trieste,Italy,509,300+,VERY_LOW,20000
+"Colorado State University, Fort Collins",United States,510,300+,VERY_LOW,40000
+National Yunlin University of Science and Technology,Taiwan,511,300+,VERY_LOW,20000
+Istanbul Technical University,Turkey,512,300+,VERY_LOW,20000
+University of Nebraska Medical Center,United States,513,300+,VERY_LOW,40000
+University of Nicosia,Cyprus,514,300+,VERY_LOW,20000
+Wayne State University,United States,515,300+,VERY_LOW,40000
+University of Stirling,United Kingdom,516,300+,VERY_LOW,30000
+Rensselaer Polytechnic Institute,United States,517,300+,VERY_LOW,40000
+Constructor University,Germany,518,300+,VERY_LOW,2000
+Massey University,New Zealand,519,300+,VERY_LOW,20000
+Stevens Institute of Technology,United States,520,300+,VERY_LOW,40000
+University of Iceland,Iceland,521,300+,VERY_LOW,20000
+Saarland University,Germany,522,300+,VERY_LOW,2000
+University of Siegen,Germany,523,300+,VERY_LOW,2000
+HSE University,Russian Federation,524,300+,VERY_LOW,20000
+University of Hull,United Kingdom,525,300+,VERY_LOW,30000
+Wroclaw Medical University,Poland,526,300+,VERY_LOW,20000
+Memorial University of Newfoundland,Canada,527,300+,VERY_LOW,25000
+Jiangsu University,China,528,300+,VERY_LOW,20000
+Pusan National University,South Korea,529,300+,VERY_LOW,20000
+Yangzhou University,China,530,300+,VERY_LOW,20000
+Jinan University (China),China,531,300+,VERY_LOW,20000
+National Cheng Kung University (NCKU),Taiwan,532,300+,VERY_LOW,20000
+University of International Business and Economics,China,533,300+,VERY_LOW,20000
+University of Modena and Reggio Emilia,Italy,534,300+,VERY_LOW,20000
+Ca’ Foscari University of Venice,Italy,535,300+,VERY_LOW,20000
+University of Windsor,Canada,536,300+,VERY_LOW,25000
+University of Limerick,Ireland,537,300+,VERY_LOW,20000
+University of Messina,Italy,538,300+,VERY_LOW,20000
+Campus Bio-Medico University of Rome,Italy,539,300+,VERY_LOW,20000
+University of Huddersfield,United Kingdom,540,300+,VERY_LOW,30000
+Université du Québec,Canada,541,300+,VERY_LOW,25000
+The University of Tulsa,United States,542,300+,VERY_LOW,40000
+University of Valencia,Spain,543,300+,VERY_LOW,20000
+"Soochow University, China",China,544,300+,VERY_LOW,20000
+University of Ulsan,South Korea,545,300+,VERY_LOW,20000
+University of Toulouse,France,546,300+,VERY_LOW,20000
+Federation University Australia,Australia,547,300+,VERY_LOW,28000
+University of Nebraska-Lincoln,United States,548,300+,VERY_LOW,40000
+Missouri University of Science and Technology,United States,549,300+,VERY_LOW,40000
+Maynooth University,Ireland,550,300+,VERY_LOW,20000
+University of Catania,Italy,551,300+,VERY_LOW,20000
+Universiti Putra Malaysia,Malaysia,552,300+,VERY_LOW,20000
+University of Plymouth,United Kingdom,553,300+,VERY_LOW,30000
+Mizzou - University of Missouri,United States,554,300+,VERY_LOW,40000
+Cyprus University of Technology,Cyprus,555,300+,VERY_LOW,20000
+NOVA University of Lisbon,Portugal,556,300+,VERY_LOW,20000
+Royal Veterinary College,United Kingdom,557,300+,VERY_LOW,30000
+TU Dortmund University,Germany,558,300+,VERY_LOW,2000
+Konkuk University,South Korea,559,300+,VERY_LOW,20000
+American University of Sharjah,United Arab Emirates,560,300+,VERY_LOW,20000
+University of Salerno,Italy,561,300+,VERY_LOW,20000
+Imam Abdulrahman Bin Faisal University,Saudi Arabia,562,300+,VERY_LOW,20000
+Keele University,United Kingdom,563,300+,VERY_LOW,30000
+University of Manitoba,Canada,564,300+,VERY_LOW,25000
+Zhejiang University of Technology,China,565,300+,VERY_LOW,20000
+University of KwaZulu-Natal,South Africa,566,300+,VERY_LOW,20000
+Mahatma Gandhi University,India,567,300+,VERY_LOW,20000
+Liverpool John Moores University,United Kingdom,568,300+,VERY_LOW,30000
+University of Bradford,United Kingdom,569,300+,VERY_LOW,30000
+National Taiwan Normal University,Taiwan,570,300+,VERY_LOW,20000
+Shiraz University of Technology,Iran,571,300+,VERY_LOW,20000
+University of Missouri-Kansas City,United States,572,300+,VERY_LOW,40000
+Indian Institute of Technology Indore,India,573,300+,VERY_LOW,20000
+Polytechnic University of Bari,Italy,574,300+,VERY_LOW,20000
+"Goldsmiths, University of London",United Kingdom,575,300+,VERY_LOW,30000
+Kyungpook National University (KNU),South Korea,576,300+,VERY_LOW,20000
+Sultan Qaboos University,Oman,577,300+,VERY_LOW,20000
+University of the Sunshine Coast,Australia,578,300+,VERY_LOW,28000
+Chulalongkorn University,Thailand,579,300+,VERY_LOW,20000
+Carleton University,Canada,580,300+,VERY_LOW,25000
+Tashkent Institute of Irrigation and Agricultural Mechanisation,Uzbekistan,581,300+,VERY_LOW,20000
+University of Ferrara,Italy,582,300+,VERY_LOW,20000
+Ewha Womans University,South Korea,583,300+,VERY_LOW,20000
+UPES,India,584,300+,VERY_LOW,20000
+University of Graz,Austria,585,300+,VERY_LOW,20000
+Alfaisal University,Saudi Arabia,586,300+,VERY_LOW,20000
+Auckland University of Technology,New Zealand,587,300+,VERY_LOW,20000
+University of Pretoria,South Africa,588,300+,VERY_LOW,20000
+"Northeastern University, China",China,589,300+,VERY_LOW,20000
+Georgia State University,United States,590,300+,VERY_LOW,40000
+New Jersey Institute of Technology,United States,591,300+,VERY_LOW,40000
+Yeungnam University,South Korea,592,300+,VERY_LOW,20000
+"China University of Petroleum, Beijing",China,593,300+,VERY_LOW,20000
+Lovely Professional University,India,594,300+,VERY_LOW,20000
+Hamburg University of Technology,Germany,595,300+,VERY_LOW,2000
+Gachon University,South Korea,596,300+,VERY_LOW,20000
+Victoria University,Australia,597,300+,VERY_LOW,28000
+UEH University,Vietnam,598,300+,VERY_LOW,20000
+RPTU University Kaiserslautern-Landau,Germany,599,300+,VERY_LOW,2000
+University of Palermo,Italy,600,300+,VERY_LOW,20000
+KIIT University,India,601,300+,VERY_LOW,20000
+Juntendo University,Japan,602,300+,VERY_LOW,20000
+Lincoln University (New Zealand),New Zealand,603,300+,VERY_LOW,20000
+Middlesex University,United Kingdom,604,300+,VERY_LOW,30000
+Banaras Hindu University,India,605,300+,VERY_LOW,20000
+Jagiellonian University,Poland,606,300+,VERY_LOW,20000
+University of Haifa,Israel,607,300+,VERY_LOW,20000
+University of Denver,United States,608,300+,VERY_LOW,40000
+Graphic Era University,India,609,300+,VERY_LOW,20000
+SUNY University at Albany,United States,610,300+,VERY_LOW,40000
+Nottingham Trent University,United Kingdom,611,300+,VERY_LOW,30000
+Sciences Po,France,612,300+,VERY_LOW,20000
+Imam Mohammad Ibn Saud Islamic University,Saudi Arabia,613,300+,VERY_LOW,20000
+American University of the Middle East,Kuwait,614,300+,VERY_LOW,20000
+Aligarh Muslim University,India,615,300+,VERY_LOW,20000
+University of Greenwich,United Kingdom,616,300+,VERY_LOW,30000
+University of Wuppertal,Germany,617,300+,VERY_LOW,2000
+National University of Sciences and Technology,Pakistan,618,300+,VERY_LOW,20000
+University of Passau,Germany,619,300+,VERY_LOW,2000
+Manchester Metropolitan University,United Kingdom,620,300+,VERY_LOW,30000
+Centrale Nantes,France,621,300+,VERY_LOW,20000
+Nanjing University of Science and Technology (NJUST),China,622,300+,VERY_LOW,20000
+University of Arkansas,United States,623,300+,VERY_LOW,40000
+Anglia Ruskin University (ARU),United Kingdom,624,300+,VERY_LOW,30000
+Lehigh University,United States,625,300+,VERY_LOW,40000
+Tabriz University of Medical Sciences,Iran,626,300+,VERY_LOW,20000
+Tarbiat Modares University,Iran,627,300+,VERY_LOW,20000
+University of Neuchâtel,Switzerland,628,300+,VERY_LOW,20000
+The Catholic University of Korea (CUK),South Korea,629,300+,VERY_LOW,20000
+Mahidol University,Thailand,630,300+,VERY_LOW,20000
+Bilkent University,Turkey,631,300+,VERY_LOW,20000
+University of Canterbury,New Zealand,632,300+,VERY_LOW,20000
+Graz University of Technology,Austria,633,300+,VERY_LOW,20000
+Nanjing Forestry University,China,634,300+,VERY_LOW,20000
+École Nationale des Travaux Publics de l'État (ENTPE),France,635,300+,VERY_LOW,20000
+TU Braunschweig,Germany,636,300+,VERY_LOW,2000
+University of Klagenfurt,Austria,637,300+,VERY_LOW,20000
+Hiroshima University,Japan,638,300+,VERY_LOW,20000
+The University of Jordan,Jordan,639,300+,VERY_LOW,20000
+Örebro University,Sweden,640,300+,VERY_LOW,20000
+University of North Carolina at Charlotte,United States,641,300+,VERY_LOW,40000
+University of Granada,Spain,642,300+,VERY_LOW,20000
+University of Alaska Fairbanks,United States,643,300+,VERY_LOW,40000
+Auburn University,United States,644,300+,VERY_LOW,40000
+Universiti Pendidikan Sultan Idris,Malaysia,645,300+,VERY_LOW,20000
+University of Lincoln,United Kingdom,646,300+,VERY_LOW,30000
+"University of Nevada, Las Vegas",United States,647,300+,VERY_LOW,40000
+University of Mons,Belgium,648,300+,VERY_LOW,20000
+University of Crete,Greece,649,300+,VERY_LOW,20000
+Ulster University,United Kingdom,650,300+,VERY_LOW,30000
+Universiti Malaysia Pahang Al-Sultan Abdullah (UMPSA),Malaysia,651,300+,VERY_LOW,20000
+Université Côte d'Azur,France,652,300+,VERY_LOW,20000
+University of Tabriz,Iran,653,300+,VERY_LOW,20000
+University of Calabria,Italy,654,300+,VERY_LOW,20000
+Babol Noshirvani University of Technology,Iran,655,300+,VERY_LOW,20000
+University of L’Aquila,Italy,656,300+,VERY_LOW,20000
+East China University of Science and Technology,China,657,300+,VERY_LOW,20000
+COMSATS University Islamabad,Pakistan,658,300+,VERY_LOW,20000
+Concordia University,Canada,659,300+,VERY_LOW,25000
+Egypt-Japan University of Science and Technology (E-JUST),Egypt,660,300+,VERY_LOW,20000
+Management & Science University (MSU),Malaysia,661,300+,VERY_LOW,20000
+"Amity University, Noida",India,662,300+,VERY_LOW,20000
+University of Minho,Portugal,663,300+,VERY_LOW,20000
+Isfahan University of Technology,Iran,664,300+,VERY_LOW,20000
+Panjab University,India,665,300+,VERY_LOW,20000
+University of Udine,Italy,666,300+,VERY_LOW,20000
+Jiangnan University,China,667,300+,VERY_LOW,20000
+Tomsk State University,Russian Federation,668,300+,VERY_LOW,20000
+UiT The Arctic University of Norway,Norway,669,300+,VERY_LOW,20000
+Universitat Politècnica de Catalunya,Spain,670,300+,VERY_LOW,20000
+Majmaah University,Saudi Arabia,671,300+,VERY_LOW,20000
+Tallinn University of Technology,Estonia,672,300+,VERY_LOW,20000
+Universiti Tenaga Nasional (UNITEN),Malaysia,673,300+,VERY_LOW,20000
+Edinburgh Napier University,United Kingdom,674,300+,VERY_LOW,30000
+ISCTE-University Institute of Lisbon,Portugal,675,300+,VERY_LOW,20000
+University of Lille,France,676,300+,VERY_LOW,20000
+Dhofar University,Oman,677,300+,VERY_LOW,20000
+Oklahoma State University,United States,678,300+,VERY_LOW,40000
+Ocean University of China,China,679,300+,VERY_LOW,20000
+"UEES, Espiritu Santo University",Ecuador,680,300+,VERY_LOW,20000
+University of Cagliari,Italy,681,300+,VERY_LOW,20000
+Claude Bernard University Lyon 1,France,682,300+,VERY_LOW,20000
+Nantes Université,France,683,300+,VERY_LOW,20000
+Sukkur IBA University,Pakistan,684,300+,VERY_LOW,20000
+Coventry University,United Kingdom,685,300+,VERY_LOW,30000
+Aberystwyth University,United Kingdom,686,300+,VERY_LOW,30000
+Toronto Metropolitan University,Canada,687,300+,VERY_LOW,25000
+Amedeo Avogadro University of Eastern Piedmont,Italy,688,300+,VERY_LOW,20000
+Symbiosis International University,India,689,300+,VERY_LOW,20000
+Paderborn University,Germany,690,300+,VERY_LOW,2000
+Manipal Academy of Higher Education,India,691,300+,VERY_LOW,20000
+Thapar Institute of Engineering and Technology,India,692,300+,VERY_LOW,20000
+Zhejiang Normal University,China,693,300+,VERY_LOW,20000
+Central University of Punjab,India,694,300+,VERY_LOW,20000
+Duy Tan University,Vietnam,695,300+,VERY_LOW,20000
+Harokopio University of Athens,Greece,696,300+,VERY_LOW,20000
+Masaryk University,Czechia,697,300+,VERY_LOW,20000
+Nanjing University of Aeronautics and Astronautics,China,698,300+,VERY_LOW,20000
+University of Tuscia,Italy,699,300+,VERY_LOW,20000
+King Faisal University,Saudi Arabia,700,300+,VERY_LOW,20000
+Lorestan University of Medical Sciences,Iran,701,300+,VERY_LOW,20000
+National Research Nuclear University MEPhI,Russian Federation,702,300+,VERY_LOW,20000
+Iran University of Medical Sciences,Iran,703,300+,VERY_LOW,20000
+Xidian University,China,704,300+,VERY_LOW,20000
+The University of Texas at San Antonio,United States,705,300+,VERY_LOW,40000
+University of New Brunswick UNB,Canada,706,300+,VERY_LOW,25000
+Golestan University,Iran,707,300+,VERY_LOW,20000
+Shiraz University of Medical Sciences,Iran,708,300+,VERY_LOW,20000
+University of Insubria,Italy,709,300+,VERY_LOW,20000
+"University of Maryland, Baltimore County",United States,710,300+,VERY_LOW,40000
+Tecnológico de Monterrey,Mexico,711,300+,VERY_LOW,20000
+Indian Institute of Technology Patna,India,712,300+,VERY_LOW,20000
+London South Bank University,United Kingdom,713,300+,VERY_LOW,30000
+Rovira i Virgili University,Spain,714,300+,VERY_LOW,20000
+Bar-Ilan University,Israel,715,300+,VERY_LOW,20000
+University of Hertfordshire,United Kingdom,716,300+,VERY_LOW,30000
+Chitkara University,India,717,300+,VERY_LOW,20000
+Cyprus International University,Northern Cyprus,718,300+,VERY_LOW,20000
+Urmia University of Medical Sciences,Iran,719,300+,VERY_LOW,20000
+Yarmouk University,Jordan,720,300+,VERY_LOW,20000
+Worcester Polytechnic Institute,United States,721,300+,VERY_LOW,40000
+Obuda University,Hungary,722,300+,VERY_LOW,20000
+Federal University of Rio de Janeiro,Brazil,723,300+,VERY_LOW,20000
+University of Beira Interior,Portugal,724,300+,VERY_LOW,20000
+University of the West of Scotland,United Kingdom,725,300+,VERY_LOW,30000
+École des Mines de Saint-Étienne,France,726,300+,VERY_LOW,20000
+Kadir Has University,Turkey,727,300+,VERY_LOW,20000
+Kobe University,Japan,728,300+,VERY_LOW,20000
+Air University,Pakistan,729,300+,VERY_LOW,20000
+Jouf University,Saudi Arabia,730,300+,VERY_LOW,20000
+Malaviya National Institute of Technology,India,731,300+,VERY_LOW,20000
+SRUC (Scotland’s Rural College),United Kingdom,732,300+,VERY_LOW,30000
+Louisiana State University,United States,733,300+,VERY_LOW,40000
+University of the Basque Country,Spain,734,300+,VERY_LOW,20000
+Shahid Beheshti University of Medical Sciences,Iran,735,300+,VERY_LOW,20000
+New Mexico State University (Main campus),United States,736,300+,VERY_LOW,40000
+Mississippi State University,United States,737,300+,VERY_LOW,40000
+Ben-Gurion University of the Negev,Israel,738,300+,VERY_LOW,20000
+Qingdao University,China,739,300+,VERY_LOW,20000
+Paris Lodron Universität Salzburg,Austria,740,300+,VERY_LOW,20000
+University of Aveiro,Portugal,741,300+,VERY_LOW,20000
+South China Normal University,China,742,300+,VERY_LOW,20000
+Capital Medical University,China,743,300+,VERY_LOW,20000
+Yuan Ze University,Taiwan,744,300+,VERY_LOW,20000
+Universidade Estadual Paulista (Unesp),Brazil,745,300+,VERY_LOW,20000
+University of Bari Aldo Moro,Italy,746,300+,VERY_LOW,20000
+UWE Bristol (University of the West of England),United Kingdom,747,300+,VERY_LOW,30000
+Otto von Guericke University of Magdeburg,Germany,748,300+,VERY_LOW,2000
+Guangdong University of Technology,China,749,300+,VERY_LOW,20000
+Government College University Faisalabad,Pakistan,750,300+,VERY_LOW,20000
+De Montfort University,United Kingdom,751,300+,VERY_LOW,30000
+London Metropolitan University,United Kingdom,752,300+,VERY_LOW,30000
+University of the Western Cape,South Africa,753,300+,VERY_LOW,20000
+Xi’an Jiaotong-Liverpool University,China,754,300+,VERY_LOW,20000
+Polytechnic University of Valencia,Spain,755,300+,VERY_LOW,20000
+Texas Tech University,United States,756,300+,VERY_LOW,40000
+American University,United States,757,300+,VERY_LOW,40000
+Universiti Teknologi Brunei,Brunei Darussalam,758,300+,VERY_LOW,20000
+SUNY Binghamton University,United States,759,300+,VERY_LOW,40000
+Teesside University,United Kingdom,760,300+,VERY_LOW,30000
+Keio University,Japan,761,300+,VERY_LOW,20000
+Isfahan University of Medical Sciences,Iran,762,300+,VERY_LOW,20000
+Eastern Mediterranean University,Northern Cyprus,763,300+,VERY_LOW,20000
+Ton Duc Thang University,Vietnam,764,300+,VERY_LOW,20000
+Czech University of Life Sciences Prague (CZU),Czechia,765,300+,VERY_LOW,20000
+City University of Macau,Macao,766,300+,VERY_LOW,20000
+University of Ha’il,Saudi Arabia,767,300+,VERY_LOW,20000
+The University of Aizu,Japan,768,300+,VERY_LOW,20000
+University of Parma,Italy,769,300+,VERY_LOW,20000
+University of Warsaw,Poland,770,300+,VERY_LOW,20000
+VIT University,India,771,300+,VERY_LOW,20000
+Parthenope University of Naples,Italy,772,300+,VERY_LOW,20000
+Sharda University,India,773,300+,VERY_LOW,20000
+Babol University of Medical Sciences,Iran,774,300+,VERY_LOW,20000
+Charles Sturt University,Australia,775,300+,VERY_LOW,28000
+National Sun Yat-Sen University,Taiwan,776,300+,VERY_LOW,20000
+University of Santiago de Compostela,Spain,777,300+,VERY_LOW,20000
+National Institute of Technology Rourkela,India,778,300+,VERY_LOW,20000
+University of Texas at Arlington,United States,779,300+,VERY_LOW,40000
+University of Tabuk,Saudi Arabia,780,300+,VERY_LOW,20000
+Kansas State University,United States,781,300+,VERY_LOW,40000
+Taif University,Saudi Arabia,782,300+,VERY_LOW,20000
+"International Institute of Information Technology, Hyderabad",India,783,300+,VERY_LOW,20000
+Bahauddin Zakariya University,Pakistan,784,300+,VERY_LOW,20000
+Harbin Engineering University,China,785,300+,VERY_LOW,20000
+University of Brighton,United Kingdom,786,300+,VERY_LOW,30000
+Jazan University,Saudi Arabia,787,300+,VERY_LOW,20000
+University of Rennes 1,France,788,300+,VERY_LOW,20000
+University of Toledo,United States,789,300+,VERY_LOW,40000
+Yıldız Technical University,Turkey,790,300+,VERY_LOW,20000
+Rochester Institute of Technology,United States,791,300+,VERY_LOW,40000
+University of Lahore,Pakistan,792,300+,VERY_LOW,20000
+University of Derby,United Kingdom,793,300+,VERY_LOW,30000
+Nanjing Tech University,China,794,300+,VERY_LOW,20000
+American University in Cairo,Egypt,795,300+,VERY_LOW,20000
+Universidade Federal do Rio Grande do Sul,Brazil,796,300+,VERY_LOW,20000
+Kafrelsheikh University,Egypt,797,300+,VERY_LOW,20000
+Alborz University of Medical Sciences,Iran,798,300+,VERY_LOW,20000
+Beirut Arab University,Lebanon,799,300+,VERY_LOW,20000
+"University of Veterinary and Animal Sciences, Lahore",Pakistan,800,300+,VERY_LOW,20000
+Qazvin University of Medical Sciences,Iran,801,300+,VERY_LOW,20000
+University of Delhi,India,802,300+,VERY_LOW,20000
+Ohio University (Main campus),United States,803,300+,VERY_LOW,40000
+Isra University (Jordan),Jordan,804,300+,VERY_LOW,20000
+Chang Gung University,Taiwan,805,300+,VERY_LOW,20000
+Bharathiar University,India,806,300+,VERY_LOW,20000
+Baylor University,United States,807,300+,VERY_LOW,40000
+Qassim University,Saudi Arabia,808,300+,VERY_LOW,20000
+Fuzhou University,China,809,300+,VERY_LOW,20000
+"University of Engineering and Technology, Taxila",Pakistan,810,300+,VERY_LOW,20000
+Kurdistan University of Medical Sciences,Iran,811,300+,VERY_LOW,20000
+William & Mary,United States,812,300+,VERY_LOW,40000
+Northeast Agricultural University,China,813,300+,VERY_LOW,20000
+Pontifical Catholic University of Rio de Janeiro (PUC-Rio),Brazil,814,300+,VERY_LOW,20000
+Jönköping University,Sweden,815,300+,VERY_LOW,20000
+Future University in Egypt,Egypt,816,300+,VERY_LOW,20000
+Birjand University of Medical Sciences,Iran,817,300+,VERY_LOW,20000
+"Birla Institute of Technology and Science, Pilani",India,818,300+,VERY_LOW,20000
+Oxford Brookes University,United Kingdom,819,300+,VERY_LOW,30000
+Shahroud University of Medical Sciences,Iran,820,300+,VERY_LOW,20000
+Jawaharlal Nehru University,India,821,300+,VERY_LOW,20000
+Leeds Beckett University,United Kingdom,822,300+,VERY_LOW,30000
+National Technical University of Athens,Greece,823,300+,VERY_LOW,20000
+Jordan University of Science and Technology,Jordan,824,300+,VERY_LOW,20000
+RUDN University,Russian Federation,825,300+,VERY_LOW,20000
+Kerman University of Medical Sciences,Iran,826,300+,VERY_LOW,20000
+University of Jaén,Spain,827,300+,VERY_LOW,20000
+Robert Gordon University,United Kingdom,828,300+,VERY_LOW,30000
+Rafsanjan University of Medical Sciences,Iran,829,300+,VERY_LOW,20000
+Panthéon-Sorbonne University – Paris 1,France,830,300+,VERY_LOW,20000
+Abdul Wali Khan University Mardan,Pakistan,831,300+,VERY_LOW,20000
+National Autonomous University of Mexico,Mexico,832,300+,VERY_LOW,20000
+Cankaya University,Turkey,833,300+,VERY_LOW,20000
+Urmia University,Iran,834,300+,VERY_LOW,20000
+University of Tunis El Manar,Tunisia,835,300+,VERY_LOW,20000
+Southwest Jiaotong University,China,836,300+,VERY_LOW,20000
+Northeast Normal University,China,837,300+,VERY_LOW,20000
+Southern Illinois University Carbondale,United States,838,300+,VERY_LOW,40000
+Nanjing Normal University,China,839,300+,VERY_LOW,20000
+Nanjing Medical University,China,840,300+,VERY_LOW,20000
+University of Seville,Spain,841,300+,VERY_LOW,20000
+University of Namur,Belgium,842,300+,VERY_LOW,20000
+Istanbul Medipol University,Turkey,843,300+,VERY_LOW,20000
+King Saud bin Abdulaziz University for Health Sciences,Saudi Arabia,844,300+,VERY_LOW,20000
+University of Management and Technology,Pakistan,845,300+,VERY_LOW,20000
+Cairo University,Egypt,846,300+,VERY_LOW,20000
+Guru Gobind Singh Indraprastha University,India,847,300+,VERY_LOW,20000
+University of Indonesia,Indonesia,848,300+,VERY_LOW,20000
+National Institute of Applied Sciences of Lyon (INSA Lyon),France,849,300+,VERY_LOW,20000
+Guilan University of Medical Sciences,Iran,850,300+,VERY_LOW,20000
+University of Salford,United Kingdom,851,300+,VERY_LOW,30000
+Empress Catherine II Saint Petersburg Mining University,Russian Federation,852,300+,VERY_LOW,20000
+University of Malakand,Pakistan,853,300+,VERY_LOW,20000
+European University Cyprus,Cyprus,854,300+,VERY_LOW,20000
+National University of Science and Technology (MISiS),Russian Federation,855,300+,VERY_LOW,20000
+University of Rhode Island,United States,856,300+,VERY_LOW,40000
+Najran University,Saudi Arabia,857,300+,VERY_LOW,20000
+University of Ljubljana,Slovenia,858,300+,VERY_LOW,20000
+Reykjavík University,Iceland,859,300+,VERY_LOW,20000
+University of Córdoba,Spain,860,300+,VERY_LOW,20000
+International University of Rabat,Morocco,861,300+,VERY_LOW,20000
+Jeonbuk National University,South Korea,862,300+,VERY_LOW,20000
+Norwegian University of Life Sciences,Norway,863,300+,VERY_LOW,20000
+Mashhad University of Medical Sciences,Iran,864,300+,VERY_LOW,20000
+Chonnam National University,South Korea,865,300+,VERY_LOW,20000
+Kaohsiung Medical University,Taiwan,866,300+,VERY_LOW,20000
+The Islamia University of Bahawalpur,Pakistan,867,300+,VERY_LOW,20000
+Vilnius University,Lithuania,868,300+,VERY_LOW,20000
+KL University,India,869,300+,VERY_LOW,20000
+National Institute of Technology Silchar,India,870,300+,VERY_LOW,20000
+The University of Alabama,United States,871,300+,VERY_LOW,40000
+Wenzhou University,China,872,300+,VERY_LOW,20000
+SR University,India,873,300+,VERY_LOW,20000
+The Catholic University of America,United States,874,300+,VERY_LOW,40000
+University of Westminster,United Kingdom,875,300+,VERY_LOW,30000
+University of Debrecen,Hungary,876,300+,VERY_LOW,20000
+Hacettepe University,Turkey,877,300+,VERY_LOW,20000
+Waseda University,Japan,878,300+,VERY_LOW,20000
+University of Vigo,Spain,879,300+,VERY_LOW,20000
+Inha University,South Korea,880,300+,VERY_LOW,20000
+Clark University,United States,881,300+,VERY_LOW,40000
+Daffodil International University (DIU),Bangladesh,882,300+,VERY_LOW,20000
+University of Salento,Italy,883,300+,VERY_LOW,20000
+JSS Academy of Higher Education and Research,India,884,300+,VERY_LOW,20000
+Montanuniversität Leoben,Austria,885,300+,VERY_LOW,20000
+Shiraz University,Iran,886,300+,VERY_LOW,20000
+Arts et Métiers,France,887,300+,VERY_LOW,20000
+University of Wyoming,United States,888,300+,VERY_LOW,40000
+Catholic University of Portugal,Portugal,889,300+,VERY_LOW,20000
+University of Medicine and Pharmacy Carol Davila,Romania,890,300+,VERY_LOW,20000
+University of Hagen,Germany,891,300+,VERY_LOW,2000
+Mansoura University,Egypt,892,300+,VERY_LOW,20000
+Zhejiang Gongshang University,China,893,300+,VERY_LOW,20000
+Gorgan University of Agricultural Sciences and Natural Resources,Iran,894,300+,VERY_LOW,20000
+The University of Notre Dame Australia,Australia,895,300+,VERY_LOW,28000
+Federal University of Minas Gerais,Brazil,896,300+,VERY_LOW,20000
+Shri Mata Vaishno Devi University,India,897,300+,VERY_LOW,20000
+North-West University,South Africa,898,300+,VERY_LOW,20000
+Government College University Lahore,Pakistan,899,300+,VERY_LOW,20000
+Universitat Ramon Llull,Spain,900,300+,VERY_LOW,20000
+Iqra University,Pakistan,901,300+,VERY_LOW,20000
+"International Islamic University, Islamabad",Pakistan,902,300+,VERY_LOW,20000
+University of the Punjab,Pakistan,903,300+,VERY_LOW,20000
+Ain Shams University,Egypt,904,300+,VERY_LOW,20000
+Azerbaijan State University of Economics,Azerbaijan,905,300+,VERY_LOW,20000
+Sogang University,South Korea,906,300+,VERY_LOW,20000
+Capital University of Science and Technology,Pakistan,907,300+,VERY_LOW,20000
+Chengdu University,China,908,300+,VERY_LOW,20000
+Siksha ‘O’ Anusandhan,India,909,300+,VERY_LOW,20000
+Zanjan University of Medical Sciences,Iran,910,300+,VERY_LOW,20000
+Northern Border University,Saudi Arabia,911,300+,VERY_LOW,20000
+Carlos III University of Madrid,Spain,912,300+,VERY_LOW,20000
+Glasgow Caledonian University,United Kingdom,913,300+,VERY_LOW,30000
+An-Najah National University,Palestine,914,300+,VERY_LOW,20000
+Open University of Catalonia,Spain,915,300+,VERY_LOW,20000
+University of Salamanca,Spain,916,300+,VERY_LOW,20000
+Ozyegin University,Turkey,917,300+,VERY_LOW,20000
+Abdullah Gül University,Turkey,918,300+,VERY_LOW,20000
+Universidade Federal de São Paulo (UNIFESP),Brazil,919,300+,VERY_LOW,20000
+Hanoi Medical University,Vietnam,920,300+,VERY_LOW,20000
+Bucharest University of Economic Studies,Romania,921,300+,VERY_LOW,20000
+University of Nova Gorica,Slovenia,922,300+,VERY_LOW,20000
+Makerere University,Uganda,923,300+,VERY_LOW,20000
+Ferdowsi University of Mashhad,Iran,924,300+,VERY_LOW,20000
+Ahvaz Jundishapur University of Medical Sciences (AJUMS),Iran,925,300+,VERY_LOW,20000
+University of Malta,Malta,926,300+,VERY_LOW,20000
+University of Vic – Central University of Catalonia,Spain,927,300+,VERY_LOW,20000
+Al-Zaytoonah University of Jordan,Jordan,928,300+,VERY_LOW,20000
+Nanjing University of Information Science and Technology,China,929,300+,VERY_LOW,20000
+University of Regina,Canada,930,300+,VERY_LOW,25000
+University of Dhaka,Bangladesh,931,300+,VERY_LOW,20000
+Guangzhou Medical University,China,932,300+,VERY_LOW,20000
+Shahrekord University of Medical Sciences,Iran,933,300+,VERY_LOW,20000
+University of Petra,Jordan,934,300+,VERY_LOW,20000
+Gazipur Agricultural University,Bangladesh,935,300+,VERY_LOW,20000
+Aristotle University of Thessaloniki,Greece,936,300+,VERY_LOW,20000
+Ilam University of Medical Sciences,Iran,937,300+,VERY_LOW,20000
+Zahedan University of Medical Sciences,Iran,938,300+,VERY_LOW,20000
+North South University,Bangladesh,939,300+,VERY_LOW,20000
+Halmstad University,Sweden,940,300+,VERY_LOW,20000
+Jahangirnagar University,Bangladesh,941,300+,VERY_LOW,20000
+University of Ibadan,Nigeria,942,300+,VERY_LOW,20000
+Eötvös Loránd University,Hungary,943,300+,VERY_LOW,20000
+Medical University of Lodz,Poland,944,300+,VERY_LOW,20000
+Shahid Beheshti University,Iran,945,300+,VERY_LOW,20000
+University of Roehampton,United Kingdom,946,300+,VERY_LOW,30000
+Ontario Tech University,Canada,947,300+,VERY_LOW,25000
+Florida Atlantic University,United States,948,300+,VERY_LOW,40000
+Khwaja Fareed University of Engineering and Information Technology,Pakistan,949,300+,VERY_LOW,20000
+Old Dominion University,United States,950,300+,VERY_LOW,40000
+University of Lleida,Spain,951,300+,VERY_LOW,20000
+Birmingham City University,United Kingdom,952,300+,VERY_LOW,30000
+Atatürk University,Turkey,953,300+,VERY_LOW,20000
+K.N. Toosi University of Technology,Iran,954,300+,VERY_LOW,20000
+University of Central Punjab,Pakistan,955,300+,VERY_LOW,20000
+Ural Federal University,Russian Federation,956,300+,VERY_LOW,20000
+University of Rome III,Italy,957,300+,VERY_LOW,20000
+University of Alcalá,Spain,958,300+,VERY_LOW,20000
+Northern Illinois University,United States,959,300+,VERY_LOW,40000
+Al al-Bayt University,Jordan,960,300+,VERY_LOW,20000
+Baqiyatallah University of Medical Sciences,Iran,961,300+,VERY_LOW,20000
+Jamia Hamdard University,India,962,300+,VERY_LOW,20000
+Mazandaran University of Medical Sciences,Iran,963,300+,VERY_LOW,20000
+Peter the Great St Petersburg Polytechnic University,Russian Federation,964,300+,VERY_LOW,20000
+University of Wolverhampton,United Kingdom,965,300+,VERY_LOW,30000
+Alagappa University,India,966,300+,VERY_LOW,20000
+Tomsk Polytechnic University,Russian Federation,967,300+,VERY_LOW,20000
+Innopolis University,Russian Federation,968,300+,VERY_LOW,20000
+Savitribai Phule Pune University,India,969,300+,VERY_LOW,20000
+Al-Azhar University,Egypt,970,300+,VERY_LOW,20000
+The Open University,United Kingdom,971,300+,VERY_LOW,30000
+University of Gujrat,Pakistan,972,300+,VERY_LOW,20000
+University of Lagos,Nigeria,973,300+,VERY_LOW,20000
+Bahçeşehir University,Turkey,974,300+,VERY_LOW,20000
+Lahore University of Management Sciences,Pakistan,974,300+,VERY_LOW,20000
+Sheffield Hallam University,United Kingdom,976,300+,VERY_LOW,30000
+Université de Bretagne Occidentale,France,977,300+,VERY_LOW,20000
+Marie and Louis Pasteur University,France,978,300+,VERY_LOW,20000
+King Mongkut’s University of Technology Thonburi,Thailand,979,300+,VERY_LOW,20000
+Alexandria University,Egypt,980,300+,VERY_LOW,20000
+"National Institute of Technology, Tiruchirappalli",India,981,300+,VERY_LOW,20000
+Pablo de Olavide University,Spain,982,300+,VERY_LOW,20000
+University of Patras,Greece,983,300+,VERY_LOW,20000
+Anna University,India,984,300+,VERY_LOW,20000
+Portland State University,United States,985,300+,VERY_LOW,40000
+Siberian Federal University,Russian Federation,986,300+,VERY_LOW,20000
+Delhi Technological University,India,987,300+,VERY_LOW,20000
+Ghulam Ishaq Khan Institute of Engineering Sciences and Technology,Pakistan,988,300+,VERY_LOW,20000
+Kazan Federal University,Russian Federation,989,300+,VERY_LOW,20000
+National Veterinary School of Alfort (EnvA),France,990,300+,VERY_LOW,20000
+"Amity University Rajasthan, Jaipur",India,991,300+,VERY_LOW,20000
+Mahsa University,Malaysia,992,300+,VERY_LOW,20000
+Kingston University,United Kingdom,992,300+,VERY_LOW,30000
+Wakayama Medical University,Japan,994,300+,VERY_LOW,20000
+École Centrale de Lyon,France,995,300+,VERY_LOW,20000
+University of the Balearic Islands,Spain,996,300+,VERY_LOW,20000
+German Jordanian University,Jordan,997,300+,VERY_LOW,20000
+University of Foggia,Italy,998,300+,VERY_LOW,20000
+Reichman University,Israel,999,300+,VERY_LOW,20000
+Gabriele d‘Annunzio University,Italy,1000,300+,VERY_LOW,20000
+IMT Nord Europe,France,1001,300+,VERY_LOW,20000
+University of Cape Coast,Ghana,1002,300+,VERY_LOW,20000
+Chungbuk National University,South Korea,1003,300+,VERY_LOW,20000
+Jawaharlal Nehru Technological University Anantapur (JNTUA),India,1004,300+,VERY_LOW,20000
+Delta University for Science and Technology,Egypt,1005,300+,VERY_LOW,20000
+Lithuanian University of Health Sciences,Lithuania,1006,300+,VERY_LOW,20000
+Indian Institute of Technology Ropar,India,1007,300+,VERY_LOW,20000
+University of Colombo,Sri Lanka,1008,300+,VERY_LOW,20000
+University of Hradec Králové,Czechia,1009,300+,VERY_LOW,20000
+China Pharmaceutical University,China,1010,300+,VERY_LOW,20000
+Tishk International University,Iraq,1011,300+,VERY_LOW,20000
+University of Campania Luigi Vanvitelli,Italy,1012,300+,VERY_LOW,20000
+University of Angers,France,1013,300+,VERY_LOW,20000
+University of Girona,Spain,1014,300+,VERY_LOW,20000
+Zagazig University,Egypt,1015,300+,VERY_LOW,20000
+PMAS Arid Agriculture University Rawalpindi,Pakistan,1016,300+,VERY_LOW,20000
+Universiti Malaysia Terengganu (UMT),Malaysia,1017,300+,VERY_LOW,20000
+ITMO University,Russian Federation,1018,300+,VERY_LOW,20000
+Islamic University of Madinah,Saudi Arabia,1019,300+,VERY_LOW,20000
+"Arab Academy for Science, Technology and Maritime Transport",Egypt,1020,300+,VERY_LOW,20000
+Hamadan University of Medical Sciences (UMSHA),Iran,1021,300+,VERY_LOW,20000
+Kyoto Prefectural University of Medicine,Japan,1022,300+,VERY_LOW,20000
+University of Hyderabad,India,1023,300+,VERY_LOW,20000
+Indian Institute of Technology Gandhinagar,India,1024,300+,VERY_LOW,20000
+Okayama University,Japan,1025,300+,VERY_LOW,20000
+GLA University,India,1026,300+,VERY_LOW,20000
+University of Memphis,United States,1027,300+,VERY_LOW,40000
+Covenant University,Nigeria,1028,300+,VERY_LOW,20000
+University of Kashan,Iran,1029,300+,VERY_LOW,20000
+"University of the Andes, Colombia",Colombia,1030,300+,VERY_LOW,20000
+University of Zaragoza,Spain,1031,300+,VERY_LOW,20000
+Bangladesh University of Engineering and Technology,Bangladesh,1032,300+,VERY_LOW,20000
+University of Rajshahi,Bangladesh,1033,300+,VERY_LOW,20000
+Université Bourgogne Europe,France,1034,300+,VERY_LOW,20000
+Universidade Federal de Santa Catarina,Brazil,1035,300+,VERY_LOW,20000
+Yokohama City University,Japan,1036,300+,VERY_LOW,20000
+University of Kurdistan,Iran,1037,300+,VERY_LOW,20000
+Riphah International University,Pakistan,1038,300+,VERY_LOW,20000
+ZHAW Zurich University of Applied Sciences,Switzerland,1039,300+,VERY_LOW,20000
+University of Savoie Mont Blanc,France,1040,300+,VERY_LOW,20000
+Institute for Advanced Studies in Basic Sciences (IASBS),Iran,1041,300+,VERY_LOW,20000
+Tokyo Medical University,Japan,1042,300+,VERY_LOW,20000
+University of Ghana,Ghana,1043,300+,VERY_LOW,20000
+University of Sannio,Italy,1044,300+,VERY_LOW,20000
+University of Murcia,Spain,1045,300+,VERY_LOW,20000
+Chiang Mai University,Thailand,1046,300+,VERY_LOW,20000
+Cochin University of Science and Technology,India,1047,300+,VERY_LOW,20000
+University of Texas at El Paso,United States,1048,300+,VERY_LOW,40000
+Lakehead University,Canada,1049,300+,VERY_LOW,25000
+SRM Institute of Science and Technology,India,1050,300+,VERY_LOW,20000
+Jashore University of Science and Technology,Bangladesh,1051,300+,VERY_LOW,20000
+Tallinn University,Estonia,1052,300+,VERY_LOW,20000
+Ming Chi University of Technology,Taiwan,1053,300+,VERY_LOW,20000
+TU Bergakademie Freiberg,Germany,1054,300+,VERY_LOW,2000
+Chiba University,Japan,1055,300+,VERY_LOW,20000
+Florida Institute of Technology,United States,1055,300+,VERY_LOW,40000
+The University of Haripur,Pakistan,1057,300+,VERY_LOW,20000
+University of Chile,Chile,1058,300+,VERY_LOW,20000
+Palacký University Olomouc,Czechia,1059,300+,VERY_LOW,20000
+University of Camerino (Unicam),Italy,1060,300+,VERY_LOW,20000
+Technische Universität Ilmenau,Germany,1061,300+,VERY_LOW,2000
+BRAC University,Bangladesh,1062,300+,VERY_LOW,20000
+University of Algarve,Portugal,1063,300+,VERY_LOW,20000
+University of Lancashire,United Kingdom,1064,300+,VERY_LOW,30000
+Shantou University,China,1065,300+,VERY_LOW,20000
+University of Bucharest,Romania,1066,300+,VERY_LOW,20000
+"University of Technology, Iraq",Iraq,1067,300+,VERY_LOW,20000
+Florida Agricultural and Mechanical University,United States,1068,300+,VERY_LOW,40000
+University of Belgrade,Serbia,1069,300+,VERY_LOW,20000
+Ateneo de Manila University,Philippines,1070,300+,VERY_LOW,20000
+Jaume I University,Spain,1071,300+,VERY_LOW,20000
+European University of Madrid,Spain,1072,300+,VERY_LOW,20000
+Gdańsk University of Technology,Poland,1073,300+,VERY_LOW,20000
+Indian Institute of Technology Mandi,India,1074,300+,VERY_LOW,20000
+CY Cergy Paris University,France,1075,300+,VERY_LOW,20000
+University of East London,United Kingdom,1076,300+,VERY_LOW,30000
+Shanghai Normal University,China,1077,300+,VERY_LOW,20000
+Kaunas University of Technology,Lithuania,1078,300+,VERY_LOW,20000
+Universidad Peruana Cayetano Heredia,Peru,1079,300+,VERY_LOW,20000
+Universiti Sultan Zainal Abidin,Malaysia,1080,300+,VERY_LOW,20000
+Shaqra University,Saudi Arabia,1081,300+,VERY_LOW,20000
+University of Oviedo,Spain,1082,300+,VERY_LOW,20000
+Hangzhou Normal University,China,1083,300+,VERY_LOW,20000
+Technical University of Madrid,Spain,1084,300+,VERY_LOW,20000
+University of Alicante,Spain,1085,300+,VERY_LOW,20000
+University of Seoul,South Korea,1086,300+,VERY_LOW,20000
+Kumamoto University,Japan,1087,300+,VERY_LOW,20000
+Tashkent State Technical University,Uzbekistan,1088,300+,VERY_LOW,20000
+Chungnam National University,South Korea,1089,300+,VERY_LOW,20000
+University of la Costa,Colombia,1090,300+,VERY_LOW,20000
+İstinye University,Turkey,1091,300+,VERY_LOW,20000
+Edge Hill University,United Kingdom,1092,300+,VERY_LOW,30000
+Jaypee University of Information Technology,India,1093,300+,VERY_LOW,20000
+University of the Aegean,Greece,1094,300+,VERY_LOW,20000
+University of Bedfordshire,United Kingdom,1095,300+,VERY_LOW,30000
+Beni-Suef University,Egypt,1096,300+,VERY_LOW,20000
+Taiz University,Yemen,1097,300+,VERY_LOW,20000
+Khulna University of Engineering and Technology (KUET),Bangladesh,1098,300+,VERY_LOW,20000
+University of Okara,Pakistan,1099,300+,VERY_LOW,20000
+University of Latvia,Latvia,1100,300+,VERY_LOW,20000
+"National Institute of Technology, Raipur",India,1101,300+,VERY_LOW,20000
+University of Gloucestershire,United Kingdom,1102,300+,VERY_LOW,30000
+University of Clermont Auvergne,France,1103,300+,VERY_LOW,20000
+University of Castilla-La Mancha,Spain,1104,300+,VERY_LOW,20000
+Central Michigan University,United States,1105,300+,VERY_LOW,40000
+Datta Meghe Institute of Higher Education & Research (Deemed to be University),India,1106,300+,VERY_LOW,20000
+Landmark University,Nigeria,1107,300+,VERY_LOW,20000
+Mae Fah Luang University,Thailand,1108,300+,VERY_LOW,20000
+Fujita Health University,Japan,1109,300+,VERY_LOW,20000
+Nippon Medical School,Japan,1110,300+,VERY_LOW,20000
+Montana State University,United States,1111,300+,VERY_LOW,40000
+Bangladesh Agricultural University (BAU),Bangladesh,1112,300+,VERY_LOW,20000
+Damietta University,Egypt,1113,300+,VERY_LOW,20000
+Kalasalingam Academy of Research and Education,India,1114,300+,VERY_LOW,20000
+South Dakota Mines,United States,1115,300+,VERY_LOW,40000
+University of the South Pacific,Fiji,1116,300+,VERY_LOW,20000
+University of Peshawar,Pakistan,1117,300+,VERY_LOW,20000
+Clarkson University,United States,1118,300+,VERY_LOW,40000
+"Adam Mickiewicz University, Poznań",Poland,1119,300+,VERY_LOW,20000
+Sechenov University,Russian Federation,1120,300+,VERY_LOW,20000
+"Maulana Abul Kalam Azad University of Technology, West Bengal",India,1121,300+,VERY_LOW,20000
+Birla Institute of Technology,India,1122,300+,VERY_LOW,20000
+University of Hafr Al Batin,Saudi Arabia,1123,300+,VERY_LOW,20000
+Central University of Jammu,India,1124,300+,VERY_LOW,20000
+AGH University of Krakow,Poland,1125,300+,VERY_LOW,20000
+Multimedia University,Malaysia,1126,300+,VERY_LOW,20000
+University of La Laguna,Spain,1127,300+,VERY_LOW,20000
+Hazara University Mansehra,Pakistan,1128,300+,VERY_LOW,20000
+Cardiff Metropolitan University,United Kingdom,1129,300+,VERY_LOW,30000
+Istanbul Gelisim University,Turkey,1130,300+,VERY_LOW,20000
+York St John University,United Kingdom,1131,300+,VERY_LOW,30000
+Universiti Tunku Abdul Rahman (UTAR),Malaysia,1132,300+,VERY_LOW,20000
+Tanta University,Egypt,1133,300+,VERY_LOW,20000
+Imam Khomeini International University,Iran,1134,300+,VERY_LOW,20000
+Changsha University of Science and Technology,China,1135,300+,VERY_LOW,20000
+Novosibirsk State University,Russian Federation,1136,300+,VERY_LOW,20000
+Anhui University,China,1137,300+,VERY_LOW,20000
+Gonabad University of Medical Sciences,Iran,1138,300+,VERY_LOW,20000
+Semnan University,Iran,1139,300+,VERY_LOW,20000
+Al-Balqa Applied University,Jordan,1140,300+,VERY_LOW,20000
+Silesian University of Technology,Poland,1141,300+,VERY_LOW,20000
+New Valley University,Egypt,1142,300+,VERY_LOW,20000
+"University of Engineering and Technology, Peshawar",Pakistan,1143,300+,VERY_LOW,20000
+Nguyen Tat Thanh University,Vietnam,1144,300+,VERY_LOW,20000
+University of Sadat City,Egypt,1145,300+,VERY_LOW,20000
+Nova Southeastern University,United States,1146,300+,VERY_LOW,40000
+Kanazawa University,Japan,1147,300+,VERY_LOW,20000
+Selçuk University,Turkey,1148,300+,VERY_LOW,20000
+University of Almería,Spain,1149,300+,VERY_LOW,20000
+Suez University,Egypt,1150,300+,VERY_LOW,20000
+Bartin University,Turkey,1151,300+,VERY_LOW,20000
+University of Tours,France,1152,300+,VERY_LOW,20000
+University of Sulaimani,Iraq,1153,300+,VERY_LOW,20000
+Fujian Agriculture and Forestry University,China,1154,300+,VERY_LOW,20000
+Medical University of Gdańsk,Poland,1155,300+,VERY_LOW,20000
+Veltech University,India,1156,300+,VERY_LOW,20000
+Izmir Institute of Technology,Turkey,1157,300+,VERY_LOW,20000
+National Central University,Taiwan,1158,300+,VERY_LOW,20000
+University of South Dakota,United States,1159,300+,VERY_LOW,40000
+Chang’an University,China,1160,300+,VERY_LOW,20000
+Hamamatsu University School of Medicine,Japan,1161,300+,VERY_LOW,20000
+Dr B.R. Ambedkar National Institute of Technology Jalandhar,India,1162,300+,VERY_LOW,20000
+Pontifical Catholic University of Rio Grande do Sul (PUCRS),Brazil,1163,300+,VERY_LOW,20000
+The Hashemite University,Jordan,1164,300+,VERY_LOW,20000
+Northwest University (China),China,1165,300+,VERY_LOW,20000
+University of Piraeus,Greece,1166,300+,VERY_LOW,20000
+O.P. Jindal Global University,India,1167,300+,VERY_LOW,20000
+Taibah University,Saudi Arabia,1168,300+,VERY_LOW,20000
+Indraprastha Institute of Information Technology Delhi,India,1169,300+,VERY_LOW,20000
+University of Szeged,Hungary,1170,300+,VERY_LOW,20000
+University of the Free State,South Africa,1171,300+,VERY_LOW,20000
+Jadavpur University,India,1172,300+,VERY_LOW,20000
+Moscow Technical University of Communications and Informatics,Russian Federation,1173,300+,VERY_LOW,20000
+Riga Technical University,Latvia,1174,300+,VERY_LOW,20000
+Minia University,Egypt,1175,300+,VERY_LOW,20000
+Firat University,Turkey,1176,300+,VERY_LOW,20000
+University of Tarapacá,Chile,1177,300+,VERY_LOW,20000
+Bayero University,Nigeria,1178,300+,VERY_LOW,20000
+San Diego State University,United States,1179,300+,VERY_LOW,40000
+University of Thessaly,Greece,1180,300+,VERY_LOW,20000
+Ardabil University of Medical Sciences,Iran,1181,300+,VERY_LOW,20000
+University of Bisha,Saudi Arabia,1182,300+,VERY_LOW,20000
+Bahria University,Pakistan,1183,300+,VERY_LOW,20000
+Aswan University,Egypt,1184,300+,VERY_LOW,20000
+University of Bahrain,Bahrain,1185,300+,VERY_LOW,20000
+Central University of Haryana,India,1186,300+,VERY_LOW,20000
+University of Pécs,Hungary,1187,300+,VERY_LOW,20000
+Sumy State University,Ukraine,1188,300+,VERY_LOW,20000
+University of South Bohemia in České Budějovice,Czechia,1189,300+,VERY_LOW,20000
+Medical University of Warsaw,Poland,1190,300+,VERY_LOW,20000
+Kore University of Enna,Italy,1191,300+,VERY_LOW,20000
+University of Medicine and Pharmacy of Craiova,Romania,1192,300+,VERY_LOW,20000
+Universiti Malaysia Sarawak (UNIMAS),Malaysia,1193,300+,VERY_LOW,20000
+Anadolu University,Turkey,1194,300+,VERY_LOW,20000
+University of Mohaghegh Ardabili,Iran,1195,300+,VERY_LOW,20000
+Institute of Space Technology,Pakistan,1196,300+,VERY_LOW,20000
+University of Botswana,Botswana,1197,300+,VERY_LOW,20000
+Financial University under the Government of the Russian Federation,Russian Federation,1198,300+,VERY_LOW,20000
+Jiangsu University of Science and Technology,China,1199,300+,VERY_LOW,20000
+Universitat Internacional de Catalunya,Spain,1200,300+,VERY_LOW,20000
+"University of Education, Lahore",Pakistan,1201,300+,VERY_LOW,20000
+Universitas Sebelas Maret,Indonesia,1202,300+,VERY_LOW,20000
+The New School,United States,1203,300+,VERY_LOW,40000
+Tokyo University of Agriculture and Technology,Japan,1204,300+,VERY_LOW,20000
+Karunya Institute of Technology and Sciences,India,1205,300+,VERY_LOW,20000
+Istanbul University,Turkey,1206,300+,VERY_LOW,20000
+Athens University of Economics and Business,Greece,1207,300+,VERY_LOW,20000
+University of Jeddah,Saudi Arabia,1208,300+,VERY_LOW,20000
+University of Maragheh,Iran,1209,300+,VERY_LOW,20000
+Saudi Electronic University,Saudi Arabia,1210,300+,VERY_LOW,20000
+Public University of Navarre,Spain,1211,300+,VERY_LOW,20000
+Université d’Orléans,France,1212,300+,VERY_LOW,20000
+University of Deusto,Spain,1213,300+,VERY_LOW,20000
+Poznan University of Medical Sciences,Poland,1214,300+,VERY_LOW,20000
+University of Isfahan,Iran,1215,300+,VERY_LOW,20000
+Ahmadu Bello University,Nigeria,1216,300+,VERY_LOW,20000
+"Dr D. Y. Patil Vidyapeeth, Pune",India,1217,300+,VERY_LOW,20000
+National University of Computer and Emerging Sciences,Pakistan,1218,300+,VERY_LOW,20000
+Bu-Ali Sina University,Iran,1219,300+,VERY_LOW,20000
+Hungarian University of Agriculture and Life Sciences,Hungary,1220,300+,VERY_LOW,20000
+"University of Occupational and Environmental Health, Japan",Japan,1221,300+,VERY_LOW,20000
+Hakim Sabzevari University,Iran,1222,300+,VERY_LOW,20000
+Azarbaijan Shahid Madani University,Iran,1223,300+,VERY_LOW,20000
+Kurume University,Japan,1224,300+,VERY_LOW,20000
+Fayoum University,Egypt,1225,300+,VERY_LOW,20000
+Ankara University,Turkey,1226,300+,VERY_LOW,20000
+Iuliu Haţieganu University of Medicine and Pharmacy Cluj-Napoca,Romania,1227,300+,VERY_LOW,20000
+Universitas Gadjah Mada,Indonesia,1228,300+,VERY_LOW,20000
+Hindustan Institute of Technology and Science,India,1229,300+,VERY_LOW,20000
+I. Horbachevsky Ternopil National Medical University,Ukraine,1230,300+,VERY_LOW,20000
+Aichi Medical University,Japan,1231,300+,VERY_LOW,20000
+University of Ilorin,Nigeria,1232,300+,VERY_LOW,20000
+University of Sargodha,Pakistan,1233,300+,VERY_LOW,20000
+Galgotias University,India,1234,300+,VERY_LOW,20000
+Benha University,Egypt,1235,300+,VERY_LOW,20000
+Ibn Tofaïl University,Morocco,1236,300+,VERY_LOW,20000
+"Shivaji University, Kolhapur",India,1237,300+,VERY_LOW,20000
+Bharathidasan University,India,1238,300+,VERY_LOW,20000
+Zhejiang University of Finance and Economics,China,1239,300+,VERY_LOW,20000
+Nitte (Deemed to be University),India,1240,300+,VERY_LOW,20000
+Shahrood University of Technology,Iran,1241,300+,VERY_LOW,20000
+Persian Gulf University,Iran,1242,300+,VERY_LOW,20000
+Walailak University,Thailand,1243,300+,VERY_LOW,20000
+Istanbul University-Cerrahpaşa,Turkey,1244,300+,VERY_LOW,20000
+Huaqiao University,China,1245,300+,VERY_LOW,20000
+Al-Baha University,Saudi Arabia,1246,300+,VERY_LOW,20000
+Sahand University of Technology,Iran,1247,300+,VERY_LOW,20000
+University of Las Palmas de Gran Canaria,Spain,1248,300+,VERY_LOW,20000
+Kansai Medical University,Japan,1249,300+,VERY_LOW,20000
+Oakland University,United States,1250,300+,VERY_LOW,40000
+National Taipei University of Technology,Taiwan,1251,300+,VERY_LOW,20000
+VSB - Technical University of Ostrava,Czechia,1252,300+,VERY_LOW,20000
+Yaşar University,Turkey,1253,300+,VERY_LOW,20000
+University of Tripoli,Libya,1254,300+,VERY_LOW,20000
+University of West London,United Kingdom,1255,300+,VERY_LOW,30000
+Technological University Dublin,Ireland,1256,300+,VERY_LOW,20000
+University of Northern British Columbia (UNBC),Canada,1257,300+,VERY_LOW,25000
+Federal University of São Carlos,Brazil,1258,300+,VERY_LOW,20000
+National Chung Hsing University,Taiwan,1259,300+,VERY_LOW,20000
+University of A Coruña,Spain,1260,300+,VERY_LOW,20000
+Wilfrid Laurier University,Canada,1261,300+,VERY_LOW,25000
+Czech Technical University in Prague,Czechia,1262,300+,VERY_LOW,20000
+University of Duhok,Iraq,1263,300+,VERY_LOW,20000
+Texas State University,United States,1264,300+,VERY_LOW,40000
+Nicolaus Copernicus University in Toruń,Poland,1265,300+,VERY_LOW,20000
+King Mongkut's University of Technology North Bangkok,Thailand,1266,300+,VERY_LOW,20000
+University of Wrocław,Poland,1267,300+,VERY_LOW,20000
+Chittagong University of Engineering & Technology,Bangladesh,1268,300+,VERY_LOW,20000
+University of Zagreb,Croatia,1269,300+,VERY_LOW,20000
+Hangzhou Dianzi University (HDU),China,1270,300+,VERY_LOW,20000
+Akdeniz University,Turkey,1271,300+,VERY_LOW,20000
+Chaudhary Charan Singh University - Meerut,India,1272,300+,VERY_LOW,20000
+Rowan University,United States,1273,300+,VERY_LOW,40000
+Ilam University,Iran,1274,300+,VERY_LOW,20000
+Suez Canal University,Egypt,1275,300+,VERY_LOW,20000
+University of South Africa,South Africa,1276,300+,VERY_LOW,20000
+Necmettin Erbakan University,Turkey,1277,300+,VERY_LOW,20000
+Khon Kaen University,Thailand,1278,300+,VERY_LOW,20000
+Banasthali University,India,1279,300+,VERY_LOW,20000
+Pondicherry University,India,1280,300+,VERY_LOW,20000
+University of Trás-os-Montes and Alto Douro,Portugal,1281,300+,VERY_LOW,20000
+Osmania University,India,1282,300+,VERY_LOW,20000
+Nagoya City University,Japan,1283,300+,VERY_LOW,20000
+Xiangtan University,China,1284,300+,VERY_LOW,20000
+Icesi University,Colombia,1285,300+,VERY_LOW,20000
+Kwame Nkrumah University of Science and Technology,Ghana,1286,300+,VERY_LOW,20000
+Kuwait University,Kuwait,1287,300+,VERY_LOW,20000
+October 6 University,Egypt,1288,300+,VERY_LOW,20000
+Soonchunhyang University,South Korea,1289,300+,VERY_LOW,20000
+Duzce University,Turkey,1290,300+,VERY_LOW,20000
+Pukyong National University,South Korea,1291,300+,VERY_LOW,20000
+"Amity University, Gurugram",India,1292,300+,VERY_LOW,20000
+Democritus University of Thrace,Greece,1293,300+,VERY_LOW,20000
+University of Urbino Carlo Bo,Italy,1294,300+,VERY_LOW,20000
+National Chengchi University,Taiwan,1295,300+,VERY_LOW,20000
+Menoufia University,Egypt,1296,300+,VERY_LOW,20000
+Seoul National University of Science and Technology (SeoulTech),South Korea,1297,300+,VERY_LOW,20000
+University of Anbar,Iraq,1298,300+,VERY_LOW,20000
+University of Engineering & Technology (UET) Lahore,Pakistan,1299,300+,VERY_LOW,20000
+Assiut University,Egypt,1300,300+,VERY_LOW,20000
+Gebze Technical University,Turkey,1301,300+,VERY_LOW,20000
+Miguel Hernández University of Elche,Spain,1302,300+,VERY_LOW,20000
+Hyogo Medical University,Japan,1303,300+,VERY_LOW,20000
+Niigata University,Japan,1304,300+,VERY_LOW,20000
+DIT University,India,1305,300+,VERY_LOW,20000
+Diego Portales University,Chile,1306,300+,VERY_LOW,20000
+Mawlana Bhashani Science and Technology University,Bangladesh,1307,300+,VERY_LOW,20000
+Universitas Airlangga,Indonesia,1308,300+,VERY_LOW,20000
+Salahaddin University–Erbil,Iraq,1309,300+,VERY_LOW,20000
+Guru Jambheshwar University of Science and Technology,India,1310,300+,VERY_LOW,20000
+Austral University,Argentina,1311,300+,VERY_LOW,20000
+Biruni University,Turkey,1312,300+,VERY_LOW,20000
+Babeş-Bolyai University,Romania,1313,300+,VERY_LOW,20000
+Port Said University,Egypt,1314,300+,VERY_LOW,20000
+"Indian Institute of Science Education and Research, Pune",India,1315,300+,VERY_LOW,20000
+Brno University of Technology,Czechia,1316,300+,VERY_LOW,20000
+Brock University,Canada,1317,300+,VERY_LOW,25000
+Inönü University,Turkey,1318,300+,VERY_LOW,20000
+Kindai University,Japan,1319,300+,VERY_LOW,20000
+Mohammed V University of Rabat,Morocco,1320,300+,VERY_LOW,20000
+Hitotsubashi University,Japan,1321,300+,VERY_LOW,20000
+Noakhali Science and Technology University (NSTU),Bangladesh,1322,300+,VERY_LOW,20000
+Institut Teknologi Bandung,Indonesia,1323,300+,VERY_LOW,20000
+Universidade Federal do Paraná (UFPR),Brazil,1324,300+,VERY_LOW,20000
+The University of Electro-Communications,Japan,1325,300+,VERY_LOW,20000
+Comenius University Bratislava,Slovakia,1326,300+,VERY_LOW,20000
+Hallym University,South Korea,1327,300+,VERY_LOW,20000
+Al-Hussein Bin Talal University,Jordan,1328,300+,VERY_LOW,20000
+Mendel University in Brno,Czechia,1329,300+,VERY_LOW,20000
+Sathyabama Institute of Science and Technology,India,1330,300+,VERY_LOW,20000
+National Institute of Technology Delhi,India,1331,300+,VERY_LOW,20000
+"Mehran University of Engineering and Technology, Jamshoro, Pakistan",Pakistan,1332,300+,VERY_LOW,20000
+University of Sfax,Tunisia,1333,300+,VERY_LOW,20000
+Wuhan Textile University,China,1334,300+,VERY_LOW,20000
+University of Ioannina,Greece,1335,300+,VERY_LOW,20000
+University of Žilina,Slovakia,1336,300+,VERY_LOW,20000
+Maharishi Markandeshwar University (MMU),India,1337,300+,VERY_LOW,20000
+University of Évora,Portugal,1338,300+,VERY_LOW,20000
+University of León,Spain,1339,300+,VERY_LOW,20000
+Yazd University,Iran,1340,300+,VERY_LOW,20000
+University of Guilan,Iran,1341,300+,VERY_LOW,20000
+"University of Chemistry and Technology, Prague",Czechia,1342,300+,VERY_LOW,20000
+HES-SO University of Applied Sciences and Arts of Western Switzerland,Switzerland,1343,300+,VERY_LOW,20000
+University of Mauritius,Mauritius,1344,300+,VERY_LOW,20000
+Université de Poitiers,France,1345,300+,VERY_LOW,20000
+Kangwon National University,South Korea,1346,300+,VERY_LOW,20000
+Chaoyang University of Technology,Taiwan,1347,300+,VERY_LOW,20000
+University of Nebraska Omaha,United States,1348,300+,VERY_LOW,40000
+University of Technology of Compiègne,France,1349,300+,VERY_LOW,20000
+Ibn Zohr University,Morocco,1350,300+,VERY_LOW,20000
+Gazi University,Turkey,1351,300+,VERY_LOW,20000
+SWPS University,Poland,1352,300+,VERY_LOW,20000
+Canterbury Christ Church University,United Kingdom,1353,300+,VERY_LOW,30000
+Manipal University Jaipur,India,1354,300+,VERY_LOW,20000
+University of Chittagong,Bangladesh,1355,300+,VERY_LOW,20000
+Universidad San Francisco de Quito,Ecuador,1356,300+,VERY_LOW,20000
+"Vietnam National University, Hanoi",Vietnam,1357,300+,VERY_LOW,20000
+Nagasaki University,Japan,1358,300+,VERY_LOW,20000
+Urmia University of Technology,Iran,1359,300+,VERY_LOW,20000
+Kohat University of Science and Technology,Pakistan,1360,300+,VERY_LOW,20000
+Tomas Bata University in Zlín,Czechia,1361,300+,VERY_LOW,20000
+Changzhou University,China,1362,300+,VERY_LOW,20000
+Immanuel Kant Baltic Federal University,Russian Federation,1363,300+,VERY_LOW,20000
+Chung Yuan Christian University,Taiwan,1364,300+,VERY_LOW,20000
+University of Staffordshire,United Kingdom,1365,300+,VERY_LOW,30000
+Gifu University,Japan,1366,300+,VERY_LOW,20000
+Lorestan University,Iran,1367,300+,VERY_LOW,20000
+National Kaohsiung University of Science and Technology,Taiwan,1368,300+,VERY_LOW,20000
+Indian Institute of Science Education and Research Bhopal,India,1369,300+,VERY_LOW,20000
+University of Rouen Normandie,France,1370,300+,VERY_LOW,20000
+University of Cadiz,Spain,1371,300+,VERY_LOW,20000
+University of Valladolid,Spain,1372,300+,VERY_LOW,20000
+University of Malaga,Spain,1373,300+,VERY_LOW,20000
+University of Jendouba,Tunisia,1374,300+,VERY_LOW,20000
+Woosong University,South Korea,1375,300+,VERY_LOW,20000
+University of the Philippines,Philippines,1376,300+,VERY_LOW,20000
+University of Winchester,United Kingdom,1377,300+,VERY_LOW,30000
+Jiangxi Normal University (JXNU),China,1378,300+,VERY_LOW,20000
+Universitas Padjadjaran,Indonesia,1379,300+,VERY_LOW,20000
+University of Concepción,Chile,1380,300+,VERY_LOW,20000
+University Rey Juan Carlos,Spain,1381,300+,VERY_LOW,20000
+Toyohashi University of Technology (TUT),Japan,1382,300+,VERY_LOW,20000
+Sakarya University,Turkey,1383,300+,VERY_LOW,20000
+Jeju National University,South Korea,1384,300+,VERY_LOW,20000
+Gyeongsang National University,South Korea,1385,300+,VERY_LOW,20000
+"Visvesvaraya National Institute of Technology, Nagpur",India,1386,300+,VERY_LOW,20000
+Medical University of Silesia in Katowice,Poland,1387,300+,VERY_LOW,20000
+Medical University of Lublin,Poland,1388,300+,VERY_LOW,20000
+University of Maribor,Slovenia,1389,300+,VERY_LOW,20000
+The Jikei University School of Medicine,Japan,1390,300+,VERY_LOW,20000
+Ege University,Turkey,1391,300+,VERY_LOW,20000
+Kashan University of Medical Sciences and Health Services,Iran,1392,300+,VERY_LOW,20000
+Universidade Eduardo Mondlane,Mozambique,1393,300+,VERY_LOW,20000
+Fu Jen Catholic University,Taiwan,1394,300+,VERY_LOW,20000
+Ho Chi Minh City Open University,Vietnam,1395,300+,VERY_LOW,20000
+Nelson Mandela University,South Africa,1396,300+,VERY_LOW,20000
+"Federal University of Technology, Minna",Nigeria,1397,300+,VERY_LOW,20000
+University of Nigeria Nsukka,Nigeria,1398,300+,VERY_LOW,20000
+Prince of Songkla University,Thailand,1399,300+,VERY_LOW,20000
+University of Burgos,Spain,1400,300+,VERY_LOW,20000
+South Valley University (Egypt),Egypt,1401,300+,VERY_LOW,20000
+Tezpur University,India,1402,300+,VERY_LOW,20000
+Damanhour University,Egypt,1403,300+,VERY_LOW,20000
+University of Mazandaran,Iran,1404,300+,VERY_LOW,20000
+Medical University of Bialystok,Poland,1405,300+,VERY_LOW,20000
+University of Colima,Mexico,1406,300+,VERY_LOW,20000
+Universitas Muhammadiyah Surakarta,Indonesia,1407,300+,VERY_LOW,20000
+Ariel University,Israel,1408,300+,VERY_LOW,20000
+Adolfo Ibáñez University,Chile,1409,300+,VERY_LOW,20000
+"MNS University of Agriculture, Multan",Pakistan,1410,300+,VERY_LOW,20000
+Slovak University of Agriculture in Nitra,Slovakia,1411,300+,VERY_LOW,20000
+University of Antioquia,Colombia,1412,300+,VERY_LOW,20000
+Shahid Chamran University of Ahvaz,Iran,1413,300+,VERY_LOW,20000
+Shahrekord University,Iran,1414,300+,VERY_LOW,20000
+National Institute of Technology Warangal,India,1415,300+,VERY_LOW,20000
+Zewail City of Science and Technology,Egypt,1416,300+,VERY_LOW,20000
+Lahore College for Women University (LCWU),Pakistan,1417,300+,VERY_LOW,20000
+Madan Mohan Malaviya University of Technology,India,1418,300+,VERY_LOW,20000
+Al-Farabi Kazakh National University,Kazakhstan,1419,300+,VERY_LOW,20000
+University of Peradeniya,Sri Lanka,1420,300+,VERY_LOW,20000
+Erciyes University,Turkey,1421,300+,VERY_LOW,20000
+The University of the West Indies,Jamaica,1422,300+,VERY_LOW,20000
+The John Paul II Catholic University of Lublin,Poland,1423,300+,VERY_LOW,20000
+Tokyo University of Science,Japan,1424,300+,VERY_LOW,20000
+Sohag University,Egypt,1425,300+,VERY_LOW,20000
+St Francis Xavier University,Canada,1426,300+,VERY_LOW,25000
+Warsaw University of Technology,Poland,1427,300+,VERY_LOW,20000
+University of El Oued,Algeria,1428,300+,VERY_LOW,20000
+Pavol Jozef Šafárik University in Košice,Slovakia,1429,300+,VERY_LOW,20000
+Sapporo Medical University,Japan,1430,300+,VERY_LOW,20000
+University of Reims Champagne-Ardenne,France,1431,300+,VERY_LOW,20000
+Wrocław University of Science and Technology,Poland,1432,300+,VERY_LOW,20000
+Shahid Bahonar University of Kerman,Iran,1433,300+,VERY_LOW,20000
+University of Social Welfare and Rehabilitation Sciences,Iran,1434,300+,VERY_LOW,20000
+Sidi Mohamed Ben Abdellah University,Morocco,1435,300+,VERY_LOW,20000
+Shiga University of Medical Science,Japan,1436,300+,VERY_LOW,20000
+National Institute of Technology Srinagar,India,1437,300+,VERY_LOW,20000
+National Institute of Technology Meghalaya,India,1438,300+,VERY_LOW,20000
+Tianjin Normal University,China,1439,300+,VERY_LOW,20000
+Mutah University,Jordan,1440,300+,VERY_LOW,20000
+Sefako Makgatho Health Sciences University,South Africa,1441,300+,VERY_LOW,20000
+TOBB University of Economics and Technology,Turkey,1442,300+,VERY_LOW,20000
+Pontifícia Universidade Católica do Paraná,Brazil,1443,300+,VERY_LOW,20000
+Shiv Nadar University,India,1444,300+,VERY_LOW,20000
+BINUS University,Indonesia,1445,300+,VERY_LOW,20000
+USAMV Cluj-Napoca,Romania,1446,300+,VERY_LOW,20000
+National University of Uzbekistan named after Mirzo Ulugbek,Uzbekistan,1447,300+,VERY_LOW,20000
+Gauhati University,India,1448,300+,VERY_LOW,20000
+National Taiwan Ocean University,Taiwan,1449,300+,VERY_LOW,20000
+Shinshu University,Japan,1450,300+,VERY_LOW,20000
+Zhejiang Chinese Medical University,China,1451,300+,VERY_LOW,20000
+National Textile University,Pakistan,1452,300+,VERY_LOW,20000
+Tokushima University,Japan,1453,300+,VERY_LOW,20000
+Holy Spirit University of Kaslik,Lebanon,1454,300+,VERY_LOW,20000
+University of Jos,Nigeria,1455,300+,VERY_LOW,20000
+University of La Serena,Chile,1456,300+,VERY_LOW,20000
+Kookmin University,South Korea,1457,300+,VERY_LOW,20000
+Reshetnev Siberian State University of Science and Technology,Russian Federation,1458,300+,VERY_LOW,20000
+Osaka Metropolitan University,Japan,1459,300+,VERY_LOW,20000
+Riga Stradiņš University,Latvia,1460,300+,VERY_LOW,20000
+The British University in Egypt,Egypt,1461,300+,VERY_LOW,20000
+Budapest University of Technology and Economics,Hungary,1462,300+,VERY_LOW,20000
+Opole University of Technology,Poland,1463,300+,VERY_LOW,20000
+SASTRA University,India,1464,300+,VERY_LOW,20000
+American International University – Bangladesh,Bangladesh,1465,300+,VERY_LOW,20000
+Kharazmi University,Iran,1466,300+,VERY_LOW,20000
+Vytautas Magnus University,Lithuania,1467,300+,VERY_LOW,20000
+University of Kerala,India,1468,300+,VERY_LOW,20000
+National University of Distance Education (UNED),Spain,1469,300+,VERY_LOW,20000
+Istanbul Medeniyet University,Turkey,1470,300+,VERY_LOW,20000
+I-Shou University,Taiwan,1471,300+,VERY_LOW,20000
+Université Djillali Liabès de Sidi Bel-Abbès,Algeria,1472,300+,VERY_LOW,20000
+Universidade Federal de Pernambuco,Brazil,1473,300+,VERY_LOW,20000
+National Dong Hwa University,Taiwan,1474,300+,VERY_LOW,20000
+"University of Health Sciences, Turkey",Turkey,1475,300+,VERY_LOW,20000
+University of La Frontera,Chile,1476,300+,VERY_LOW,20000
+Thammasat University,Thailand,1477,300+,VERY_LOW,20000
+IFHE Hyderabad,India,1478,300+,VERY_LOW,20000
+Autonomous University of Sinaloa,Mexico,1479,300+,VERY_LOW,20000
+Lebanese University,Lebanon,1480,300+,VERY_LOW,20000
+Süleyman Demirel University,Turkey,1481,300+,VERY_LOW,20000
+University of Brasília,Brazil,1482,300+,VERY_LOW,20000
+University of Manouba,Tunisia,1483,300+,VERY_LOW,20000
+University of South Wales,United Kingdom,1484,300+,VERY_LOW,30000
+Universidad del Desarrollo,Chile,1485,300+,VERY_LOW,20000
+Kyushu Institute of Technology (Kyutech),Japan,1486,300+,VERY_LOW,20000
+University of Split,Croatia,1487,300+,VERY_LOW,20000
+National Chung Cheng University,Taiwan,1488,300+,VERY_LOW,20000
+M. Kumarasamy College of Engineering,India,1489,300+,VERY_LOW,20000
+Yanshan University,China,1490,300+,VERY_LOW,20000
+Ilia State University,Georgia,1491,300+,VERY_LOW,20000
+Suranaree University of Technology,Thailand,1492,300+,VERY_LOW,20000
+Khulna University,Bangladesh,1493,300+,VERY_LOW,20000
+Universidad Católica San Antonio de Murcia (UCAM),Spain,1494,300+,VERY_LOW,20000
+Poznań University of Life Sciences,Poland,1495,300+,VERY_LOW,20000
+Hosei University,Japan,1496,300+,VERY_LOW,20000
+Tokai University,Japan,1497,300+,VERY_LOW,20000
+Botswana International University of Science and Technology (BIUST),Botswana,1498,300+,VERY_LOW,20000
+Yokohama National University,Japan,1499,300+,VERY_LOW,20000
+Tzu Chi University,Taiwan,1500,300+,VERY_LOW,20000
+University of La Sabana,Colombia,1501,300+,VERY_LOW,20000
+Incheon National University,South Korea,1502,300+,VERY_LOW,20000
+Netaji Subhas University of Technology,India,1503,300+,VERY_LOW,20000
+Qom University of Medical Sciences,Iran,1504,300+,VERY_LOW,20000
+Moulay Ismail University,Morocco,1505,300+,VERY_LOW,20000
+Technical University of Crete,Greece,1506,300+,VERY_LOW,20000
+Chosun University,South Korea,1507,300+,VERY_LOW,20000
+Guru Ghasidas Vishwavidyalaya,India,1508,300+,VERY_LOW,20000
+Federal University of Technology Akure,Nigeria,1509,300+,VERY_LOW,20000
+Federal University of Goiás,Brazil,1510,300+,VERY_LOW,20000
+Universidad de Cartagena,Colombia,1511,300+,VERY_LOW,20000
+Saitama Medical University,Japan,1512,300+,VERY_LOW,20000
+Sabzevar University of Medical Sciences,Iran,1513,300+,VERY_LOW,20000
+Christ University,India,1514,300+,VERY_LOW,20000
+University of Monastir,Tunisia,1515,300+,VERY_LOW,20000
+University of Gdańsk,Poland,1516,300+,VERY_LOW,20000
+Shahid Sadoughi University of Medical Sciences,Iran,1517,300+,VERY_LOW,20000
+Transilvania University of Brașov,Romania,1518,300+,VERY_LOW,20000
+West University of Timişoara,Romania,1519,300+,VERY_LOW,20000
+Tokyo Metropolitan University,Japan,1520,300+,VERY_LOW,20000
+Wrocław University of Environmental and Life Sciences,Poland,1521,300+,VERY_LOW,20000
+Razi University,Iran,1522,300+,VERY_LOW,20000
+University of Macedonia,Greece,1523,300+,VERY_LOW,20000
+IPB University,Indonesia,1524,300+,VERY_LOW,20000
+SGH Warsaw School of Economics,Poland,1525,300+,VERY_LOW,20000
+Universiti Tun Hussein Onn Malaysia (UTHM),Malaysia,1526,300+,VERY_LOW,20000
+University of Northampton,United Kingdom,1527,300+,VERY_LOW,30000
+University Cadi Ayyad of Marrakech,Morocco,1528,300+,VERY_LOW,20000
+Université Saint-Joseph de Beyrouth,Lebanon,1529,300+,VERY_LOW,20000
+"Vels Institute of Science, Technology and Advanced Studies (VISTAS)",India,1530,300+,VERY_LOW,20000
+Federal University of Lavras,Brazil,1531,300+,VERY_LOW,20000
+Tunghai University,Taiwan,1532,300+,VERY_LOW,20000
+Helwan University,Egypt,1533,300+,VERY_LOW,20000
+Medical University of Sofia,Bulgaria,1534,300+,VERY_LOW,20000
+Babcock University,Nigeria,1535,300+,VERY_LOW,20000
+Tokyo University of Marine Science and Technology,Japan,1536,300+,VERY_LOW,20000
+Universitas Negeri Yogyakarta,Indonesia,1537,300+,VERY_LOW,20000
+Technical University of Cartagena,Spain,1538,300+,VERY_LOW,20000
+University of Technology of Troyes,France,1539,300+,VERY_LOW,20000
+Universidad Loyola,Spain,1540,300+,VERY_LOW,20000
+Kagawa University,Japan,1541,300+,VERY_LOW,20000
+Pirogov Russian National Research Medical University,Russian Federation,1542,300+,VERY_LOW,20000
+Vilnius Gediminas Technical University (Vilnius Tech),Lithuania,1543,300+,VERY_LOW,20000
+Allameh Tabataba ’i University,Iran,1544,300+,VERY_LOW,20000
+Warsaw University of Life Sciences – SGGW,Poland,1545,300+,VERY_LOW,20000
+University of Toyama,Japan,1546,300+,VERY_LOW,20000
+Federal University of Uberlândia,Brazil,1547,300+,VERY_LOW,20000
+University of Antofagasta,Chile,1548,300+,VERY_LOW,20000
+Istanbul Okan University,Turkey,1549,300+,VERY_LOW,20000
+Moscow Polytechnic University,Russian Federation,1550,300+,VERY_LOW,20000
+Poznan University of Technology,Poland,1551,300+,VERY_LOW,20000
+Lucian Blaga University of Sibiu,Romania,1552,300+,VERY_LOW,20000
+Technical University of Košice,Slovakia,1552,300+,VERY_LOW,20000
+Yamagata University,Japan,1554,300+,VERY_LOW,20000
+University of Zanjan,Iran,1555,300+,VERY_LOW,20000
+Cardinal Stefan Wyszyński University in Warsaw,Poland,1556,300+,VERY_LOW,20000
+Liverpool Hope University,United Kingdom,1557,300+,VERY_LOW,30000
+Hassiba Benbouali University of Chlef,Algeria,1558,300+,VERY_LOW,20000
+Diponegoro University,Indonesia,1559,300+,VERY_LOW,20000
+Al-Qasim Green University,Iraq,1560,300+,VERY_LOW,20000
+University of Havana,Cuba,1561,300+,VERY_LOW,20000
+Mirpur University of Science and Technology,Pakistan,1562,300+,VERY_LOW,20000
+KMITL – King Mongkut’s Institute of Technology Ladkrabang,Thailand,1563,300+,VERY_LOW,20000
+University of Las Américas (UDLA),Ecuador,1564,300+,VERY_LOW,20000
+Kitasato University,Japan,1565,300+,VERY_LOW,20000
+University of Texas Rio Grande Valley,United States,1566,300+,VERY_LOW,40000
+University of Lodz,Poland,1567,300+,VERY_LOW,20000
+Manav Rachna International Institute of Research and Studies,India,1568,300+,VERY_LOW,20000
+Recep Tayyip Erdoğan University,Turkey,1569,300+,VERY_LOW,20000
+Universidad Francisco de Vitoria,Spain,1570,300+,VERY_LOW,20000
+Obafemi Awolowo University,Nigeria,1571,300+,VERY_LOW,20000
+Nagoya Institute of Technology,Japan,1572,300+,VERY_LOW,20000
+Abdelmalek Essaâdi University,Morocco,1573,300+,VERY_LOW,20000
+University of West Bohemia,Czechia,1574,300+,VERY_LOW,20000
+Université Hassan II de Casablanca,Morocco,1575,300+,VERY_LOW,20000
+Universidade Federal do ABC (UFABC),Brazil,1576,300+,VERY_LOW,20000
+Chung Shan Medical University,Taiwan,1577,300+,VERY_LOW,20000
+University of Nairobi,Kenya,1578,300+,VERY_LOW,20000
+Universidade Lusófona,Portugal,1579,300+,VERY_LOW,20000
+Dokuz Eylül University,Turkey,1580,300+,VERY_LOW,20000
+Toho University,Japan,1581,300+,VERY_LOW,20000
+University of Benin,Nigeria,1582,300+,VERY_LOW,20000
+Universitas Negeri Padang,Indonesia,1583,300+,VERY_LOW,20000
+Federal University of Santa Maria,Brazil,1584,300+,VERY_LOW,20000
+Lublin University of Technology,Poland,1585,300+,VERY_LOW,20000
+Hormozgan University of Medical Sciences,Iran,1586,300+,VERY_LOW,20000
+Tamkang University,Taiwan,1587,300+,VERY_LOW,20000
+National University of Colombia,Colombia,1588,300+,VERY_LOW,20000
+Lodz University of Technology,Poland,1589,300+,VERY_LOW,20000
+Del Rosario University,Colombia,1590,300+,VERY_LOW,20000
+Karabük University,Turkey,1591,300+,VERY_LOW,20000
+University of La Rochelle,France,1592,300+,VERY_LOW,20000
+Escuela Superior Politécnica del Litoral,Ecuador,1593,300+,VERY_LOW,20000
+Yasouj University,Iran,1594,300+,VERY_LOW,20000
+Vinayaka Mission’s Research Foundation,India,1595,300+,VERY_LOW,20000
+Hellenic Open University,Greece,1596,300+,VERY_LOW,20000
+Rikkyo University,Japan,1597,300+,VERY_LOW,20000
+Moscow Aviation Institute,Russian Federation,1598,300+,VERY_LOW,20000
+Durban University of Technology,South Africa,1599,300+,VERY_LOW,20000
+University of Sunderland,United Kingdom,1600,300+,VERY_LOW,30000
+Universiti Malaysia Perlis,Malaysia,1601,300+,VERY_LOW,20000
+Guangxi Normal University,China,1602,300+,VERY_LOW,20000
+Marmara University,Turkey,1603,300+,VERY_LOW,20000
+Tashkent University of Information Technologies,Uzbekistan,1604,300+,VERY_LOW,20000
+Université Polytechnique Hauts-de-France,France,1605,300+,VERY_LOW,20000
+Military Institute of Science and Technology (MIST),Bangladesh,1606,300+,VERY_LOW,20000
+Southwest Petroleum University,China,1607,300+,VERY_LOW,20000
+Bezmiâlem Vakif University,Turkey,1608,300+,VERY_LOW,20000
+Shree Guru Gobind Singh Tricentenary University,India,1609,300+,VERY_LOW,20000
+GMR Institute of Technology,India,1610,300+,VERY_LOW,20000
+Université Sultan Moulay Slimane,Morocco,1611,300+,VERY_LOW,20000
+Nagaoka University of Technology,Japan,1612,300+,VERY_LOW,20000
+Universiti Teknologi MARA,Malaysia,1613,300+,VERY_LOW,20000
+University of the Ryukyus,Japan,1614,300+,VERY_LOW,20000
+Goa University,India,1615,300+,VERY_LOW,20000
+University of Lethbridge,Canada,1616,300+,VERY_LOW,25000
+Ritsumeikan University,Japan,1617,300+,VERY_LOW,20000
+University of Warmia and Mazury in Olsztyn,Poland,1618,300+,VERY_LOW,20000
+Osaka Medical and Pharmaceutical University,Japan,1619,300+,VERY_LOW,20000
+Pace University-New York,United States,1620,300+,VERY_LOW,40000
+Karadeniz Technical University,Turkey,1621,300+,VERY_LOW,20000
+Pontifical Catholic University of Valparaíso,Chile,1622,300+,VERY_LOW,20000
+"University of the Andes, Chile",Chile,1623,300+,VERY_LOW,20000
+University of Huelva,Spain,1624,300+,VERY_LOW,20000
+Ştefan cel Mare University of Suceava,Romania,1625,300+,VERY_LOW,20000
+Paris Nanterre University,France,1626,300+,VERY_LOW,20000
+University for Development Studies,Ghana,1627,300+,VERY_LOW,20000
+University of Worcester,United Kingdom,1628,300+,VERY_LOW,30000
+Mie University,Japan,1629,300+,VERY_LOW,20000
+Université Sorbonne Nouvelle,France,1630,300+,VERY_LOW,20000
+Slovak University of Technology in Bratislava,Slovakia,1631,300+,VERY_LOW,20000
+Communication University of China,China,1632,300+,VERY_LOW,20000
+Yeditepe University,Turkey,1633,300+,VERY_LOW,20000
+University of Chester,United Kingdom,1634,300+,VERY_LOW,30000
+University of Ostrava,Czechia,1635,300+,VERY_LOW,20000
+Harran University,Turkey,1636,300+,VERY_LOW,20000
+University of Zimbabwe,Zimbabwe,1637,300+,VERY_LOW,20000
+University of Talca,Chile,1637,300+,VERY_LOW,20000
+"Jaypee Institute of Information Technology, Noida",India,1639,300+,VERY_LOW,20000
+National Chin-Yi University of Technology,Taiwan,1640,300+,VERY_LOW,20000
+Kyiv National University of Construction and Architecture,Ukraine,1641,300+,VERY_LOW,20000
+Universitas Syiah Kuala,Indonesia,1642,300+,VERY_LOW,20000
+Hirosaki University,Japan,1643,300+,VERY_LOW,20000
+Satbayev University,Kazakhstan,1644,300+,VERY_LOW,20000
+Muhimbili University of Health and Allied Sciences,Tanzania,1645,300+,VERY_LOW,20000
+Karpagam Academy of Higher Education,India,1646,300+,VERY_LOW,20000
+Universiti Malaysia Kelantan,Malaysia,1647,300+,VERY_LOW,20000
+Vali-e-Asr University of Rafsanjan,Iran,1648,300+,VERY_LOW,20000
+University of Silesia in Katowice,Poland,1649,300+,VERY_LOW,20000
+CEU Universities,Spain,1650,300+,VERY_LOW,20000
+Lincoln University College,Malaysia,1651,300+,VERY_LOW,20000
+University of Pannonia,Hungary,1652,300+,VERY_LOW,20000
+Unisinos University,Brazil,1653,300+,VERY_LOW,20000
+Universidade Federal da Bahia,Brazil,1654,300+,VERY_LOW,20000
+University of Rijeka,Croatia,1655,300+,VERY_LOW,20000
+University of Hormozgan,Iran,1656,300+,VERY_LOW,20000
+University of Santo Tomas,Philippines,1657,300+,VERY_LOW,20000
+Kastamonu University,Turkey,1658,300+,VERY_LOW,20000
+Universidad Autónoma de Chile,Chile,1659,300+,VERY_LOW,20000
+"National Institute of Applied Sciences, Strasbourg (INSA Strasbourg)",France,1660,300+,VERY_LOW,20000
+Istanbul Aydın University,Turkey,1661,300+,VERY_LOW,20000
+University of Carthage,Tunisia,1662,300+,VERY_LOW,20000
+Federal University of Rio Grande do Norte (UFRN),Brazil,1663,300+,VERY_LOW,20000
+Far Eastern Federal University,Russian Federation,1664,300+,VERY_LOW,20000
+Institut Teknologi Sepuluh Nopember,Indonesia,1665,300+,VERY_LOW,20000
+Alzahra University,Iran,1666,300+,VERY_LOW,20000
+Universidade Federal de Juiz de Fora,Brazil,1667,300+,VERY_LOW,20000
+Universiti Teknikal Malaysia Melaka,Malaysia,1668,300+,VERY_LOW,20000
+Maejo University,Thailand,1669,300+,VERY_LOW,20000
+Jiangsu Normal University,China,1670,300+,VERY_LOW,20000
+Université de Skikda,Algeria,1671,300+,VERY_LOW,20000
+Ehime University,Japan,1672,300+,VERY_LOW,20000
+Tribhuvan University,Nepal,1673,300+,VERY_LOW,20000
+Acharya Nagarjuna University,India,1674,300+,VERY_LOW,20000
+University of the Arts London,United Kingdom,1675,300+,VERY_LOW,30000
+Centurion University of Technology and Management,India,1676,300+,VERY_LOW,20000
+University of Sousse,Tunisia,1677,300+,VERY_LOW,20000
+Chang Gung University of Science and Technology,Taiwan,1678,300+,VERY_LOW,20000
+University of Novi Sad,Serbia,1679,300+,VERY_LOW,20000
+University of Sistan and Baluchestan,Iran,1680,300+,VERY_LOW,20000
+Instituto Politécnico de Viana do Castelo,Portugal,1681,300+,VERY_LOW,20000
+University of Calabar,Nigeria,1682,300+,VERY_LOW,20000
+University of Western Macedonia,Greece,1683,300+,VERY_LOW,20000
+Yamaguchi University,Japan,1684,300+,VERY_LOW,20000
+Sri Venkateswara University,India,1685,300+,VERY_LOW,20000
+Maria Curie-Skłodowska University (UMCS),Poland,1686,300+,VERY_LOW,20000
+Pontifical Catholic University of Peru,Peru,1687,300+,VERY_LOW,20000
+Southern Federal University,Russian Federation,1688,300+,VERY_LOW,20000
+Cracow University of Technology,Poland,1689,300+,VERY_LOW,20000
+Acıbadem University,Turkey,1690,300+,VERY_LOW,20000
+Catholic University of the North,Chile,1691,300+,VERY_LOW,20000
+University of Tunis,Tunisia,1692,300+,VERY_LOW,20000
+Karamanoğlu Mehmet Bey University,Turkey,1693,300+,VERY_LOW,20000
+International Hellenic University,Greece,1694,300+,VERY_LOW,20000
+UNIR – International University of La Rioja,Spain,1695,300+,VERY_LOW,20000
+Istanbul Bilgi University,Turkey,1696,300+,VERY_LOW,20000
+"George Emil Palade University of Medicine, Pharmacy, Science, and Technology of Targu Mures",Romania,1697,300+,VERY_LOW,20000
+Saga University,Japan,1698,300+,VERY_LOW,20000
+Gunma University,Japan,1699,300+,VERY_LOW,20000
+National Research University of Electronic Technology (MIET),Russian Federation,1700,300+,VERY_LOW,20000
+University of Oum El Bouaghi,Algeria,1701,300+,VERY_LOW,20000
+University of Primorska,Slovenia,1702,300+,VERY_LOW,20000
+October University for Modern Sciences and Arts (MSA),Egypt,1703,300+,VERY_LOW,20000
+Université de Gabès,Tunisia,1704,300+,VERY_LOW,20000
+Austral University of Chile,Chile,1705,300+,VERY_LOW,20000
+Morgan State University,United States,1706,300+,VERY_LOW,40000
+Georgia Southern University,United States,1707,300+,VERY_LOW,40000
+University of Qom,Iran,1708,300+,VERY_LOW,20000
+Polytechnic Institute of Porto,Portugal,1709,300+,VERY_LOW,20000
+Technical University of Cluj-Napoca,Romania,1710,300+,VERY_LOW,20000
+Cukurova University,Turkey,1711,300+,VERY_LOW,20000
+Universidad Andrés Bello (UNAB),Chile,1712,300+,VERY_LOW,20000
+Telkom University,Indonesia,1713,300+,VERY_LOW,20000
+Ubon Ratchathani University,Thailand,1714,300+,VERY_LOW,20000
+Universitas Ahmad Dahlan,Indonesia,1715,300+,VERY_LOW,20000
+"University of the North, Colombia",Colombia,1716,300+,VERY_LOW,20000
+Izmir University of Economics,Turkey,1717,300+,VERY_LOW,20000
+University of Pau and Pays de l’Adour,France,1718,300+,VERY_LOW,20000
+State University of Malang,Indonesia,1719,300+,VERY_LOW,20000
+University of Baghdad,Iraq,1720,300+,VERY_LOW,20000
+B. S. Abdur Rahman Crescent Institute of Science and Technology,India,1721,300+,VERY_LOW,20000
+Pontificia Universidad Javeriana,Colombia,1722,300+,VERY_LOW,20000
+Amity University - Kolkata,India,1723,300+,VERY_LOW,20000
+Nnamdi Azikiwe University,Nigeria,1724,300+,VERY_LOW,20000
+University of Al-Qadisiyah,Iraq,1725,300+,VERY_LOW,20000
+Ochanomizu University,Japan,1726,300+,VERY_LOW,20000
+Universitas Negeri Semarang,Indonesia,1727,300+,VERY_LOW,20000
+University of Costa Rica,Costa Rica,1728,300+,VERY_LOW,20000
+Hanoi University of Science and Technology,Vietnam,1729,300+,VERY_LOW,20000
+Arak University,Iran,1730,300+,VERY_LOW,20000
+Federico Santa María Technical University,Chile,1731,300+,VERY_LOW,20000
+Universidade do Estado do Rio de Janeiro (UERJ),Brazil,1732,300+,VERY_LOW,20000
+University of Babylon,Iraq,1733,300+,VERY_LOW,20000
+Federal University of Pelotas,Brazil,1734,300+,VERY_LOW,20000
+Eskişehir Osmangazi University,Turkey,1735,300+,VERY_LOW,20000
+Alexandru Ioan Cuza University,Romania,1736,300+,VERY_LOW,20000
+Plekhanov Russian University of Economics,Russian Federation,1737,300+,VERY_LOW,20000
+Saitama University,Japan,1738,300+,VERY_LOW,20000
+University of Kufa,Iraq,1739,300+,VERY_LOW,20000
+University of Moratuwa,Sri Lanka,1740,300+,VERY_LOW,20000
+Dankook University,South Korea,1741,300+,VERY_LOW,20000
+Gaziantep University,Turkey,1742,300+,VERY_LOW,20000
+Universidade Federal de Ouro Preto (UFOP),Brazil,1743,300+,VERY_LOW,20000
+Tottori University,Japan,1744,300+,VERY_LOW,20000
+"University of Santiago, Chile (USACH)",Chile,1745,300+,VERY_LOW,20000
+University of Yamanashi,Japan,1746,300+,VERY_LOW,20000
+Universiti Malaysia Sabah (UMS),Malaysia,1747,300+,VERY_LOW,20000
+L.N. Gumilyov Eurasian National University,Kazakhstan,1748,300+,VERY_LOW,20000
+Ladoke Akintola University of Technology,Nigeria,1749,300+,VERY_LOW,20000
+Tamil Nadu Agricultural University,India,1750,300+,VERY_LOW,20000
+Kagoshima University,Japan,1751,300+,VERY_LOW,20000
+University of Economics in Prague,Czechia,1752,300+,VERY_LOW,20000
+Tokat Gaziosmanpaşa University,Turkey,1753,300+,VERY_LOW,20000
+University of Life Sciences in Lublin,Poland,1754,300+,VERY_LOW,20000
+Shibaura Institute of Technology,Japan,1755,300+,VERY_LOW,20000
+University of Brawijaya,Indonesia,1756,300+,VERY_LOW,20000
+Université Chouaïb Doukkali,Morocco,1757,300+,VERY_LOW,20000
+Wasit University,Iraq,1758,300+,VERY_LOW,20000
+National University of San Martín,Argentina,1759,300+,VERY_LOW,20000
+Feng Chia University,Taiwan,1760,300+,VERY_LOW,20000
+Dow University of Health Sciences,Pakistan,1761,300+,VERY_LOW,20000
+Badji Mokhtar University – Annaba,Algeria,1762,300+,VERY_LOW,20000
+"Balochistan University of Information Technology, Engineering and Management Sciences (BUITEMS)",Pakistan,1763,300+,VERY_LOW,20000
+Dnipro University of Technology,Ukraine,1764,300+,VERY_LOW,20000
+Federal University of Mato Grosso do Sul,Brazil,1765,300+,VERY_LOW,20000
+Russian Presidential Academy of National Economy and Public Administration,Russian Federation,1766,300+,VERY_LOW,20000
+Bashkir State Medical University,Russian Federation,1767,300+,VERY_LOW,20000
+Federal University of Espírito Santo,Brazil,1768,300+,VERY_LOW,20000
+Aydın Adnan Menderes University,Turkey,1769,300+,VERY_LOW,20000
+Federal University of Viçosa,Brazil,1770,300+,VERY_LOW,20000
+Kyoto Institute of Technology,Japan,1771,300+,VERY_LOW,20000
+Moscow Power Engineering Institute,Russian Federation,1772,300+,VERY_LOW,20000
+Kasetsart University,Thailand,1773,300+,VERY_LOW,20000
+Dunarea de Jos University of Galati,Romania,1774,300+,VERY_LOW,20000
+Dokkyo Medical University,Japan,1775,300+,VERY_LOW,20000
+National University of La Plata,Argentina,1776,300+,VERY_LOW,20000
+Altınbaş University,Turkey,1777,300+,VERY_LOW,20000
+"Vignan’s Foundation for Science, Technology and Research",India,1778,300+,VERY_LOW,20000
+Universidad Mayor,Chile,1779,300+,VERY_LOW,20000
+Fluminense Federal University,Brazil,1780,300+,VERY_LOW,20000
+University of Zambia,Zambia,1781,300+,VERY_LOW,20000
+Al-Nahrain University,Iraq,1782,300+,VERY_LOW,20000
+Catholic University of Brasília,Brazil,1783,300+,VERY_LOW,20000
+Technical University of Liberec,Czechia,1784,300+,VERY_LOW,20000
+University of Pardubice,Czechia,1785,300+,VERY_LOW,20000
+National Changhua University of Education,Taiwan,1786,300+,VERY_LOW,20000
+University of Miyazaki,Japan,1787,300+,VERY_LOW,20000
+Nile University,Egypt,1788,300+,VERY_LOW,20000
+Damghan University,Iran,1789,300+,VERY_LOW,20000
+Metropolitan Autonomous University,Mexico,1790,300+,VERY_LOW,20000
+Baku State University,Azerbaijan,1791,300+,VERY_LOW,20000
+University of West Attica,Greece,1792,300+,VERY_LOW,20000
+Universidade Federal de Ciências da Saúde de Porto Alegre (UFCSPA),Brazil,1793,300+,VERY_LOW,20000
+REVA University,India,1794,300+,VERY_LOW,20000
+Konya Technical University,Turkey,1795,300+,VERY_LOW,20000
+Altai State University,Russian Federation,1796,300+,VERY_LOW,20000
+Kazan State Medical University,Russian Federation,1797,300+,VERY_LOW,20000
+Grand Valley State University,United States,1798,300+,VERY_LOW,40000
+Atılım University,Turkey,1799,300+,VERY_LOW,20000
+Shahed University,Iran,1800,300+,VERY_LOW,20000
+Universidade Estadual do Norte Fluminense Darcy Ribeiro,Brazil,1801,300+,VERY_LOW,20000
+Al-Quds University,Palestine,1802,300+,VERY_LOW,20000
+Taras Shevchenko National University of Kyiv,Ukraine,1803,300+,VERY_LOW,20000
+"State University ""Kyiv Aviation Institute""",Ukraine,1804,300+,VERY_LOW,20000
+Universidade Estadual de Maringá,Brazil,1805,300+,VERY_LOW,20000
+Universitas Pendidikan Indonesia,Indonesia,1806,300+,VERY_LOW,20000
+Pázmány Péter Catholic University,Hungary,1807,300+,VERY_LOW,20000
+Universidad Católica del Maule,Chile,1808,300+,VERY_LOW,20000
+Kenyatta University,Kenya,1809,300+,VERY_LOW,20000
+University of Oradea,Romania,1810,300+,VERY_LOW,20000
+Shanxi Medical University,China,1811,300+,VERY_LOW,20000
+Sinop University,Turkey,1812,300+,VERY_LOW,20000
+Bharati Vidyapeeth University,India,1813,300+,VERY_LOW,20000
+Shimane University,Japan,1814,300+,VERY_LOW,20000
+Ondokuz Mayis University,Turkey,1815,300+,VERY_LOW,20000
+Van Yüzüncü Yil University,Turkey,1816,300+,VERY_LOW,20000
+Ankara Yildirim Beyazit University,Turkey,1817,300+,VERY_LOW,20000
+East West University,Bangladesh,1818,300+,VERY_LOW,20000
+Sofia University,Bulgaria,1819,300+,VERY_LOW,20000
+R V College of Engineering,India,1820,300+,VERY_LOW,20000
+Shizuoka University,Japan,1821,300+,VERY_LOW,20000
+De La Salle University,Philippines,1822,300+,VERY_LOW,20000
+El Bosque University,Colombia,1823,300+,VERY_LOW,20000
+Muroran Institute of Technology,Japan,1824,300+,VERY_LOW,20000
+Lobachevsky State University of Nizhni Novgorod,Russian Federation,1825,300+,VERY_LOW,20000
+Ferhat Abbas Sétif University 1,Algeria,1826,300+,VERY_LOW,20000
+Al-Muthanna University,Iraq,1827,300+,VERY_LOW,20000
+Polytechnic University of Timişoara,Romania,1828,300+,VERY_LOW,20000
+Londrina State University,Brazil,1828,300+,VERY_LOW,20000
+Teikyo University,Japan,1830,300+,VERY_LOW,20000
+University of Lucknow,India,1831,300+,VERY_LOW,20000
+University of Rzeszów,Poland,1832,300+,VERY_LOW,20000
+Lagos State University,Nigeria,1833,300+,VERY_LOW,20000
+St Petersburg Electrotechnical University (LETI),Russian Federation,1834,300+,VERY_LOW,20000
+University of Miskolc,Hungary,1835,300+,VERY_LOW,20000
+Vietnam National University (Ho Chi Minh City),Vietnam,1836,300+,VERY_LOW,20000
+University of Rwanda,Rwanda,1837,300+,VERY_LOW,20000
+Széchenyi István University,Hungary,1838,300+,VERY_LOW,20000
+Hasanuddin University,Indonesia,1839,300+,VERY_LOW,20000
+University of Karachi,Pakistan,1840,300+,VERY_LOW,20000
+Universidad Católica de la Santísima Concepción,Chile,1841,300+,VERY_LOW,20000
+Kochi University,Japan,1842,300+,VERY_LOW,20000
+Bialystok University of Technology,Poland,1843,300+,VERY_LOW,20000
+State University of Ponta Grossa,Brazil,1844,300+,VERY_LOW,20000
+Pavlov First Saint Petersburg State Medical University,Russian Federation,1845,300+,VERY_LOW,20000
+Samara State Medical University,Russian Federation,1846,300+,VERY_LOW,20000
+Universidad Nacional de Asunción,Paraguay,1847,300+,VERY_LOW,20000
+University of Sri Jayewardenepura,Sri Lanka,1848,300+,VERY_LOW,20000
+Lviv Polytechnic National University,Ukraine,1849,300+,VERY_LOW,20000
+Akita University,Japan,1850,300+,VERY_LOW,20000
+University of Szczecin,Poland,1851,300+,VERY_LOW,20000
+GITAM University,India,1852,300+,VERY_LOW,20000
+University of Fukui,Japan,1853,300+,VERY_LOW,20000
+Tomsk State University of Control Systems and Radioelectronics,Russian Federation,1854,300+,VERY_LOW,20000
+Adelphi University,United States,1855,300+,VERY_LOW,40000
+"Federal University of Technology, Owerri",Nigeria,1856,300+,VERY_LOW,20000
+Antonio Nariño University,Colombia,1857,300+,VERY_LOW,20000
+Naresuan University,Thailand,1858,300+,VERY_LOW,20000
+North Khorasan University of Medical Sciences,Iran,1859,300+,VERY_LOW,20000
+Saints Cyril and Methodius University in Skopje,North Macedonia,1860,300+,VERY_LOW,20000
+Bilecik Şeyh Edebali University,Turkey,1861,300+,VERY_LOW,20000
+Kochi University of Technology,Japan,1862,300+,VERY_LOW,20000
+Escuela Politécnica Nacional,Ecuador,1863,300+,VERY_LOW,20000
+University of Diyala,Iraq,1864,300+,VERY_LOW,20000
+Silpakorn University,Thailand,1865,300+,VERY_LOW,20000
+Federal University of Pará,Brazil,1866,300+,VERY_LOW,20000
+Polytechnic University of Bucharest,Romania,1867,300+,VERY_LOW,20000
+University of Passo Fundo (UPF),Brazil,1868,300+,VERY_LOW,20000
+Université Kasdi Merbah Ouargla,Algeria,1869,300+,VERY_LOW,20000
+Federal Rural University of Pernambuco,Brazil,1870,300+,VERY_LOW,20000
+Kharkiv National University of Radio Electronics,Ukraine,1871,300+,VERY_LOW,20000
+Samara National Research University (Samara University),Russian Federation,1872,300+,VERY_LOW,20000
+Sivas Cumhuriyet University,Turkey,1873,300+,VERY_LOW,20000
+Université 8 Mai 1945 Guelma,Algeria,1874,300+,VERY_LOW,20000
+Grigore T. Popa University of Medicine and Pharmacy,Romania,1875,300+,VERY_LOW,20000
+M S Ramaiah University of Applied Sciences (RUAS),India,1876,300+,VERY_LOW,20000
+Erzincan Binali Yıldırım University,Turkey,1877,300+,VERY_LOW,20000
+Sikkim Manipal University,India,1878,300+,VERY_LOW,20000
+Niğde Ömer Halisdemir University,Turkey,1879,300+,VERY_LOW,20000
+Belarusian State University,Belarus,1880,300+,VERY_LOW,20000
+Universitas Sumatera Utara,Indonesia,1881,300+,VERY_LOW,20000
+National Taipei University,Taiwan,1882,300+,VERY_LOW,20000
+Universidade do Estado de Santa Catarina,Brazil,1883,300+,VERY_LOW,20000
+University of Science and Technology of Oran Mohamed-Boudiaf,Algeria,1884,300+,VERY_LOW,20000
+Misr University for Science and Technology,Egypt,1885,300+,VERY_LOW,20000
+Sakarya University of Applied Sciences,Turkey,1886,300+,VERY_LOW,20000
+Universidade Federal de Sergipe,Brazil,1887,300+,VERY_LOW,20000
+Oita University,Japan,1888,300+,VERY_LOW,20000
+University of Medellín,Colombia,1889,300+,VERY_LOW,20000
+University of Mataram,Indonesia,1890,300+,VERY_LOW,20000
+University of Namibia,Namibia,1891,300+,VERY_LOW,20000
+Mustansiriyah University,Iraq,1892,300+,VERY_LOW,20000
+Bolu Abant Izzet Baysal University,Turkey,1893,300+,VERY_LOW,20000
+Alberto Hurtado University,Chile,1894,300+,VERY_LOW,20000
+Universitas Andalas,Indonesia,1895,300+,VERY_LOW,20000
+Mapúa University,Philippines,1896,300+,VERY_LOW,20000
+University of Sarajevo,Bosnia and Herzegovina,1897,300+,VERY_LOW,20000
+"Soochow University, Taiwan",Taiwan,1898,300+,VERY_LOW,20000
+Technical University of Sofia,Bulgaria,1899,300+,VERY_LOW,20000
+Universiti Kuala Lumpur,Malaysia,1900,300+,VERY_LOW,20000
+The University of Danang,Vietnam,1901,300+,VERY_LOW,20000
+University of Dar es Salaam,Tanzania,1902,300+,VERY_LOW,20000
+University of Valparaíso,Chile,1903,300+,VERY_LOW,20000
+National Chi Nan University,Taiwan,1904,300+,VERY_LOW,20000
+University of Phayao,Thailand,1905,300+,VERY_LOW,20000
+University of Shizuoka,Japan,1906,300+,VERY_LOW,20000
+Kirikkale University,Turkey,1907,300+,VERY_LOW,20000
+V.N. Karazin Kharkiv National University,Ukraine,1908,300+,VERY_LOW,20000
+University of Birjand,Iran,1909,300+,VERY_LOW,20000
+University of Montenegro,Montenegro,1910,300+,VERY_LOW,20000
+PSG College of Technology,India,1911,300+,VERY_LOW,20000
+Adıyaman University,Turkey,1912,300+,VERY_LOW,20000
+Kwansei Gakuin University,Japan,1913,300+,VERY_LOW,20000
+Burdur Mehmet Akif Ersoy University,Turkey,1914,300+,VERY_LOW,20000
+National Pingtung University of Science and Technology,Taiwan,1915,300+,VERY_LOW,20000
+AIIMS Rishikesh,India,1916,300+,VERY_LOW,20000
+Çankırı Karatekin University,Turkey,1917,300+,VERY_LOW,20000
+University of Los Lagos,Chile,1918,300+,VERY_LOW,20000
+Latvia University of Life Sciences and Technologies,Latvia,1919,300+,VERY_LOW,20000
+Bursa Uludağ University,Turkey,1920,300+,VERY_LOW,20000
+Ming Chuan University,Taiwan,1921,300+,VERY_LOW,20000
+NED University of Engineering and Technology,Pakistan,1922,300+,VERY_LOW,20000
+Atma Jaya Catholic University of Indonesia,Indonesia,1923,300+,VERY_LOW,20000
+Georgian Technical University,Georgia,1924,300+,VERY_LOW,20000
+Matej Bel University,Slovakia,1925,300+,VERY_LOW,20000
+Sri Ramachandra Institute of Higher Education and Research,India,1926,300+,VERY_LOW,20000
+University of San Martín de Porres,Peru,1927,300+,VERY_LOW,20000
+Mendeleev University of Chemical Technology,Russian Federation,1928,300+,VERY_LOW,20000
+Universitas Muhammadiyah Yogyakarta,Indonesia,1929,300+,VERY_LOW,20000
+Sophia University,Japan,1930,300+,VERY_LOW,20000
+National Chiayi University,Taiwan,1931,300+,VERY_LOW,20000
+Universidad Autónoma de Querétaro,Mexico,1932,300+,VERY_LOW,20000
+University of Taipei,Taiwan,1933,300+,VERY_LOW,20000
+State University of Santa Cruz,Brazil,1934,300+,VERY_LOW,20000
+Universidad San Ignacio de Loyola,Peru,1935,300+,VERY_LOW,20000
+University of Mascara,Algeria,1936,300+,VERY_LOW,20000
+University of Craiova,Romania,1937,300+,VERY_LOW,20000
+Jianghan University,China,1938,300+,VERY_LOW,20000
+Belgorod State National Research University,Russian Federation,1939,300+,VERY_LOW,20000
+Pontifical Catholic University of Argentina,Argentina,1940,300+,VERY_LOW,20000
+KLE Academy of Higher Education and Research,India,1941,300+,VERY_LOW,20000
+Tokyo University of Agriculture,Japan,1942,300+,VERY_LOW,20000
+Kocaeli University,Turkey,1943,300+,VERY_LOW,20000
+Adana Alparslan Türkeş Science and Technology University,Turkey,1944,300+,VERY_LOW,20000
+Mahasarakham University,Thailand,1945,300+,VERY_LOW,20000
+Afyonkarahisar Health Sciences University,Turkey,1946,300+,VERY_LOW,20000
+Centro Federal de Educação Tecnológica Celso Suckow da Fonseca (CEFET-RJ),Brazil,1947,300+,VERY_LOW,20000
+Jean Moulin University – Lyon 3,France,1948,300+,VERY_LOW,20000
+Mersin University,Turkey,1949,300+,VERY_LOW,20000
+Muş Alparslan University,Turkey,1950,300+,VERY_LOW,20000
+Presidency University,India,1951,300+,VERY_LOW,20000
+Don State Technical University,Russian Federation,1952,300+,VERY_LOW,20000
+Universidad Pontificia Bolivariana (UPB),Colombia,1953,300+,VERY_LOW,20000
+Ionian University,Greece,1954,300+,VERY_LOW,20000
+Universitas Negeri Jakarta,Indonesia,1955,300+,VERY_LOW,20000
+Tikrit University,Iraq,1956,300+,VERY_LOW,20000
+National University of Córdoba,Argentina,1957,300+,VERY_LOW,20000
+Gheorghe Asachi Technical University of Iaşi,Romania,1958,300+,VERY_LOW,20000
+Gdynia Maritime University,Poland,1959,300+,VERY_LOW,20000
+Thiagarajar College of Engineering,India,1960,300+,VERY_LOW,20000
+Eskişehir Technical University,Turkey,1961,300+,VERY_LOW,20000
+Azerbaijan State Oil and Industry University,Azerbaijan,1962,300+,VERY_LOW,20000
+"Federal University of Agriculture, Abeokuta",Nigeria,1963,300+,VERY_LOW,20000
+Afyon Kocatepe University,Turkey,1964,300+,VERY_LOW,20000
+Mindanao State University – Iligan Institute of Technology,Philippines,1965,300+,VERY_LOW,20000
+Zonguldak Bülent Ecevit University,Turkey,1966,300+,VERY_LOW,20000
+Irkutsk National Research Technical University,Russian Federation,1967,300+,VERY_LOW,20000
+University of Hyogo,Japan,1968,300+,VERY_LOW,20000
+Universitas Muhammadiyah Malang,Indonesia,1968,300+,VERY_LOW,20000
+University of Biskra,Algeria,1970,300+,VERY_LOW,20000
+Universitas Negeri Surabaya,Indonesia,1971,300+,VERY_LOW,20000
+Islamic Science University of Malaysia (USIM),Malaysia,1972,300+,VERY_LOW,20000
+Islamic University of Indonesia,Indonesia,1973,300+,VERY_LOW,20000
+İzmir Kâtip Çelebi University,Turkey,1974,300+,VERY_LOW,20000
+National Ilan University,Taiwan,1975,300+,VERY_LOW,20000
+Srinakharinwirot University,Thailand,1976,300+,VERY_LOW,20000
+Central University of Venezuela,Venezuela,1977,300+,VERY_LOW,20000
+University of Thi-Qar,Iraq,1978,300+,VERY_LOW,20000
+Ekiti State University,Nigeria,1979,300+,VERY_LOW,20000
+Rzeszów University of Technology,Poland,1980,300+,VERY_LOW,20000
+East China University of Technology,China,1981,300+,VERY_LOW,20000
+EAFIT University,Colombia,1982,300+,VERY_LOW,20000
+Çanakkale Onsekiz Mart University,Turkey,1983,300+,VERY_LOW,20000
+University of Port Harcourt,Nigeria,1984,300+,VERY_LOW,20000
+Temuco Catholic University,Chile,1985,300+,VERY_LOW,20000
+University of Caxias do Sul,Brazil,1986,300+,VERY_LOW,20000
+Dicle University,Turkey,1987,300+,VERY_LOW,20000
+Perm National Research Polytechnic University,Russian Federation,1988,300+,VERY_LOW,20000
+Université Cheikh Anta Diop de Dakar (UCAD),Senegal,1989,300+,VERY_LOW,20000
+University of Abou Bekr Belkaïd Tlemcen,Algeria,1990,300+,VERY_LOW,20000
+Başkent University,Turkey,1991,300+,VERY_LOW,20000
+Universidad del Valle,Colombia,1992,300+,VERY_LOW,20000
+Pontificia Universidad Católica del Ecuador,Ecuador,1993,300+,VERY_LOW,20000
+Kırşehir Ahi Evran University,Turkey,1994,300+,VERY_LOW,20000
+Universidad Panamericana (UP),Mexico,1995,300+,VERY_LOW,20000
+Dr. M.G.R. Educational and Research Institute,India,1996,300+,VERY_LOW,20000
+Bozok University,Turkey,1997,300+,VERY_LOW,20000
+Üsküdar University,Turkey,1998,300+,VERY_LOW,20000
+Yerevan State University,Armenia,1999,300+,VERY_LOW,20000
+National Technical University Kharkiv Polytechnic Institute,Ukraine,2000,300+,VERY_LOW,20000
+Ordu University,Turkey,2001,300+,VERY_LOW,20000
+Kharkiv Aviation Institute,Ukraine,2002,300+,VERY_LOW,20000
+National University of Cuyo,Argentina,2003,300+,VERY_LOW,20000
+Dumlupinar University,Turkey,2004,300+,VERY_LOW,20000
+Kazakh National Agrarian Research University,Kazakhstan,2005,300+,VERY_LOW,20000
+University of Kelaniya,Sri Lanka,2006,300+,VERY_LOW,20000
+Petersburg State Transport University,Russian Federation,2007,300+,VERY_LOW,20000
+Universidade Estadual de Feira de Santana (UEFS),Brazil,2008,300+,VERY_LOW,20000
+Uşak University,Turkey,2009,300+,VERY_LOW,20000
+Mackenzie Presbyterian University,Brazil,2010,300+,VERY_LOW,20000
+Tokyo City University,Japan,2011,300+,VERY_LOW,20000
+Novosibirsk State Technical University,Russian Federation,2012,300+,VERY_LOW,20000
+Giresun University,Turkey,2013,300+,VERY_LOW,20000
+Larbi Tebessi University,Algeria,2014,300+,VERY_LOW,20000
+National University of Kaohsiung,Taiwan,2015,300+,VERY_LOW,20000
+Jan Evangelista Purkyně University,Czechia,2016,300+,VERY_LOW,20000
+University of Prishtina,Kosovo,2017,300+,VERY_LOW,20000
+University of Béjaïa,Algeria,2018,300+,VERY_LOW,20000
+University of Laghouat,Algeria,2019,300+,VERY_LOW,20000
+Hitit University,Turkey,2020,300+,VERY_LOW,20000
+Instituto Politécnico Nacional (IPN),Mexico,2021,300+,VERY_LOW,20000
+North-Caucasus Federal University,Russian Federation,2022,300+,VERY_LOW,20000
+Oran 1 University,Algeria,2023,300+,VERY_LOW,20000
+Benemérita Universidad Autónoma de Puebla,Mexico,2024,300+,VERY_LOW,20000
+Vasyl Stefanyk Carpathian National University,Ukraine,2025,300+,VERY_LOW,20000
+Aksaray University,Turkey,2026,300+,VERY_LOW,20000
+Chubu University,Japan,2027,300+,VERY_LOW,20000
+University of Cuenca,Ecuador,2028,300+,VERY_LOW,20000
+National Technical University of Ukraine – Igor Sikorsky Kyiv Polytechnic Institute,Ukraine,2029,300+,VERY_LOW,20000
+Mugla Sitki Kocman University,Turkey,2030,300+,VERY_LOW,20000
+North-Eastern Federal University,Russian Federation,2031,300+,VERY_LOW,20000
+Universidad Científica del Sur,Peru,2032,300+,VERY_LOW,20000
+Manisa Celal Bayar University,Turkey,2033,300+,VERY_LOW,20000
+Bursa Technical University,Turkey,2034,300+,VERY_LOW,20000
+Jan Kochanowski University in Kielce,Poland,2035,300+,VERY_LOW,20000
+National University of Mongolia,Mongolia,2036,300+,VERY_LOW,20000
+Polytechnic Institute of Setúbal,Portugal,2037,300+,VERY_LOW,20000
+Privolzhsky Research Medical University,Russian Federation,2038,300+,VERY_LOW,20000
+Petrozavodsk State University,Russian Federation,2039,300+,VERY_LOW,20000
+Payame Noor University,Iran,2040,300+,VERY_LOW,20000
+Kazan National Research Technological University,Russian Federation,2041,300+,VERY_LOW,20000
+Ibaraki University,Japan,2042,300+,VERY_LOW,20000
+North-Western State Medical University named after I.I. Mechnikov,Russian Federation,2043,300+,VERY_LOW,20000
+Volgograd State University,Russian Federation,2044,300+,VERY_LOW,20000
+Pamukkale University,Turkey,2045,300+,VERY_LOW,20000
+M’Hamed Bougara University of Boumerdès,Algeria,2046,300+,VERY_LOW,20000
+Universidad Nacional Agraria La Molina,Peru,2047,300+,VERY_LOW,20000
+Ivane Javakhishvili Tbilisi State University,Georgia,2048,300+,VERY_LOW,20000
+University of Kerbala,Iraq,2049,300+,VERY_LOW,20000
+Chuo University,Japan,2049,300+,VERY_LOW,20000
+Nihon University,Japan,2051,300+,VERY_LOW,20000
+"National Pirogov Memorial Medical University, Vinnytsya",Ukraine,2052,300+,VERY_LOW,20000
+National University of Life and Environmental Sciences of Ukraine,Ukraine,2053,300+,VERY_LOW,20000
+Université Frères Mentouri Constantine 1,Algeria,2054,300+,VERY_LOW,20000
+Saint Petersburg State Pediatric Medical University,Russian Federation,2055,300+,VERY_LOW,20000
+Alanya Alaaddin Keykubat University,Turkey,2056,300+,VERY_LOW,20000
+Middle Technical University,Iraq,2057,300+,VERY_LOW,20000
+Universidad Nacional Mayor de San Marcos,Peru,2058,300+,VERY_LOW,20000
+National University of Medical Sciences (NUMS),Pakistan,2059,300+,VERY_LOW,20000
+National United University,Taiwan,2060,300+,VERY_LOW,20000
+Tecnológico de Costa Rica,Costa Rica,2061,300+,VERY_LOW,20000
+Herzen State Pedagogical University of Russia,Russian Federation,2062,300+,VERY_LOW,20000
+University of Mosul,Iraq,2063,300+,VERY_LOW,20000
+University Mohamed Boudiaf of M’Sila,Algeria,2064,300+,VERY_LOW,20000
+Hue University,Vietnam,2065,300+,VERY_LOW,20000
+Ceará State University,Brazil,2066,300+,VERY_LOW,20000
+Universidade Nove de Julho (Uninove),Brazil,2067,300+,VERY_LOW,20000
+Universidad Industrial de Santander (UIS),Colombia,2068,300+,VERY_LOW,20000
+Doshisha University,Japan,2069,300+,VERY_LOW,20000
+Chinese Culture University,Taiwan,2070,300+,VERY_LOW,20000
+National University of Costa Rica,Costa Rica,2071,300+,VERY_LOW,20000
+University of Guadalajara,Mexico,2072,300+,VERY_LOW,20000
+Gubkin Russian State University of Oil and Gas,Russian Federation,2073,300+,VERY_LOW,20000
+Utsunomiya University,Japan,2074,300+,VERY_LOW,20000
+Ufa State Petroleum Technological University,Russian Federation,2075,300+,VERY_LOW,20000
+Anáhuac University,Mexico,2076,300+,VERY_LOW,20000
+Trakya University,Turkey,2077,300+,VERY_LOW,20000
+University of Sciences and Technology Houari Boumediene,Algeria,2078,300+,VERY_LOW,20000
+Beykent University,Turkey,2079,300+,VERY_LOW,20000
+Ryukoku University,Japan,2080,300+,VERY_LOW,20000
+Hatay Mustafa Kemal University,Turkey,2081,300+,VERY_LOW,20000
+Bernardo O’Higgins University,Chile,2082,300+,VERY_LOW,20000
+Ogarev Mordovia State University,Russian Federation,2083,300+,VERY_LOW,20000
+Blida 1 University,Algeria,2084,300+,VERY_LOW,20000
+Ovidius University of Constanța,Romania,2085,300+,VERY_LOW,20000
+CES University,Colombia,2086,300+,VERY_LOW,20000
+University of Bío-Bío,Chile,2087,300+,VERY_LOW,20000
+Tokyo University of Technology,Japan,2088,300+,VERY_LOW,20000
+Osaka Institute of Technology,Japan,2089,300+,VERY_LOW,20000
+Universidad Santo Tomás,Chile,2090,300+,VERY_LOW,20000
+Russian State University for the Humanities,Russian Federation,2091,300+,VERY_LOW,20000
+Ivan Franko National University of Lviv,Ukraine,2092,300+,VERY_LOW,20000
+Kansai University,Japan,2093,300+,VERY_LOW,20000
+Voronezh State University,Russian Federation,2094,300+,VERY_LOW,20000
+Bogomolets National Medical University,Ukraine,2095,300+,VERY_LOW,20000
+Ibn Khaldoun University,Algeria,2096,300+,VERY_LOW,20000
+Azerbaijan Technical University (AzTU),Azerbaijan,2097,300+,VERY_LOW,20000
+Burapha University,Thailand,2098,300+,VERY_LOW,20000
+Universidade Federal do Maranhão (UFMA),Brazil,2099,300+,VERY_LOW,20000
+University of Guanajuato,Mexico,2100,300+,VERY_LOW,20000
+Volgograd State Medical University,Russian Federation,2101,300+,VERY_LOW,20000
+Sri Lanka Institute of Information Technology,Sri Lanka,2102,300+,VERY_LOW,20000
+State Islamic University of Sunan Gunung Djati Bandung,Indonesia,2103,300+,VERY_LOW,20000
+"University of the Andes, Venezuela",Venezuela,2104,300+,VERY_LOW,20000
+University Abdelhamid Ibn Badis Mostaganem,Algeria,2105,300+,VERY_LOW,20000
+Universidad Nacional del Litoral,Argentina,2106,300+,VERY_LOW,20000
+Kanagawa University,Japan,2107,300+,VERY_LOW,20000
+Universidade Estadual do Oeste do Paraná (Unioeste),Brazil,2108,300+,VERY_LOW,20000
+Odesa I.I. Mechnikov National University,Ukraine,2109,300+,VERY_LOW,20000
+University of Jijel,Algeria,2110,300+,VERY_LOW,20000
+Kogakuin University,Japan,2111,300+,VERY_LOW,20000
+Okayama University of Science,Japan,2112,300+,VERY_LOW,20000
+Universidad Autónoma de Nuevo León (UANL),Mexico,2113,300+,VERY_LOW,20000
+Universidad Autónoma de Coahuila,Mexico,2114,300+,VERY_LOW,20000
+Toyama Prefectural University,Japan,2115,300+,VERY_LOW,20000
+University of Fortaleza (UNIFOR),Brazil,2116,300+,VERY_LOW,20000
+University of Lampung,Indonesia,2117,300+,VERY_LOW,20000
+Voronezh State Technical University,Russian Federation,2118,300+,VERY_LOW,20000
+Tokyo Denki University,Japan,2119,300+,VERY_LOW,20000
+Northern Technical University,Iraq,2120,300+,VERY_LOW,20000
+Al-Furat Al-Awsat Technical University,Iraq,2121,300+,VERY_LOW,20000
+Universidad Autónoma del Estado de Mexico (UAEMex),Mexico,2122,300+,VERY_LOW,20000
+Aoyama Gakuin University,Japan,2123,300+,VERY_LOW,20000
+Meiji University,Japan,2124,300+,VERY_LOW,20000
+University of Cauca,Colombia,2125,300+,VERY_LOW,20000
+Volgograd State Technical University,Russian Federation,2126,300+,VERY_LOW,20000
+Russian University of Transport (MIIT),Russian Federation,2127,300+,VERY_LOW,20000
+Meijo University,Japan,2128,300+,VERY_LOW,20000
+Ukrainian State University of Science and Technologies,Ukraine,2129,300+,VERY_LOW,20000
+University of Pernambuco,Brazil,2130,300+,VERY_LOW,20000
+MIREA - Russian Technological University,Russian Federation,2131,300+,VERY_LOW,20000
+Pontifical Catholic University of Minas Gerais,Brazil,2132,300+,VERY_LOW,20000
+Tekirdağ Namık Kemal University,Turkey,2133,300+,VERY_LOW,20000
+Northern (Arctic) Federal University named after M.V. Lomonosov,Russian Federation,2134,300+,VERY_LOW,20000
+Universidad Distrital Francisco José de Caldas,Colombia,2135,300+,VERY_LOW,20000
+Autonomous University of Baja California,Mexico,2136,300+,VERY_LOW,20000
+Trakia University,Bulgaria,2137,300+,VERY_LOW,20000
+University of Sonora,Mexico,2138,300+,VERY_LOW,20000
+Toyo University,Japan,2139,300+,VERY_LOW,20000
+Paisii Hilendarski University of Plovdiv,Bulgaria,2140,300+,VERY_LOW,20000
+Universidad Autónoma de Yucatán,Mexico,2141,300+,VERY_LOW,20000
+Perm State University,Russian Federation,2142,300+,VERY_LOW,20000
+Universidad Politécnica Salesiana,Ecuador,2143,300+,VERY_LOW,20000
+Chiba Institute of Technology,Japan,2144,300+,VERY_LOW,20000
+Nizhny Novgorod State Technical University n.a. R.E. Alekseev,Russian Federation,2145,300+,VERY_LOW,20000
+Federal University Oye-Ekiti,Nigeria,2146,300+,VERY_LOW,20000
+State University of Southwestern Bahia (UESB),Brazil,2147,300+,VERY_LOW,20000
+Balıkesir University,Turkey,2148,300+,VERY_LOW,20000
+Universidad Técnica Particular de Loja,Ecuador,2149,300+,VERY_LOW,20000
+Kazan State Power Engineering University,Russian Federation,2150,300+,VERY_LOW,20000
+Universidad Michoacana de San Nicolás de Hidalgo,Mexico,2151,300+,VERY_LOW,20000
+University of Kirkuk,Iraq,2152,300+,VERY_LOW,20000
+University of Batna 2,Algeria,2153,300+,VERY_LOW,20000
+Yuriy Fedkovych Chernivtsi National University,Ukraine,2154,300+,VERY_LOW,20000
+Siberian State Medical University,Russian Federation,2155,300+,VERY_LOW,20000
+Damascus University,Syria,2156,300+,VERY_LOW,20000
+National Formosa University,Taiwan,2157,300+,VERY_LOW,20000
+Ziane Achour University of Djelfa,Algeria,2158,300+,VERY_LOW,20000
+National University of Rosario (UNR),Argentina,2159,300+,VERY_LOW,20000
+"Delta State University, Abraka",Nigeria,2160,300+,VERY_LOW,20000
+University of Basrah,Iraq,2161,300+,VERY_LOW,20000
+Nueva Granada Military University,Colombia,2162,300+,VERY_LOW,20000
+Universidad Autónoma del Estado de Hidalgo,Mexico,2163,300+,VERY_LOW,20000
+Universitas Sriwijaya,Indonesia,2164,300+,VERY_LOW,20000
+Halu Oleo University,Indonesia,2165,300+,VERY_LOW,20000
+Technological University of Pereira,Colombia,2166,300+,VERY_LOW,20000
+Samara State Technical University,Russian Federation,2167,300+,VERY_LOW,20000
+Universidad de las Fuerzas Armadas – ESPE,Ecuador,2168,300+,VERY_LOW,20000
+Oles Honchar Dnipro National University,Ukraine,2169,300+,VERY_LOW,20000
+Université Mouloud Mammeri de Tizi-Ouzou,Algeria,2170,300+,VERY_LOW,20000
+Universidad Peruana de Ciencias Aplicadas (UPC),Peru,2171,300+,VERY_LOW,20000
+Kemerovo State University,Russian Federation,2172,300+,VERY_LOW,20000
+Universidad Técnica de Manabí,Ecuador,2173,300+,VERY_LOW,20000
+Uzhhorod National University,Ukraine,2174,300+,VERY_LOW,20000
+Autonomous University of Guerrero (UAGro),Mexico,2175,300+,VERY_LOW,20000
+Regional Autonomous University of the Andes (UNIANDES),Ecuador,2176,300+,VERY_LOW,20000
+Jember University,Indonesia,2177,300+,VERY_LOW,20000
+National University of Quilmes,Argentina,2178,300+,VERY_LOW,20000
+State University of Bahia,Brazil,2179,300+,VERY_LOW,20000
+Irkutsk State University,Russian Federation,2180,300+,VERY_LOW,20000
+Penza State University,Russian Federation,2181,300+,VERY_LOW,20000
+Industrial University of Tyumen,Russian Federation,2182,300+,VERY_LOW,20000
+Ivanovo State University of Chemistry and Technology,Russian Federation,2183,300+,VERY_LOW,20000
+Universidade Estadual do Maranhão,Brazil,2184,300+,VERY_LOW,20000
+Chelyabinsk State University,Russian Federation,2185,300+,VERY_LOW,20000
+Universidade Federal Rural do Semi-Arido,Brazil,2186,300+,VERY_LOW,20000
+Instituto Tecnológico Metropolitano,Colombia,2187,300+,VERY_LOW,20000
+Universidad Pedagogica y Tecnologica de Colombia - UPTC,Colombia,2188,300+,VERY_LOW,20000
+Omsk State Technical University,Russian Federation,2189,300+,VERY_LOW,20000
+"Federal Institute of Education, Science and Technology of São Paulo",Brazil,2190,300+,VERY_LOW,20000
+Tula State University,Russian Federation,2191,300+,VERY_LOW,20000

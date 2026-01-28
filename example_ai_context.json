@@ -1,0 +1,63 @@
+{
+    "system_prompt": "You are AI Counsellor, a state-driven decision agent...",
+    "user_profile": {
+        "name": "Sarah Chen",
+        "email": "sarah@example.com",
+        "academic_score": 88,
+        "budget": 35000,
+        "preferred_countries": [
+            "United States",
+            "Canada",
+            "United Kingdom"
+        ]
+    },
+    "current_stage": "DISCOVERY",
+    "candidate_universities": [
+        {
+            "id": 1,
+            "name": "Massachusetts Institute of Technology",
+            "country": "United States",
+            "rank": 1,
+            "ranking_band": "Top 50",
+            "competitiveness": "HIGH",
+            "avg_tuition_usd": 40000
+        },
+        {
+            "id": 15,
+            "name": "University of Toronto",
+            "country": "Canada",
+            "rank": 21,
+            "ranking_band": "Top 50",
+            "competitiveness": "HIGH",
+            "avg_tuition_usd": 25000
+        },
+        {
+            "id": 23,
+            "name": "University of British Columbia",
+            "country": "Canada",
+            "rank": 38,
+            "ranking_band": "Top 50",
+            "competitiveness": "HIGH",
+            "avg_tuition_usd": 25000
+        },
+        {
+            "id": 45,
+            "name": "McGill University",
+            "country": "Canada",
+            "rank": 54,
+            "ranking_band": "50-100",
+            "competitiveness": "MEDIUM",
+            "avg_tuition_usd": 25000
+        },
+        {
+            "id": 67,
+            "name": "University of Manchester",
+            "country": "United Kingdom",
+            "rank": 78,
+            "ranking_band": "50-100",
+            "competitiveness": "MEDIUM",
+            "avg_tuition_usd": 30000
+        }
+    ],
+    "instructions": "Recommend universities from candidate_universities ONLY. Never invent or suggest universities outside this list."
+}
