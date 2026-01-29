@@ -18,7 +18,7 @@ class UserProfileCreate(BaseModel):
     field_of_study: Optional[str] = None
     intake_year: Optional[int] = None
     preferred_countries: List[str] = []
-    budget_per_year: Optional[int] = None
+    budget_per_year: Optional[float] = None # Float to handle int inputs safely
     funding_plan: Optional[str] = None
     ielts_status: Optional[str] = None
     gre_gmat_status: Optional[str] = None

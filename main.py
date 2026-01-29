@@ -1,19 +1,44 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-from typing import Optional
+from typing import Optional, List
 
 from config import settings
-from models import Base, StageEnum
+from models import Base, StageEnum, UserProfile
 import crud
 import schemas
-from database import query_universities, normalize_country
+from database import query_universities, verify_tables_exist
 from scoring import categorize_universities
 
 # Create FastAPI app
 app = FastAPI(title="AI Counsellor Backend")
+
+# Ensure database tables exist on startup
+@app.on_event("startup")
+def startup_event():
+    verify_tables_exist()
+
+# Global Custom Error Handlers
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Convert 422 to 400 for frontend compatibility."""
+    return JSONResponse(
+        status_code=400,
+        content={"error": "VALIDATION_ERROR", "message": f"Invalid data format: {str(exc)}"},
+    )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """Catch all unhandled exceptions."""
+    print(f"Global Error: {str(exc)}")
+    return JSONResponse(
+        status_code=500,
+        content={"error": "INTERNAL_SERVER_ERROR", "message": "An unexpected error occurred. Please try again."},
+    )
 
 # Configure CORS
 app.add_middleware(
@@ -52,84 +77,43 @@ async def onboarding(
 ):
     """
     Complete user onboarding.
-    Creates profile, sets stage to DISCOVERY, generates initial tasks.
+    Upserts user profile (IDEMPOTENT).
     """
-    # Check if user already exists
-    existing = crud.get_user_by_email(db, profile_data.email)
-    if existing:
-        raise HTTPException(status_code=400, detail="User already exists")
-    
-    # Create user profile
-    profile_dict = profile_data.model_dump()
-    profile_dict["profile_complete"] = True
-    profile = crud.create_user_profile(db, profile_dict)
-    
-    # Create user state
-    crud.create_user_state(db, profile.id, StageEnum.DISCOVERY)
-    
-    # Generate initial tasks
-    crud.generate_initial_tasks(db, profile.id)
-    
-    return schemas.OnboardingResponse(
-        profile_complete=True,
-        current_stage=StageEnum.DISCOVERY,
-        user_id=profile.id
-    )
-
-@app.get("/dashboard", response_model=schemas.DashboardResponse)
-async def get_dashboard(
-    user_id: int,
-    db: Session = Depends(get_db)
-):
-    """
-    Get complete dashboard data.
-    Auto-includes university recommendations if stage == DISCOVERY.
-    """
-    # Get user profile
-    profile = crud.get_user_profile(db, user_id)
-    if not profile:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    # Get current stage
-    state = crud.get_user_state(db, user_id)
-    if not state:
-        raise HTTPException(status_code=404, detail="User state not found")
-    
-    # Get tasks for current stage
-    tasks = crud.get_tasks_by_stage(db, user_id, state.current_stage)
-    
-    # Auto-include universities if in DISCOVERY stage
-    universities = None
-    if state.current_stage == StageEnum.DISCOVERY and profile.profile_complete:
-        try:
-            # Get recommendations
-            unis = query_universities(
-                country=profile.preferred_countries[0] if profile.preferred_countries else "",
-                max_budget=profile.budget_per_year or 50000,
-                limit=15
-            )
+    try:
+        # Check if user already exists
+        existing_user = db.query(UserProfile).filter(UserProfile.email == profile_data.email).first()
+        
+        if existing_user:
+            # Update existing profile
+            for key, value in profile_data.model_dump().items():
+                setattr(existing_user, key, value)
+            existing_user.profile_complete = True
+            db.commit()
+            db.refresh(existing_user)
+            profile = existing_user
             
-            # Categorize
-            categorized = categorize_universities(
-                unis,
-                gpa=float(profile.gpa) if profile.gpa else 7.0,
-                budget=profile.budget_per_year or 50000
-            )
-            
-            universities = schemas.CategorizedUniversities(
-                dream=[schemas.UniversityResponse(**uni) for uni in categorized["dream"]],
-                target=[schemas.UniversityResponse(**uni) for uni in categorized["target"]],
-                safe=[schemas.UniversityResponse(**uni) for uni in categorized["safe"]]
-            )
-        except Exception as e:
-            print(f"[ERROR] Failed to load universities: {e}")
-    
-    return schemas.DashboardResponse(
-        profile_summary=schemas.UserProfileResponse.model_validate(profile),
-        current_stage=state.current_stage,
-        tasks=[schemas.TaskResponse.model_validate(t) for t in tasks],
-        universities=universities
-    )
+            # Ensure state exists
+            state = crud.get_user_state(db, profile.id)
+            if not state:
+                crud.create_user_state(db, profile.id, StageEnum.DISCOVERY)
+                
+        else:
+            # Create new user
+            profile_dict = profile_data.model_dump()
+            profile_dict["profile_complete"] = True
+            profile = crud.create_user_profile(db, profile_dict)
+            crud.create_user_state(db, profile.id, StageEnum.DISCOVERY)
+            crud.generate_initial_tasks(db, profile.id)
+        
+        return schemas.OnboardingResponse(
+            profile_complete=True,
+            current_stage=StageEnum.DISCOVERY,
+            user_id=profile.id
+        )
+        
+    except Exception as e:
+        print(f"Onboarding Error: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"Failed to save profile: {str(e)}")
 
 @app.get("/recommendations", response_model=schemas.MatchesResponse)
 async def get_deterministic_recommendations(
@@ -138,43 +122,30 @@ async def get_deterministic_recommendations(
 ):
     """
     Get deterministic university recommendations.
-    Strict logic: Country match + Budget fit + Rank sorting.
-    Categorization by rank only.
+    Strict logic: Multi-Country match + Budget fit + Rank sorting.
     """
     # 1. Fetch user profile
-    profile = crud.get_user_by_email(db, email)
+    profile = db.query(UserProfile).filter(UserProfile.email == email).first()
     if not profile:
-        # Return empty generic response or specific error? 
-        # Requirement: "Return empty arrays if no matches" implies success 200 likely, 
-        # but if user doesn't exist, we can't match. 
-        # Constraint: "Never raise 422 here".
-        # If user not found, strictly speaking we can't validate onboarding.
-        # But standard API practice for bad auth/user is 404 or 401. 
-        # However, checking "Validate onboarding is complete".
-        # If no profile, implies not onboarded.
-        return schemas.MatchesResponse(
-            matches=schemas.CategorizedUniversities(dream=[], target=[], safe=[])
-        )
+        # Return 400 as per contract if profile missing
+        raise HTTPException(status_code=400, detail="Profile not found. Please complete onboarding.")
 
     # 2. Validate onboarding
     if not profile.profile_complete:
-         return schemas.MatchesResponse(
-            matches=schemas.CategorizedUniversities(dream=[], target=[], safe=[])
-        )
+         raise HTTPException(status_code=400, detail="Profile incomplete. Please complete onboarding.")
 
     # 3. Query universities
-    # Use existing database function which does: Country ILIKE & Budget <= Max
-    country = profile.preferred_countries[0] if profile.preferred_countries else ""
+    countries = profile.preferred_countries if profile.preferred_countries else ["USA"] # Default fallback
     budget = profile.budget_per_year or 0
     
-    # query_universities orders by rank ASC already
+    # Query with multi-country support
     unis = query_universities(
-        country=country,
-        max_budget=budget,
-        limit=10 
+        countries=countries,
+        max_budget=float(budget),
+        limit=20 # Get top 20 to distribute
     )
-
-    # 4. Categorize by Rank (Strict Rule)
+    
+    # 4. Determinstic Categorization by Rank
     dream = []
     target = []
     safe = []
