@@ -1,10 +1,23 @@
-from schemas import Context, AdvisorResponse
+from schemas import Context, AdvisorResponse, UniversityRecommendation, RecommendationsByCategory
 from models import StageEnum
+from database import query_universities
+from classifier import classify_universities
+from gemini_client import generate_explanation
 
 def process_counseling(context: Context) -> AdvisorResponse:
+    """
+    Process counseling request and return recommendations.
+    
+    Args:
+        context: User context with profile and stage
+    
+    Returns:
+        AdvisorResponse with recommendations and guidance
+    """
     stage = context.current_stage
     profile = context.user_profile
 
+    # ONBOARDING: Check for missing profile fields
     if stage == StageEnum.ONBOARDING:
         missing = []
         if not profile.name: missing.append("name")
@@ -25,45 +38,124 @@ def process_counseling(context: Context) -> AdvisorResponse:
                 next_stage=StageEnum.DISCOVERY
             )
 
+    # DISCOVERY: Query and recommend universities
     elif stage == StageEnum.DISCOVERY:
-        # Mock recommendation logic
-        rec_unis = []
-        if not context.shortlisted_universities:
-            # logic to recommend unversities would go here
-            return AdvisorResponse(
-                message="Based on your profile, here are some recommendations.",
-                recommendations=[], # Populate with real data or mock
-                next_stage=StageEnum.DISCOVERY
+        try:
+            # Query universities from database
+            max_tuition = profile.budget * 1.2  # 20% buffer
+            universities = query_universities(
+                country=profile.preferred_country,
+                max_tuition=max_tuition,
+                limit=30
             )
-        else:
-             return AdvisorResponse(
-                message="You have shortlisted universities. Would you like to lock one?",
-                next_stage=StageEnum.SHORTLISTING
+            
+            if not universities:
+                return AdvisorResponse(
+                    message=f"No universities found matching your criteria in {profile.preferred_country} within budget ${profile.budget}. Try adjusting your preferences.",
+                    next_stage=StageEnum.DISCOVERY,
+                    recommendations=RecommendationsByCategory()
+                )
+            
+            # Classify universities into dream/target/safe
+            classified = classify_universities(
+                universities=universities,
+                academic_score=profile.academic_score
+            )
+            
+            # Convert to response format
+            recommendations = RecommendationsByCategory(
+                dream=[
+                    UniversityRecommendation(
+                        id=uni["id"],
+                        name=uni["name"],
+                        country=uni["country"],
+                        tuition_fee=uni["avg_tuition_usd"],
+                        ranking=uni["rank"]
+                    )
+                    for uni in classified["dream"]
+                ],
+                target=[
+                    UniversityRecommendation(
+                        id=uni["id"],
+                        name=uni["name"],
+                        country=uni["country"],
+                        tuition_fee=uni["avg_tuition_usd"],
+                        ranking=uni["rank"]
+                    )
+                    for uni in classified["target"]
+                ],
+                safe=[
+                    UniversityRecommendation(
+                        id=uni["id"],
+                        name=uni["name"],
+                        country=uni["country"],
+                        tuition_fee=uni["avg_tuition_usd"],
+                        ranking=uni["rank"]
+                    )
+                    for uni in classified["safe"]
+                ]
+            )
+            
+            # Generate AI explanation
+            try:
+                message = generate_explanation(
+                    user_profile={
+                        "academic_score": profile.academic_score,
+                        "budget": profile.budget,
+                        "preferred_country": profile.preferred_country
+                    },
+                    classified_universities=classified
+                )
+            except Exception as e:
+                # Fallback message if AI fails
+                total = len(universities)
+                message = f"Based on your profile, we've identified {total} universities in {profile.preferred_country}: {len(classified['dream'])} reach schools, {len(classified['target'])} target schools, and {len(classified['safe'])} safety schools."
+            
+            return AdvisorResponse(
+                message=message,
+                next_stage=StageEnum.DISCOVERY,
+                recommendations=recommendations
+            )
+            
+        except Exception as e:
+            # Error handling
+            return AdvisorResponse(
+                message=f"Error retrieving recommendations: {str(e)}. Please try again.",
+                next_stage=StageEnum.DISCOVERY,
+                recommendations=RecommendationsByCategory()
             )
 
+    # SHORTLISTING: Help narrow down choices
     elif stage == StageEnum.SHORTLISTING:
         if context.locked_university:
-             return AdvisorResponse(
-                message=f"You have locked {context.locked_university.name}. Preparing application.",
+            return AdvisorResponse(
+                message=f"You have locked a university. Preparing application guidance.",
                 next_stage=StageEnum.LOCKED
             )
         else:
             return AdvisorResponse(
-                message="Please select a university to lock.",
+                message="Please select a university to lock from your shortlist.",
                 next_stage=StageEnum.SHORTLISTING
             )
 
+    # LOCKED: Focus on locked university
     elif stage == StageEnum.LOCKED:
         if context.locked_university:
-             return AdvisorResponse(
-                message=f"Assisting with application for {context.locked_university.name}. what do you need help with?",
+            return AdvisorResponse(
+                message=f"Assisting with application. What do you need help with?",
                 next_stage=StageEnum.APPLICATION
             )
         else:
-            # Fallback if state is inconsistent
             return AdvisorResponse(
-                message="No university determined. Returning to discovery.",
+                message="No university locked. Returning to discovery.",
                 next_stage=StageEnum.DISCOVERY
             )
+    
+    # APPLICATION: Application assistance
+    elif stage == StageEnum.APPLICATION:
+        return AdvisorResponse(
+            message="Application assistance mode. How can I help with your application?",
+            next_stage=StageEnum.APPLICATION
+        )
             
     return AdvisorResponse(message="Invalid state.", next_stage=stage)
