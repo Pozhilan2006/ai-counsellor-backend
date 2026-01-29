@@ -97,7 +97,11 @@ class ApplicationResponse(BaseModel):
 
 # AI Counsel Schema
 class CounselRequest(BaseModel):
-    message: str
+    user_profile: dict # Flexible to accept full profile object
+    current_stage: str
+    shortlisted_universities: List[int] = [] # List of IDs
+    locked_university: Optional[dict] = None
+    question: str # REQUIRED field
 
 class CounselActions(BaseModel):
     shortlisted_added: List[int] = []
@@ -110,6 +114,7 @@ class CounselResponse(BaseModel):
 
 class MatchesResponse(BaseModel):
     matches: CategorizedUniversities
+    count: int # Added count field
 
 # Error Schema
 class ErrorResponse(BaseModel):
