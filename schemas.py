@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import List, Optional
+from typing import List, Optional, Union
 from enum import Enum
 from models import StageEnum
 
@@ -8,8 +8,9 @@ class UniversityRecommendation(BaseModel):
     id: int
     name: str
     country: str
-    tuition_fee: int  # Renamed from avg_tuition_usd for frontend
-    ranking: int      # Renamed from rank for frontend
+    rank: Optional[int] = None
+    estimated_tuition_usd: int
+    competitiveness: Optional[str] = None
 
 class RecommendationsByCategory(BaseModel):
     """Categorized university recommendations."""
@@ -34,4 +35,4 @@ class AdvisorResponse(BaseModel):
     message: str
     next_stage: Optional[StageEnum] = None
     missing_fields: List[str] = []
-    recommendations: RecommendationsByCategory = RecommendationsByCategory()
+    recommendations: Union[List[UniversityRecommendation], RecommendationsByCategory] = []

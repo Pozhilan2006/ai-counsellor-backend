@@ -41,75 +41,37 @@ def process_counseling(context: Context) -> AdvisorResponse:
     # DISCOVERY: Query and recommend universities
     elif stage == StageEnum.DISCOVERY:
         try:
-            # Query universities from database
-            max_tuition = profile.budget * 1.2  # 20% buffer
+            # Query universities with MINIMAL filtering
+            # NO 1.2x multiplier, NO classification, NO academic score filtering
             universities = query_universities(
                 country=profile.preferred_country,
-                max_tuition=max_tuition,
-                limit=30
+                max_budget=profile.budget,  # Use exact budget, no multiplier
+                limit=10  # Return top 10 only
             )
+            
+            print(f"[DEBUG] Found {len(universities)} universities for {profile.preferred_country}, budget {profile.budget}")
             
             if not universities:
                 return AdvisorResponse(
-                    message=f"No universities found matching your criteria in {profile.preferred_country} within budget ${profile.budget}. Try adjusting your preferences.",
+                    message=f"No universities found in {profile.preferred_country} within budget ${profile.budget}. Try adjusting your preferences.",
                     next_stage=StageEnum.DISCOVERY,
-                    recommendations=RecommendationsByCategory()
+                    recommendations=[]
                 )
             
-            # Classify universities into dream/target/safe
-            classified = classify_universities(
-                universities=universities,
-                academic_score=profile.academic_score
-            )
-            
-            # Convert to response format
-            recommendations = RecommendationsByCategory(
-                dream=[
-                    UniversityRecommendation(
-                        id=uni["id"],
-                        name=uni["name"],
-                        country=uni["country"],
-                        tuition_fee=uni["estimated_tuition_usd"],
-                        ranking=uni["rank"]
-                    )
-                    for uni in classified["dream"]
-                ],
-                target=[
-                    UniversityRecommendation(
-                        id=uni["id"],
-                        name=uni["name"],
-                        country=uni["country"],
-                        tuition_fee=uni["estimated_tuition_usd"],
-                        ranking=uni["rank"]
-                    )
-                    for uni in classified["target"]
-                ],
-                safe=[
-                    UniversityRecommendation(
-                        id=uni["id"],
-                        name=uni["name"],
-                        country=uni["country"],
-                        tuition_fee=uni["estimated_tuition_usd"],
-                        ranking=uni["rank"]
-                    )
-                    for uni in classified["safe"]
-                ]
-            )
-            
-            # Generate AI explanation
-            try:
-                message = generate_explanation(
-                    user_profile={
-                        "academic_score": profile.academic_score,
-                        "budget": profile.budget,
-                        "preferred_country": profile.preferred_country
-                    },
-                    classified_universities=classified
+            # Convert to response format (flat array, no classification)
+            recommendations = [
+                UniversityRecommendation(
+                    id=uni["id"],
+                    name=uni["name"],
+                    country=uni["country"],
+                    rank=uni["rank"],
+                    estimated_tuition_usd=uni["estimated_tuition_usd"],
+                    competitiveness=uni["competitiveness"]
                 )
-            except Exception as e:
-                # Fallback message if AI fails
-                total = len(universities)
-                message = f"Based on your profile, we've identified {total} universities in {profile.preferred_country}: {len(classified['dream'])} reach schools, {len(classified['target'])} target schools, and {len(classified['safe'])} safety schools."
+                for uni in universities
+            ]
+            
+            message = f"Based on your profile, here are {len(recommendations)} universities in {profile.preferred_country} within your budget."
             
             return AdvisorResponse(
                 message=message,
@@ -118,11 +80,15 @@ def process_counseling(context: Context) -> AdvisorResponse:
             )
             
         except Exception as e:
-            # Error handling
+            # Error handling with detailed logging
+            print(f"[ERROR] Failed to query universities: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            
             return AdvisorResponse(
                 message=f"Error retrieving recommendations: {str(e)}. Please try again.",
                 next_stage=StageEnum.DISCOVERY,
-                recommendations=RecommendationsByCategory()
+                recommendations=[]
             )
 
     # SHORTLISTING: Help narrow down choices

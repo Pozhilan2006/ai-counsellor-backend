@@ -2,6 +2,44 @@ from sqlalchemy import create_engine, text
 from typing import List, Dict, Optional
 from config import settings
 
+# Country normalization mapping
+COUNTRY_MAPPING = {
+    "USA": "United States",
+    "US": "United States",
+    "United States": "United States",
+    "UK": "United Kingdom",
+    "United Kingdom": "United Kingdom",
+    "Canada": "Canada",
+    "Australia": "Australia",
+    "Germany": "Germany",
+}
+
+def normalize_country(country: str) -> str:
+    """
+    Normalize country input to match database values.
+    
+    Args:
+        country: User input country (e.g., "USA", "UK")
+    
+    Returns:
+        Normalized country name (e.g., "United States", "United Kingdom")
+    """
+    if not country:
+        return ""
+    
+    # Try exact match first
+    normalized = COUNTRY_MAPPING.get(country.strip())
+    if normalized:
+        return normalized
+    
+    # Try case-insensitive match
+    for key, value in COUNTRY_MAPPING.items():
+        if key.lower() == country.lower():
+            return value
+    
+    # Return original if no mapping found
+    return country.strip()
+
 def get_db_connection():
     """Create and return database engine."""
     if not settings.DATABASE_URL:
@@ -10,22 +48,30 @@ def get_db_connection():
 
 def query_universities(
     country: str,
-    max_tuition: float,
-    limit: int = 30
+    max_budget: float,
+    limit: int = 10
 ) -> List[Dict]:
     """
-    Query universities from database with filters.
+    Query universities from database with MINIMAL filtering.
+    
+    ONLY filters by:
+    - Country (case-insensitive, partial match)
+    - Budget (estimated_tuition_usd <= max_budget)
     
     Args:
-        country: Preferred country
-        max_tuition: Maximum tuition (budget * 1.2)
-        limit: Maximum number of results
+        country: User's preferred country (will be normalized)
+        max_budget: Maximum budget (NOT multiplied by 1.2)
+        limit: Maximum number of results (default 10)
     
     Returns:
         List of university dictionaries
     """
     engine = get_db_connection()
     
+    # Normalize country input
+    normalized_country = normalize_country(country)
+    
+    # Use ILIKE for case-insensitive partial matching
     query = text("""
         SELECT 
             id,
@@ -37,9 +83,9 @@ def query_universities(
             estimated_tuition_usd
         FROM universities
         WHERE 
-            country = :country
-            AND estimated_tuition_usd <= :max_tuition
-        ORDER BY rank ASC
+            country ILIKE :country_pattern
+            AND estimated_tuition_usd <= :max_budget
+        ORDER BY rank ASC NULLS LAST
         LIMIT :limit
     """)
     
@@ -47,8 +93,8 @@ def query_universities(
         result = conn.execute(
             query,
             {
-                "country": country,
-                "max_tuition": max_tuition,
+                "country_pattern": f"%{normalized_country}%",
+                "max_budget": max_budget,
                 "limit": limit
             }
         )
@@ -64,5 +110,9 @@ def query_universities(
                 "competitiveness": row.competitiveness,
                 "estimated_tuition_usd": row.estimated_tuition_usd
             })
+        
+        # Debug logging
+        print(f"[DEBUG] Query params: country={normalized_country}, budget={max_budget}")
+        print(f"[DEBUG] Matched universities: {len(universities)}")
         
         return universities
