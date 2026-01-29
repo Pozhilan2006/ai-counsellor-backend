@@ -18,11 +18,12 @@ class UserProfileCreate(BaseModel):
     field_of_study: Optional[str] = None
     intake_year: Optional[int] = None
     preferred_countries: List[str] = []
-    budget_per_year: Optional[float] = None # Float to handle int inputs safely
+    budget_per_year: Optional[int] = None
     funding_plan: Optional[str] = None
     ielts_status: Optional[str] = None
     gre_gmat_status: Optional[str] = None
     sop_status: Optional[str] = None
+    final_submit: Optional[bool] = False  # Flag to mark profile as complete
 
 class UserProfileResponse(BaseModel):
     id: int
@@ -95,13 +96,10 @@ class ApplicationResponse(BaseModel):
     tasks: List[TaskResponse]
     timeline: List[str]
 
-# AI Counsel Schema
+# AI Counsel Schema (Simplified)
 class CounselRequest(BaseModel):
-    user_profile: dict # Flexible to accept full profile object
-    current_stage: str
-    shortlisted_universities: List[int] = [] # List of IDs
-    locked_university: Optional[dict] = None
-    question: str # REQUIRED field
+    email: str
+    message: str
 
 class CounselActions(BaseModel):
     shortlisted_added: List[int] = []
