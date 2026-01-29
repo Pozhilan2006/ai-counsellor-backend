@@ -77,9 +77,7 @@ async def onboarding(
 ):
     """
     Complete user onboarding with UPSERT logic.
-    If profile exists -> UPDATE
-    If new -> INSERT
-    If final_submit=true -> mark profile_complete=true
+    Stage is derived from profile_complete, NOT stored in a table.
     """
     print(f"[ENDPOINT] /onboarding called for {profile_data.email}")
     
@@ -105,28 +103,21 @@ async def onboarding(
             db.commit()
             db.refresh(existing_user)
             profile = existing_user
-            
-            # Ensure state exists
-            state = crud.get_user_state(db, profile.id)
-            if not state:
-                crud.create_user_state(db, profile.id, StageEnum.DISCOVERY)
                 
         else:
             # INSERT new user
             print(f"[LOGIC] Creating new profile for {profile_data.email}")
             profile_dict["profile_complete"] = profile_data.final_submit
             profile = crud.create_user_profile(db, profile_dict)
-            crud.create_user_state(db, profile.id, StageEnum.DISCOVERY)
             
-            # Generate initial tasks only for new users
+            # Generate initial tasks only for new users with complete profile
             if profile_data.final_submit:
                 crud.generate_initial_tasks(db, profile.id)
         
-        # Get current stage
-        state = crud.get_user_state(db, profile.id)
-        current_stage = state.current_stage if state else StageEnum.DISCOVERY
+        # Derive stage from profile_complete (NO TABLE QUERY)
+        current_stage = StageEnum.DISCOVERY if profile.profile_complete else StageEnum.ONBOARDING
         
-        print(f"[SUCCESS] Profile saved. Complete: {profile.profile_complete}")
+        print(f"[SUCCESS] Profile saved. Complete: {profile.profile_complete}, Stage: {current_stage}")
         
         return schemas.OnboardingResponse(
             profile_complete=profile.profile_complete,

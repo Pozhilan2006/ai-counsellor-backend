@@ -4,7 +4,7 @@ CRUD operations for database models.
 
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
-from models import UserProfile, UserState, UserUniversity, Task, StageEnum, CategoryEnum
+from models import UserProfile, UserUniversity, Task, StageEnum, CategoryEnum
 from typing import List, Optional, Dict
 from datetime import datetime
 
@@ -29,26 +29,6 @@ def update_profile_complete(db: Session, user_id: int, complete: bool = True):
     """Mark profile as complete."""
     db.query(UserProfile).filter(UserProfile.id == user_id).update(
         {"profile_complete": complete}
-    )
-    db.commit()
-
-# UserState operations
-def create_user_state(db: Session, user_id: int, stage: StageEnum = StageEnum.ONBOARDING) -> UserState:
-    """Create user state entry."""
-    state = UserState(user_id=user_id, current_stage=stage)
-    db.add(state)
-    db.commit()
-    db.refresh(state)
-    return state
-
-def get_user_state(db: Session, user_id: int) -> Optional[UserState]:
-    """Get user's current state."""
-    return db.query(UserState).filter(UserState.user_id == user_id).first()
-
-def update_user_stage(db: Session, user_id: int, stage: StageEnum):
-    """Update user's current stage."""
-    db.query(UserState).filter(UserState.user_id == user_id).update(
-        {"current_stage": stage, "updated_at": datetime.utcnow()}
     )
     db.commit()
 
