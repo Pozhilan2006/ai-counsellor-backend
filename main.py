@@ -131,6 +131,82 @@ async def get_dashboard(
         universities=universities
     )
 
+@app.get("/recommendations", response_model=schemas.MatchesResponse)
+async def get_deterministic_recommendations(
+    email: str,
+    db: Session = Depends(get_db)
+):
+    """
+    Get deterministic university recommendations.
+    Strict logic: Country match + Budget fit + Rank sorting.
+    Categorization by rank only.
+    """
+    # 1. Fetch user profile
+    profile = crud.get_user_by_email(db, email)
+    if not profile:
+        # Return empty generic response or specific error? 
+        # Requirement: "Return empty arrays if no matches" implies success 200 likely, 
+        # but if user doesn't exist, we can't match. 
+        # Constraint: "Never raise 422 here".
+        # If user not found, strictly speaking we can't validate onboarding.
+        # But standard API practice for bad auth/user is 404 or 401. 
+        # However, checking "Validate onboarding is complete".
+        # If no profile, implies not onboarded.
+        return schemas.MatchesResponse(
+            matches=schemas.CategorizedUniversities(dream=[], target=[], safe=[])
+        )
+
+    # 2. Validate onboarding
+    if not profile.profile_complete:
+         return schemas.MatchesResponse(
+            matches=schemas.CategorizedUniversities(dream=[], target=[], safe=[])
+        )
+
+    # 3. Query universities
+    # Use existing database function which does: Country ILIKE & Budget <= Max
+    country = profile.preferred_countries[0] if profile.preferred_countries else ""
+    budget = profile.budget_per_year or 0
+    
+    # query_universities orders by rank ASC already
+    unis = query_universities(
+        country=country,
+        max_budget=budget,
+        limit=10 
+    )
+
+    # 4. Categorize by Rank (Strict Rule)
+    dream = []
+    target = []
+    safe = []
+
+    for uni in unis:
+        # Map DB dict to schema
+        uni_obj = schemas.UniversityResponse(
+            id=uni["id"],
+            name=uni["name"],
+            country=uni["country"],
+            rank=uni["rank"],
+            estimated_tuition_usd=uni["estimated_tuition_usd"],
+            competitiveness=uni["competitiveness"]
+        )
+        
+        # Categorize
+        rank = uni["rank"] or 999
+        if rank <= 100:
+            dream.append(uni_obj)
+        elif rank <= 300:
+            target.append(uni_obj)
+        else:
+            safe.append(uni_obj)
+
+    return schemas.MatchesResponse(
+        matches=schemas.CategorizedUniversities(
+            dream=dream,
+            target=target,
+            safe=safe
+        )
+    )
+
 @app.get("/universities/recommendations", response_model=schemas.CategorizedUniversities)
 async def get_recommendations(
     user_id: int,

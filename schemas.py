@@ -108,6 +108,9 @@ class CounselResponse(BaseModel):
     message: str
     actions: CounselActions
 
+class MatchesResponse(BaseModel):
+    matches: CategorizedUniversities
+
 # Error Schema
 class ErrorResponse(BaseModel):
     error: str
