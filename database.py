@@ -34,11 +34,11 @@ def query_universities(
             rank,
             ranking_band,
             competitiveness,
-            avg_tuition_usd
+            estimated_tuition_usd
         FROM universities
         WHERE 
             country = :country
-            AND avg_tuition_usd <= :max_tuition
+            AND estimated_tuition_usd <= :max_tuition
         ORDER BY rank ASC
         LIMIT :limit
     """)
@@ -62,7 +62,7 @@ def query_universities(
                 "rank": row.rank,
                 "ranking_band": row.ranking_band,
                 "competitiveness": row.competitiveness,
-                "avg_tuition_usd": row.avg_tuition_usd
+                "estimated_tuition_usd": row.estimated_tuition_usd
             })
         
         return universities

@@ -69,7 +69,7 @@ def process_counseling(context: Context) -> AdvisorResponse:
                         id=uni["id"],
                         name=uni["name"],
                         country=uni["country"],
-                        tuition_fee=uni["avg_tuition_usd"],
+                        tuition_fee=uni["estimated_tuition_usd"],
                         ranking=uni["rank"]
                     )
                     for uni in classified["dream"]
@@ -79,7 +79,7 @@ def process_counseling(context: Context) -> AdvisorResponse:
                         id=uni["id"],
                         name=uni["name"],
                         country=uni["country"],
-                        tuition_fee=uni["avg_tuition_usd"],
+                        tuition_fee=uni["estimated_tuition_usd"],
                         ranking=uni["rank"]
                     )
                     for uni in classified["target"]
@@ -89,7 +89,7 @@ def process_counseling(context: Context) -> AdvisorResponse:
                         id=uni["id"],
                         name=uni["name"],
                         country=uni["country"],
-                        tuition_fee=uni["avg_tuition_usd"],
+                        tuition_fee=uni["estimated_tuition_usd"],
                         ranking=uni["rank"]
                     )
                     for uni in classified["safe"]
