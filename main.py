@@ -152,6 +152,32 @@ async def get_user_stage(email: str, db: Session = Depends(get_db)):
             "profile_complete": False
         }
 
+@app.get("/profile/strength")
+async def get_profile_strength(email: str, db: Session = Depends(get_db)):
+    """
+    Get profile completion strength with point-based scoring.
+    Returns dynamic calculation based on current profile state.
+    """
+    try:
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            raise HTTPException(
+                status_code=404,
+                detail={"error": "USER_NOT_FOUND", "message": "User not found"}
+            )
+        
+        # Calculate strength dynamically
+        strength = crud.calculate_profile_strength(db, profile)
+        return strength
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] get_profile_strength failed: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail={"error": "CALCULATION_FAILED", "message": str(e)}
+        )
+
 @app.post("/onboarding", response_model=schemas.OnboardingResponse)
 async def onboarding(
     profile_data: schemas.UserProfileCreate,

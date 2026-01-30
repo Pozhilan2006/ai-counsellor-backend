@@ -316,95 +316,152 @@ def clear_user_tasks(db: Session, user_id: int):
         print(f"[ERROR] clear_user_tasks failed: {str(e)}")
         db.rollback()
 
-# Profile Strength Calculation
-def calculate_profile_strength(profile: UserProfile) -> Dict:
+# Profile Strength Calculation (Point-Based System)
+def calculate_profile_strength(db: Session, profile: UserProfile) -> Dict:
     """
-    Calculate profile completion percentage.
-    Returns overall and category-wise breakdown.
+    Calculate profile completion using point-based scoring (100 points total).
     
-    Categories:
-    - Academic (30%): GPA, test scores
-    - Basic Info (25%): Name, email, field, countries, budget
-    - Experience (25%): Work experience, projects (future fields)
-    - Documents (20%): SOP, recommendations, resume (future fields)
+    Scoring Breakdown:
+    - Academics (30 points): GPA (20) + Degree/Field (10)
+    - Exams (20 points): IELTS/TOEFL (10) + GRE/GMAT (10)
+    - Documents (25 points): SOP (15 max) + Resume (10)
+    - Preferences (15 points): Budget (5) + Countries (5) + Course (5)
+    - Decision Progress (10 points): Shortlist (5) OR Lock (10)
+    
+    Returns dynamic calculation, NOT static values.
     """
-    # Academic (30%)
-    academic_fields = {
-        "gpa": profile.gpa is not None and profile.gpa > 0,
-        "gre_gmat": profile.gre_gmat_status not in [None, "", "Not Started"],
-        "ielts": profile.ielts_status not in [None, "", "Not Started"]
+    total_points = 0
+    sections = {}
+    
+    # ========================================
+    # ACADEMICS (30 points)
+    # ========================================
+    academics_points = 0
+    
+    # GPA present → +20
+    if profile.gpa and float(profile.gpa) > 0:
+        academics_points += 20
+    
+    # Degree / field present → +10
+    if (profile.degree and profile.degree.strip()) or (profile.field_of_study and profile.field_of_study.strip()):
+        academics_points += 10
+    
+    total_points += academics_points
+    sections["academics"] = {
+        "points": academics_points,
+        "max_points": 30,
+        "percentage": round((academics_points / 30) * 100, 1),
+        "status": "strong" if academics_points >= 25 else "moderate" if academics_points >= 15 else "weak"
     }
-    academic_completed = sum(academic_fields.values())
-    academic_total = len(academic_fields)
-    academic_score = (academic_completed / academic_total) * 30 if academic_total > 0 else 0
     
-    # Basic Info (25%)
-    basic_fields = {
-        "name": bool(profile.name and profile.name.strip()),
-        "email": bool(profile.email and profile.email.strip()),
-        "field_of_study": bool(profile.field_of_study and profile.field_of_study.strip()),
-        "preferred_countries": bool(profile.preferred_countries and len(profile.preferred_countries) > 0),
-        "budget": profile.budget_per_year is not None and profile.budget_per_year > 0
+    # ========================================
+    # EXAMS (20 points)
+    # ========================================
+    exams_points = 0
+    
+    # IELTS/TOEFL status + score → +10
+    if profile.ielts_status and profile.ielts_status not in ["", "Not Started", "Planning"]:
+        exams_points += 10
+    
+    # GRE/GMAT status + score → +10
+    if profile.gre_gmat_status and profile.gre_gmat_status not in ["", "Not Started", "Planning"]:
+        exams_points += 10
+    
+    total_points += exams_points
+    sections["exams"] = {
+        "points": exams_points,
+        "max_points": 20,
+        "percentage": round((exams_points / 20) * 100, 1),
+        "status": "complete" if exams_points >= 15 else "in_progress" if exams_points >= 5 else "not_started"
     }
-    basic_completed = sum(basic_fields.values())
-    basic_total = len(basic_fields)
-    basic_score = (basic_completed / basic_total) * 25 if basic_total > 0 else 0
     
-    # Education Details (25%)
-    education_fields = {
-        "education_level": bool(profile.education_level and profile.education_level.strip()),
-        "degree": bool(profile.degree and profile.degree.strip()),
-        "graduation_year": profile.graduation_year is not None and profile.graduation_year > 0,
-        "intended_degree": bool(profile.intended_degree and profile.intended_degree.strip()),
-        "intake_year": profile.intake_year is not None and profile.intake_year > 0
+    # ========================================
+    # DOCUMENTS (25 points)
+    # ========================================
+    documents_points = 0
+    
+    # SOP status
+    if profile.sop_status:
+        if profile.sop_status.lower() in ["ready", "completed", "done"]:
+            documents_points += 15
+        elif profile.sop_status.lower() in ["draft", "drafting", "in progress"]:
+            documents_points += 10
+    
+    # Resume uploaded → +10 (check if field exists, future enhancement)
+    # For now, we'll use a placeholder check
+    # documents_points += 10  # Add when resume field exists
+    
+    total_points += documents_points
+    sections["documents"] = {
+        "points": documents_points,
+        "max_points": 25,
+        "percentage": round((documents_points / 25) * 100, 1),
+        "status": "complete" if documents_points >= 20 else "incomplete"
     }
-    education_completed = sum(education_fields.values())
-    education_total = len(education_fields)
-    education_score = (education_completed / education_total) * 25 if education_total > 0 else 0
     
-    # Documents (20%)
-    document_fields = {
-        "sop": profile.sop_status not in [None, "", "Not Started"],
-        "funding_plan": bool(profile.funding_plan and profile.funding_plan.strip())
+    # ========================================
+    # PREFERENCES & PLANNING (15 points)
+    # ========================================
+    preferences_points = 0
+    
+    # Budget set → +5
+    if profile.budget_per_year and profile.budget_per_year > 0:
+        preferences_points += 5
+    
+    # Country preferences set → +5
+    if profile.preferred_countries and len(profile.preferred_countries) > 0:
+        preferences_points += 5
+    
+    # Course preference set → +5
+    if profile.field_of_study and profile.field_of_study.strip():
+        preferences_points += 5
+    
+    total_points += preferences_points
+    sections["preferences"] = {
+        "points": preferences_points,
+        "max_points": 15,
+        "percentage": round((preferences_points / 15) * 100, 1),
+        "status": "complete" if preferences_points >= 12 else "partial" if preferences_points >= 5 else "incomplete"
     }
-    document_completed = sum(document_fields.values())
-    document_total = len(document_fields)
-    document_score = (document_completed / document_total) * 20 if document_total > 0 else 0
     
-    # Calculate overall
-    overall = academic_score + basic_score + education_score + document_score
+    # ========================================
+    # DECISION PROGRESS (10 points)
+    # ========================================
+    decision_points = 0
     
-    # Collect missing fields
-    missing_fields = []
-    for field, present in {**academic_fields, **basic_fields, **education_fields, **document_fields}.items():
-        if not present:
-            missing_fields.append(field)
+    # Check if university is locked (overrides shortlist)
+    locked_uni = get_locked_university(db, profile.id)
+    if locked_uni:
+        decision_points = 10
+    else:
+        # Check shortlist count
+        shortlists = get_user_shortlists(db, profile.id)
+        if len(shortlists) >= 1:
+            decision_points = 5
+    
+    total_points += decision_points
+    sections["decision_progress"] = {
+        "points": decision_points,
+        "max_points": 10,
+        "percentage": round((decision_points / 10) * 100, 1),
+        "status": "locked" if decision_points == 10 else "shortlisted" if decision_points == 5 else "exploring"
+    }
+    
+    # ========================================
+    # CALCULATE FINAL PERCENTAGE
+    # ========================================
+    total_percentage = round(total_points, 1)  # Out of 100
     
     return {
-        "overall_percentage": round(overall, 1),
-        "categories": {
-            "academic": {
-                "percentage": round((academic_completed / academic_total) * 100, 1) if academic_total > 0 else 0,
-                "completed": academic_completed,
-                "total": academic_total
-            },
-            "basic_info": {
-                "percentage": round((basic_completed / basic_total) * 100, 1) if basic_total > 0 else 0,
-                "completed": basic_completed,
-                "total": basic_total
-            },
-            "education": {
-                "percentage": round((education_completed / education_total) * 100, 1) if education_total > 0 else 0,
-                "completed": education_completed,
-                "total": education_total
-            },
-            "documents": {
-                "percentage": round((document_completed / document_total) * 100, 1) if document_total > 0 else 0,
-                "completed": document_completed,
-                "total": document_total
-            }
-        },
-        "missing_fields": missing_fields,
-        "total_fields_completed": academic_completed + basic_completed + education_completed + document_completed,
-        "total_fields": academic_total + basic_total + education_total + document_total
+        "percentage": total_percentage,
+        "total_points": total_points,
+        "max_points": 100,
+        "sections": sections,
+        "breakdown": {
+            "academics": sections["academics"]["status"],
+            "exams": sections["exams"]["status"],
+            "documents": sections["documents"]["status"],
+            "preferences": sections["preferences"]["status"],
+            "decision": sections["decision_progress"]["status"]
+        }
     }
