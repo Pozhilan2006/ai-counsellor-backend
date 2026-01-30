@@ -114,23 +114,32 @@ def add_to_shortlist(db: Session, user_id: int, university_id: int, category: Op
             )
         ).first()
         
+        # Determine strict category
+        cat = category or "TARGET"
+        
         if existing:
             # Update category if provided
             if category:
-                existing.category = category
+                existing.category = cat
             db.commit()
             db.refresh(existing)
+            # Update stage to FINALIZING_UNIVERSITIES
+            update_user_stage(db, user_id, StageEnum.FINALIZING_UNIVERSITIES)
             return existing
         
-        # Create new entry with default category
+        # Create new entry
         shortlist = Shortlist(
             user_id=user_id,
             university_id=university_id,
-            category=category or "TARGET"
+            category=cat
         )
         db.add(shortlist)
         db.commit()
         db.refresh(shortlist)
+        
+        # Update stage to FINALIZING_UNIVERSITIES
+        update_user_stage(db, user_id, StageEnum.FINALIZING_UNIVERSITIES)
+        
         return shortlist
     except Exception as e:
         print(f"[ERROR] add_to_shortlist failed: {str(e)}")
@@ -162,6 +171,10 @@ def lock_university(db: Session, user_id: int, university_id: int) -> Shortlist:
         shortlist.locked = True
         db.commit()
         db.refresh(shortlist)
+        
+        # Update stage to PREPARING_APPLICATIONS
+        update_user_stage(db, user_id, StageEnum.PREPARING_APPLICATIONS)
+        
         return shortlist
     except Exception as e:
         print(f"[ERROR] lock_university failed: {str(e)}")
