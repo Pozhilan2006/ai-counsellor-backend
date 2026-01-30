@@ -635,39 +635,97 @@ async def counsel(
         
         print(f"[LOGIC] Stage: {current_stage}, Shortlists: {shortlist_count} (D:{dream_count}, T:{target_count}, S:{safe_count}), Available: {len(available_unis)}")
         
-        # 6. Generate stage-aware, context-specific response (NO STATIC TEXT)
-        if current_stage == "DISCOVERY":
+        # 6. Analyze user's question to determine intent
+        question_lower = request.message.lower().strip()
+        
+        # Check if user is asking for university recommendations
+        is_asking_for_universities = any(keyword in question_lower for keyword in [
+            "recommend universities", "which universities", "suggest universities",
+            "show me universities", "what universities", "list universities",
+            "universities for me", "university recommendations"
+        ])
+        
+        # Check if user is asking for profile analysis
+        is_asking_profile_analysis = any(keyword in question_lower for keyword in [
+            "analyze my profile", "how strong is my profile", "profile strength",
+            "evaluate my profile", "assess my profile", "my chances"
+        ])
+        
+        # Check if asking for improvement advice
+        is_asking_improvement = any(keyword in question_lower for keyword in [
+            "what should i improve", "how to improve", "strengthen my profile",
+            "what can i do", "how can i improve"
+        ])
+        
+        # Check if asking about budget
+        is_asking_budget = any(keyword in question_lower for keyword in [
+            "budget", "afford", "cost", "tuition", "fees", "financial"
+        ])
+        
+        # 7. Generate contextual response based on question intent
+        if is_asking_for_universities:
+            # Only mention universities when explicitly asked
             if len(available_unis) > 0:
-                message = f"Based on your profile (GPA: {profile.gpa}, Budget: ${profile.budget_per_year:,}), I found {len(available_unis)} universities matching your criteria in {', '.join(countries)}. Regarding your question: '{request.message}' - I can help you understand which universities align best with your goals in {profile.field_of_study}."
+                message = f"Based on your profile (GPA: {profile.gpa}, Budget: ${profile.budget_per_year:,}, Field: {profile.field_of_study}), I found {len(available_unis)} universities in {', '.join(countries)} that match your criteria. Would you like me to categorize them into Dream, Target, and Safe options?"
             else:
-                message = f"I notice there are limited universities matching your budget of ${profile.budget_per_year:,} in {', '.join(countries)}. About your question: '{request.message}' - Let me help you explore alternative options or adjust your search criteria."
+                message = f"With your budget of ${profile.budget_per_year:,} in {', '.join(countries)}, I'm finding limited exact matches. However, I can suggest universities just slightly above your budget or explore alternative countries with similar quality education. What would you prefer?"
         
-        elif current_stage == "SHORTLIST":
-            if shortlist_count > 0:
-                category_breakdown = []
-                if dream_count > 0:
-                    category_breakdown.append(f"{dream_count} dream")
-                if target_count > 0:
-                    category_breakdown.append(f"{target_count} target")
-                if safe_count > 0:
-                    category_breakdown.append(f"{safe_count} safe")
-                
-                breakdown_text = ", ".join(category_breakdown) if category_breakdown else "universities"
-                message = f"Great! You've shortlisted {shortlist_count} universities ({breakdown_text}). Regarding '{request.message}' - I can help you compare these options and determine which ones best fit your profile in {profile.field_of_study}. What specific aspects would you like to evaluate?"
+        elif is_asking_profile_analysis:
+            # Provide profile strength analysis
+            gpa_val = float(profile.gpa) if profile.gpa else 0
+            if gpa_val >= 9.0:
+                strength = "excellent"
+                tier = "top-tier universities (Ivy League, Oxbridge, etc.)"
+            elif gpa_val >= 8.0:
+                strength = "strong"
+                tier = "highly competitive universities (Top 50 globally)"
+            elif gpa_val >= 7.0:
+                strength = "good"
+                tier = "reputable universities (Top 100-200 globally)"
             else:
-                message = f"You're in the shortlisting phase but haven't added any universities yet. About '{request.message}' - I recommend reviewing the {len(available_unis)} universities I found for you and shortlisting your top choices across dream, target, and safe categories."
+                strength = "developing"
+                tier = "universities with holistic admissions"
+            
+            message = f"**Profile Analysis:**\n\n**Academic Strength:** Your GPA of {profile.gpa} is {strength}. This positions you well for {tier}.\n\n**Budget:** ${profile.budget_per_year:,}/year gives you solid options in {', '.join(countries)}.\n\n**Field:** {profile.field_of_study} is in high demand globally.\n\n**Overall:** You have a competitive profile. Focus on building strong essays, relevant projects, and test scores to maximize your chances."
         
-        elif current_stage == "LOCKED":
-            if locked_uni_id:
-                message = f"You've locked a university for your application! Regarding '{request.message}' - I can guide you through the application requirements, deadlines, and preparation steps for your chosen university."
-            else:
-                if shortlist_count > 0:
-                    message = f"You're ready to lock in your final choice. About '{request.message}' - Let me help you make this important decision from your {shortlist_count} shortlisted universities."
-                else:
-                    message = f"About '{request.message}' - You'll need to shortlist some universities first before locking one for application. Let me help you find the right options."
+        elif is_asking_improvement:
+            # Provide actionable improvement steps
+            message = f"**To strengthen your profile for {profile.field_of_study}:**\n\n1. **Standardized Tests:** Aim for GRE 320+ (or GMAT 700+) and IELTS 7.5+\n2. **Projects:** Build 2-3 relevant projects showcasing technical skills\n3. **Experience:** Gain internships or research experience in your field\n4. **Essays:** Craft compelling personal statements highlighting unique perspectives\n5. **Recommendations:** Secure strong letters from professors/supervisors who know your work well\n\nWhich area would you like specific guidance on?"
+        
+        elif is_asking_budget:
+            # Focus only on budget strategy
+            budget_val = profile.budget_per_year or 0
+            message = f"**Budget Strategy for ${budget_val:,}/year:**\n\n**Tuition Coverage:** This budget covers tuition at many universities in {', '.join(countries)}.\n\n**Cost Optimization:**\n- Apply for merit scholarships (can reduce costs by 20-50%)\n- Consider universities in lower-cost cities\n- Look for graduate assistantships (can cover tuition + stipend)\n\n**Financial Planning:**\n- Budget for living expenses (~$15-20k/year)\n- Factor in health insurance (~$2-3k/year)\n- Keep emergency fund (~$5k)\n\nWould you like me to suggest scholarship opportunities?"
         
         else:
-            message = f"I'm here to help with your question: '{request.message}'. Based on your current stage ({current_stage}) and profile, I can provide specific guidance tailored to your situation."
+            # Answer the user's specific question directly
+            # Use profile as supporting context, not the main answer
+            if current_stage == "DISCOVERY":
+                message = f"Regarding your question: '{request.message}' - I can provide specific guidance based on your profile in {profile.field_of_study}. What specific aspect would you like to know more about? (e.g., application timeline, test requirements, program selection, etc.)"
+            
+            elif current_stage == "SHORTLIST":
+                if shortlist_count > 0:
+                    category_breakdown = []
+                    if dream_count > 0:
+                        category_breakdown.append(f"{dream_count} dream")
+                    if target_count > 0:
+                        category_breakdown.append(f"{target_count} target")
+                    if safe_count > 0:
+                        category_breakdown.append(f"{safe_count} safe")
+                    
+                    breakdown_text = ", ".join(category_breakdown) if category_breakdown else "universities"
+                    message = f"You've shortlisted {shortlist_count} universities ({breakdown_text}). About '{request.message}' - I can help you compare specific aspects like program curriculum, research opportunities, placement rates, or campus culture. What would you like to evaluate?"
+                else:
+                    message = f"Regarding '{request.message}' - I can provide detailed guidance. Since you haven't shortlisted universities yet, would you like recommendations first, or do you have specific questions about the application process?"
+            
+            elif current_stage == "LOCKED":
+                if locked_uni_id:
+                    message = f"You've locked your university choice! About '{request.message}' - I can guide you on application essays, document preparation, deadlines, visa process, or interview prep. What do you need help with?"
+                else:
+                    message = f"About '{request.message}' - I'm here to help. You're at the decision stage. Would you like help comparing your shortlisted options, or do you have other questions?"
+            
+            else:
+                message = f"I'm here to help with '{request.message}'. Could you provide more context or specify what aspect you'd like guidance on? (e.g., profile evaluation, university selection, application strategy, budget planning, etc.)"
         
         return schemas.CounselResponse(
             message=message,
