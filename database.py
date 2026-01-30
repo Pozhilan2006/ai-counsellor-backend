@@ -79,6 +79,9 @@ def verify_tables_exist():
             """))
             conn.commit()
 
+# Safe fallback defaults
+DEFAULT_COUNTRIES = ["USA", "UK", "Canada", "Germany", "Australia"]
+
 def query_universities(
     countries: Union[str, List[str], None] = None,
     max_budget: float | None = None,
@@ -86,11 +89,13 @@ def query_universities(
     limit: int = 20
 ) -> List[Dict]:
     """
-    Query universities from database with proper filtering.
+    Query universities from database with proper filtering and failsafe fallback.
     
     Supports two modes:
-    1. Discovery mode: Filter by countries + budget
+    1. Discovery mode: Filter by countries + budget (with safe defaults)
     2. Shortlist mode: Fetch by university IDs only
+    
+    FAILSAFE GUARANTEE: Never returns empty if universities exist in database.
     
     Args:
         countries: List of country names (discovery mode)
@@ -102,6 +107,7 @@ def query_universities(
         List of university dictionaries
     """
     engine = get_db_connection()
+    fallback_used = False
     
     try:
         # ========================================
@@ -141,11 +147,13 @@ def query_universities(
                 return universities
         
         # ========================================
-        # DISCOVERY MODE: Filter by countries + budget
+        # DISCOVERY MODE: Dynamic Filter Building
         # ========================================
-        if countries is None or max_budget is None:
-            logger.warning("query_universities called without countries/budget or university_ids")
-            return []
+        
+        # SAFE DEFAULTS: Apply fallbacks for missing data
+        if not countries or (isinstance(countries, list) and len(countries) == 0):
+            countries = DEFAULT_COUNTRIES
+            logger.info(f"No countries provided, using defaults: {DEFAULT_COUNTRIES}")
         
         # Normalize countries
         if isinstance(countries, str):
@@ -157,12 +165,33 @@ def query_universities(
             if norm:
                 normalized_countries.append(f"%{norm}%")
         
-        # If no valid countries, return empty
+        # If normalization failed, use defaults
         if not normalized_countries:
-            logger.warning("No valid countries provided")
-            return []
-
-        query = text("""
+            logger.warning("Country normalization failed, using defaults")
+            for c in DEFAULT_COUNTRIES:
+                normalized_countries.append(f"%{c}%")
+        
+        # Build dynamic WHERE clause
+        filters = []
+        params = {
+            "countries": normalized_countries,
+            "limit": limit
+        }
+        
+        # Always apply country filter
+        filters.append("country ILIKE ANY(:countries)")
+        
+        # Only apply budget filter if budget is provided and > 0
+        if max_budget and max_budget > 0:
+            filters.append("estimated_tuition_usd <= :max_budget")
+            params["max_budget"] = max_budget
+            logger.info(f"Budget filter applied: <= {max_budget}")
+        else:
+            logger.info("No budget filter applied (budget is NULL or 0)")
+        
+        where_clause = " AND ".join(filters)
+        
+        query = text(f"""
             SELECT 
                 id,
                 name,
@@ -172,22 +201,15 @@ def query_universities(
                 competitiveness,
                 estimated_tuition_usd
             FROM universities
-            WHERE 
-                country ILIKE ANY(:countries)
-                AND estimated_tuition_usd <= :max_budget
+            WHERE {where_clause}
             ORDER BY rank ASC NULLS LAST
             LIMIT :limit
         """)
         
+        logger.info(f"Query (discovery mode): filters={filters}, params={params}")
+        
         with engine.connect() as conn:
-            result = conn.execute(
-                query,
-                {
-                    "countries": normalized_countries,
-                    "max_budget": max_budget,
-                    "limit": limit
-                }
-            )
+            result = conn.execute(query, params)
             
             universities = []
             for row in result:
@@ -201,7 +223,42 @@ def query_universities(
                     "estimated_tuition_usd": row.estimated_tuition_usd
                 })
             
-            logger.info(f"Query (discovery mode): countries={normalized_countries}, budget={max_budget}, found={len(universities)}")
+            logger.info(f"Query returned {len(universities)} results")
+            
+            # ========================================
+            # FAILSAFE FALLBACK: If no results, return top-ranked
+            # ========================================
+            if len(universities) == 0:
+                logger.warning("Filtered query returned 0 results, running fallback")
+                fallback_query = text("""
+                    SELECT 
+                        id,
+                        name,
+                        country,
+                        rank,
+                        ranking_band,
+                        competitiveness,
+                        estimated_tuition_usd
+                    FROM universities
+                    ORDER BY rank ASC NULLS LAST
+                    LIMIT 10
+                """)
+                
+                result = conn.execute(fallback_query)
+                for row in result:
+                    universities.append({
+                        "id": row.id,
+                        "name": row.name,
+                        "country": row.country,
+                        "rank": row.rank,
+                        "ranking_band": row.ranking_band,
+                        "competitiveness": row.competitiveness,
+                        "estimated_tuition_usd": row.estimated_tuition_usd
+                    })
+                
+                fallback_used = True
+                logger.info(f"Fallback returned {len(universities)} results")
+            
             return universities
             
     except Exception as e:
