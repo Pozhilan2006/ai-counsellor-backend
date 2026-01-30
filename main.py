@@ -489,6 +489,117 @@ async def add_shortlist_alt(
             "message": "University added to shortlist"
         }
 
+@app.post("/shortlist/remove")
+async def remove_shortlist(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """
+    Remove a university from user's shortlist.
+    
+    Rules:
+    - Cannot remove locked universities
+    - Recalculates stage if shortlist becomes empty
+    """
+    # Parse JSON body
+    try:
+        body = await request.json()
+    except Exception as e:
+        print(f"[ERROR] Failed to parse JSON: {str(e)}")
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "INVALID_JSON", "message": "Invalid JSON payload"}
+        )
+    
+    email = body.get("email")
+    university_id = body.get("university_id")
+    
+    # Validate required fields
+    if not email:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "MISSING_EMAIL", "message": "Email is required"}
+        )
+    
+    if university_id is None:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "MISSING_UNIVERSITY_ID", "message": "University ID is required"}
+        )
+    
+    # Trim and cast
+    email = str(email).strip()
+    try:
+        university_id = int(university_id)
+    except (ValueError, TypeError):
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "INVALID_UNIVERSITY_ID", "message": "University ID must be a number"}
+        )
+    
+    print(f"[ENDPOINT] POST /shortlist/remove called for {email}, university_id={university_id}")
+    
+    try:
+        # Get user profile
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            raise HTTPException(
+                status_code=400,
+                detail={"error": "USER_NOT_FOUND", "message": "User not found"}
+            )
+        
+        # Find shortlist entry
+        shortlist = db.query(Shortlist).filter(
+            and_(
+                Shortlist.user_id == profile.id,
+                Shortlist.university_id == university_id
+            )
+        ).first()
+        
+        if not shortlist:
+            raise HTTPException(
+                status_code=404,
+                detail={"error": "NOT_IN_SHORTLIST", "message": "University not in shortlist"}
+            )
+        
+        # Check if locked
+        if shortlist.locked:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "success": False,
+                    "error": "UNIVERSITY_LOCKED",
+                    "message": "This university is locked. Unlock it before removing from shortlist."
+                }
+            )
+        
+        # Delete the shortlist entry
+        db.delete(shortlist)
+        db.commit()
+        
+        print(f"[SUCCESS] University {university_id} removed from shortlist for {email}")
+        
+        # Check if shortlist is now empty - recalculate stage
+        remaining_shortlists = db.query(Shortlist).filter(Shortlist.user_id == profile.id).count()
+        
+        if remaining_shortlists == 0:
+            # Move back to DISCOVERY stage
+            crud.update_user_stage(db, profile.id, "DISCOVERY")
+            print(f"[STAGE] User {email} moved back to DISCOVERY (no shortlists remaining)")
+        
+        return {
+            "success": True,
+            "message": "University removed from shortlist"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] remove_shortlist failed: {str(e)}")
+        raise HTTPException(
+            status_code=400,
+            detail={"success": False, "error": "REMOVE_FAILED", "message": str(e)}
+        )
+
 @app.patch("/shortlist")
 async def update_shortlist(
     email: str,
