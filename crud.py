@@ -200,13 +200,41 @@ def get_tasks_by_stage(db: Session, user_id: int, stage: StageEnum) -> List[Task
         )
     ).all()
 
-def get_all_tasks(db: Session, user_id: int) -> List[Task]:
-    """Get all tasks for a user. Returns empty list if table doesn't exist."""
+def get_all_tasks(db: Session, user_id: int) -> tuple[List[Task], int | None]:
+    """
+    Get all tasks for a user, filtered by locked university if applicable.
+    
+    Returns:
+        (tasks, locked_university_id)
+        - tasks: List of Task objects
+        - locked_university_id: ID of locked university, or None
+    """
     try:
-        return db.query(Task).filter(Task.user_id == user_id).all()
+        # Check if user has a locked university
+        locked_shortlist = db.query(Shortlist).filter(
+            Shortlist.user_id == user_id,
+            Shortlist.locked == True
+        ).first()
+        
+        locked_university_id = locked_shortlist.university_id if locked_shortlist else None
+        
+        if locked_university_id:
+            # User has locked university - return only tasks for that university
+            tasks = db.query(Task).filter(
+                Task.user_id == user_id,
+                Task.university_id == locked_university_id
+            ).all()
+            print(f"[TASKS] User {user_id} has locked university {locked_university_id}, returning {len(tasks)} tasks")
+        else:
+            # No locked university - return empty list (tasks only appear after lock)
+            tasks = []
+            print(f"[TASKS] User {user_id} has no locked university, returning empty tasks")
+        
+        return tasks, locked_university_id
+        
     except Exception as e:
-        print(f"[WARNING] get_all_tasks failed (table may not exist): {str(e)}")
-        return []
+        print(f"[WARNING] get_all_tasks failed: {str(e)}")
+        return [], None
 
 def complete_task(db: Session, task_id: int):
     """Mark a task as completed."""

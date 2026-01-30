@@ -118,39 +118,53 @@ async def health():
 @app.get("/tasks")
 async def get_tasks(email: str, db: Session = Depends(get_db)):
     """
-    Get all tasks for a user.
-    DEFENSIVE: Always returns array, never 404 or 500.
+    Get tasks for a user.
+    
+    Rules:
+    - Before university lock: Returns empty array
+    - After university lock: Returns tasks for that university
+    - Always returns 200 with consistent structure
     """
     print(f"[ENDPOINT] GET /tasks called for {email}")
     
     try:
-        # Get user profile
         profile = db.query(UserProfile).filter(UserProfile.email == email).first()
         if not profile:
             print(f"[INFO] User not found: {email}, returning empty tasks")
-            return []
+            return {
+                "tasks": [],
+                "locked_university_id": None
+            }
         
-        # Get tasks
-        tasks = crud.get_all_tasks(db, profile.id)
+        # Get tasks filtered by locked university
+        tasks, locked_university_id = crud.get_all_tasks(db, profile.id)
         
-        # Format tasks
+        # Format response
         result = []
         for task in tasks:
             result.append({
                 "id": task.id,
                 "title": task.title,
                 "description": task.description,
-                "stage": task.stage.value if task.stage else None,
                 "completed": task.completed,
                 "university_id": task.university_id,
-                "created_at": task.created_at.isoformat() if task.created_at else None
+                "stage": task.stage.value if task.stage else None
             })
         
-        return result
+        print(f"[SUCCESS] Returning {len(result)} tasks for user {profile.id}, locked_university={locked_university_id}")
+        
+        return {
+            "tasks": result,
+            "locked_university_id": locked_university_id
+        }
+        
     except Exception as e:
         print(f"[ERROR] get_tasks failed: {str(e)}")
         # DEFENSIVE: Return empty array instead of error
-        return []
+        return {
+            "tasks": [],
+            "locked_university_id": None
+        }
 
 @app.get("/user/stage")
 async def get_user_stage(email: str, db: Session = Depends(get_db)):
