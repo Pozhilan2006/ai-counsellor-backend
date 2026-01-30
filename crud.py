@@ -564,6 +564,21 @@ def calculate_profile_strength(db: Session, profile: UserProfile) -> Dict:
     
     return {
         "overall": overall,
-        "sections": sections,
-        "next_actions": next_actions[:3]  # Limit to top 3 actions
+        "academics": {
+            "value": academics_score,
+            "status": academics_status
+        },
+        "exams": {
+            "status": exams_status
+        },
+        "sop": {
+            "status": sop_status
+        },
+        "documents": {
+            "status": documents_status
+        },
+        "preferences": {
+            "status": preferences_status
+        },
+        "next_actions": next_actions[:3]
     }
