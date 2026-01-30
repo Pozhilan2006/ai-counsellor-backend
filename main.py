@@ -70,6 +70,38 @@ async def health():
     """Health check endpoint."""
     return {"status": "ok", "service": "ai-counsellor-backend"}
 
+@app.get("/user/stage")
+async def get_user_stage(email: str, db: Session = Depends(get_db)):
+    """
+    Get user's current stage by email.
+    Returns 404 if user not found.
+    """
+    print(f"[ENDPOINT] /user/stage called for {email}")
+    
+    try:
+        # Look up user
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        
+        if not profile:
+            raise HTTPException(
+                status_code=404,
+                detail={"error": "USER_NOT_FOUND", "message": "User not found"}
+            )
+        
+        # Get or create state
+        state = crud.get_or_create_user_state(db, profile.id)
+        
+        return {
+            "email": email,
+            "current_stage": state.current_stage,
+            "profile_complete": profile.profile_complete
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] get_user_stage failed: {str(e)}")
+        raise HTTPException(status_code=500, detail={"error": "STAGE_FETCH_FAILED", "message": str(e)})
+
 @app.post("/onboarding", response_model=schemas.OnboardingResponse)
 async def onboarding(
     profile_data: schemas.UserProfileCreate,
