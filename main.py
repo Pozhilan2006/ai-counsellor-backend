@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, text, and_
 from sqlalchemy.orm import sessionmaker
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 from config import settings
 from models import Base, StageEnum, UserProfile, Shortlist
@@ -13,6 +13,51 @@ import crud
 import schemas
 from database import query_universities, verify_tables_exist
 from scoring import categorize_universities
+
+# ============================================================================
+# UTILITY FUNCTIONS FOR ENTERPRISE QUALITY
+# ============================================================================
+
+def resolve_profile_values(profile: UserProfile) -> Dict[str, str]:
+    """
+    Resolve profile fields into safe, display-ready strings.
+    CRITICAL: Prevents template leaks by converting all values to strings.
+    """
+    return {
+        "gpa": str(profile.gpa) if profile.gpa else "your academic record",
+        "gpa_value": float(profile.gpa) if profile.gpa else 0.0,
+        "budget": f"${profile.budget_per_year:,}" if profile.budget_per_year else "your budget range",
+        "budget_value": int(profile.budget_per_year) if profile.budget_per_year else 0,
+        "field": profile.field_of_study or "your field of interest",
+        "countries": ", ".join(profile.preferred_countries) if profile.preferred_countries else "your target countries",
+        "countries_list": profile.preferred_countries if profile.preferred_countries else ["USA"],
+        "name": profile.name or "there"
+    }
+
+def sanitize_response(message: str) -> str:
+    """
+    Sanitize AI response to enterprise standards.
+    - Remove markdown symbols
+    - Detect template leaks
+    - Clean whitespace
+    """
+    # Check for template leaks (CRITICAL)
+    if "{" in message or "}" in message:
+        print(f"[CRITICAL] Template leak detected in response: {message[:100]}")
+        # Remove the leaked templates
+        import re
+        message = re.sub(r'\{[^}]+\}', '[value]', message)
+    
+    # Remove markdown symbols
+    message = message.replace("**", "")
+    message = message.replace("##", "")
+    message = message.replace("- ", "")
+    message = message.replace("* ", "")
+    
+    # Clean excessive whitespace
+    message = " ".join(message.split())
+    
+    return message.strip()
 
 # Create FastAPI app
 app = FastAPI(title="AI Counsellor Backend")
@@ -527,7 +572,7 @@ async def lock_shortlist(
 ):
     """
     Lock a university for application (unlocks all others).
-    DEPRECATED: Use PATCH /shortlist with locked=true instead.
+    DEPRECATED: Use POST /university/lock instead.
     """
     print(f"[ENDPOINT] PATCH /shortlist/lock called for {email}, university_id={university_id}")
     
@@ -555,6 +600,91 @@ async def lock_shortlist(
     except Exception as e:
         print(f"[ERROR] lock_shortlist failed: {str(e)}")
         raise HTTPException(status_code=500, detail={"error": "LOCK_FAILED", "message": str(e)})
+
+@app.post("/university/lock")
+async def lock_university_for_application(
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    """
+    Lock a university for application (enterprise endpoint).
+    
+    Validates:
+    - User exists
+    - University is in shortlist
+    - Auto-unlocks previous locks
+    
+    Side effects:
+    - Updates user stage to LOCKED
+    - Unlocks all other universities
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "INVALID_JSON", "message": "Invalid JSON payload"}
+        )
+    
+    email = body.get("email")
+    university_id = body.get("university_id")
+    
+    if not email or not university_id:
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "MISSING_FIELDS", "message": "Email and university_id are required"}
+        )
+    
+    print(f"[ENDPOINT] POST /university/lock called for {email}, university_id={university_id}")
+    
+    try:
+        # Get user profile
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            raise HTTPException(
+                status_code=400,
+                detail={"error": "USER_NOT_FOUND", "message": "User not found"}
+            )
+        
+        # Verify university is in shortlist
+        shortlist_entry = db.query(Shortlist).filter(
+            and_(
+                Shortlist.user_id == profile.id,
+                Shortlist.university_id == university_id
+            )
+        ).first()
+        
+        if not shortlist_entry:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": "NOT_IN_SHORTLIST",
+                    "message": "University must be in your shortlist before locking"
+                }
+            )
+        
+        # Lock university (auto-unlocks others)
+        shortlist = crud.lock_university(db, profile.id, university_id)
+        
+        # Update user stage to LOCKED
+        crud.update_user_stage(db, profile.id, "LOCKED")
+        
+        print(f"[SUCCESS] University {university_id} locked for {email}, stage updated to LOCKED")
+        
+        return {
+            "success": True,
+            "locked_university_id": shortlist.university_id,
+            "stage": "LOCKED",
+            "message": "University locked for application"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] lock_university failed: {str(e)}")
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "LOCK_FAILED", "message": str(e)}
+        )
 
 @app.post("/counsel", response_model=schemas.CounselResponse)
 async def counsel(
@@ -635,7 +765,10 @@ async def counsel(
         
         print(f"[LOGIC] Stage: {current_stage}, Shortlists: {shortlist_count} (D:{dream_count}, T:{target_count}, S:{safe_count}), Available: {len(available_unis)}")
         
-        # 6. Analyze user's question to determine intent
+        # 6. Resolve profile values safely (NO TEMPLATE LEAKS)
+        pv = resolve_profile_values(profile)
+        
+        # 7. Analyze user's question to determine intent
         question_lower = request.message.lower().strip()
         
         # Check if user is asking for university recommendations
@@ -643,6 +776,12 @@ async def counsel(
             "recommend universities", "which universities", "suggest universities",
             "show me universities", "what universities", "list universities",
             "universities for me", "university recommendations"
+        ])
+        
+        # Check if asking for BEST university (single recommendation)
+        is_asking_best_university = any(keyword in question_lower for keyword in [
+            "best university", "which university is best", "top university",
+            "which one should i choose", "recommend one university"
         ])
         
         # Check if user is asking for profile analysis
@@ -662,46 +801,60 @@ async def counsel(
             "budget", "afford", "cost", "tuition", "fees", "financial"
         ])
         
-        # 7. Generate contextual response based on question intent
-        if is_asking_for_universities:
+        # 8. Generate contextual response based on question intent
+        if is_asking_best_university:
+            # User wants ONE recommendation
+            if shortlist_count > 0:
+                # Recommend from shortlist
+                target_unis = [s for s in shortlists if s.category == "TARGET"]
+                if target_unis:
+                    uni_id = target_unis[0].university_id
+                    message = f"Based on your profile with a GPA of {pv['gpa']} and budget of {pv['budget']} annually, I recommend focusing on university ID {uni_id} from your shortlist. This represents a strong target option that balances academic fit with admission probability. The primary risk is competition in {pv['field']}, so strengthen your application with relevant projects and strong recommendations. Lock this university when you're ready to proceed with the application."
+                else:
+                    message = f"From your shortlist of {shortlist_count} universities, I need more context about your priorities. Are you optimizing for program reputation, cost, location, or research opportunities in {pv['field']}? This will help me recommend the single best fit."
+            elif len(available_unis) > 0:
+                message = f"Based on your GPA of {pv['gpa']} and budget of {pv['budget']}, I recommend starting with universities in {pv['countries']} that offer strong {pv['field']} programs. Add a few to your shortlist first, then I can provide a specific recommendation based on your final priorities."
+            else:
+                message = f"With your budget of {pv['budget']} in {pv['countries']}, options are limited. I recommend expanding your search to include universities slightly above budget with strong scholarship programs, or exploring alternative countries with comparable education quality at lower costs."
+        
+        elif is_asking_for_universities:
             # Only mention universities when explicitly asked
             if len(available_unis) > 0:
-                message = f"Based on your GPA of {profile.gpa} and budget of ${profile.budget_per_year:,} per year, I've identified {len(available_unis)} universities in {', '.join(countries)} that align with your profile in {profile.field_of_study}. I can help you categorize these into reach, target, and safety options if you'd like. This would give you a balanced application strategy across different selectivity tiers."
+                message = f"Based on your GPA of {pv['gpa']} and budget of {pv['budget']} per year, I've identified {len(available_unis)} universities in {pv['countries']} that align with your profile in {pv['field']}. I can help you categorize these into reach, target, and safety options if you'd like. This would give you a balanced application strategy across different selectivity tiers."
             else:
-                message = f"With your budget of ${profile.budget_per_year:,} in {', '.join(countries)}, I'm seeing limited exact matches at the moment. However, there are a few paths we could explore. We could look at universities slightly above your budget that offer strong scholarship opportunities, or we could expand to countries with comparable education quality but lower costs. Which direction interests you more?"
+                message = f"With your budget of {pv['budget']} in {pv['countries']}, I'm seeing limited exact matches at the moment. However, there are a few paths we could explore. We could look at universities slightly above your budget that offer strong scholarship opportunities, or we could expand to countries with comparable education quality but lower costs. Which direction interests you more?"
         
         elif is_asking_profile_analysis:
             # Provide profile strength analysis
-            gpa_val = float(profile.gpa) if profile.gpa else 0
+            gpa_val = pv['gpa_value']
             if gpa_val >= 9.0:
-                strength_desc = "Your GPA of {profile.gpa} positions you very competitively for top-tier programs globally, including Ivy League and Oxbridge institutions"
+                strength_desc = f"Your GPA of {pv['gpa']} positions you very competitively for top-tier programs globally, including Ivy League and Oxbridge institutions"
                 next_steps = "Focus on differentiating yourself through research publications, strong recommendation letters, and a compelling personal statement that showcases unique perspectives or experiences"
             elif gpa_val >= 8.0:
-                strength_desc = f"Your GPA of {profile.gpa} is strong and puts you in good standing for highly competitive universities in the top 50 globally"
+                strength_desc = f"Your GPA of {pv['gpa']} is strong and puts you in good standing for highly competitive universities in the top 50 globally"
                 next_steps = "Strengthen your profile with relevant projects, aim for GRE scores above 320, and secure recommendations from faculty who can speak to your research or academic potential"
             elif gpa_val >= 7.0:
-                strength_desc = f"Your GPA of {profile.gpa} gives you solid options among reputable universities ranked in the top 100-200 globally"
-                next_steps = "Build your profile with internships or research experience in {profile.field_of_study}, target strong standardized test scores, and craft essays that highlight your growth trajectory and career goals"
+                strength_desc = f"Your GPA of {pv['gpa']} gives you solid options among reputable universities ranked in the top 100-200 globally"
+                next_steps = f"Build your profile with internships or research experience in {pv['field']}, target strong standardized test scores, and craft essays that highlight your growth trajectory and career goals"
             else:
-                strength_desc = f"Your current GPA opens doors to universities with holistic admissions processes that value diverse experiences beyond academics"
-                next_steps = "Focus on demonstrating professional experience, relevant projects, and clear career objectives. Consider programs that emphasize practical skills and industry connections in {profile.field_of_study}"
+                strength_desc = f"Your current academic record opens doors to universities with holistic admissions processes that value diverse experiences beyond academics"
+                next_steps = f"Focus on demonstrating professional experience, relevant projects, and clear career objectives. Consider programs that emphasize practical skills and industry connections in {pv['field']}"
             
-            message = f"{strength_desc}. With your budget of ${profile.budget_per_year:,} annually in {', '.join(countries)}, you have good financial flexibility. {next_steps}. The key is presenting a cohesive narrative that connects your academic background, career aspirations, and why specific programs align with your goals."
+            message = f"{strength_desc}. With your budget of {pv['budget']} annually in {pv['countries']}, you have good financial flexibility. {next_steps}. The key is presenting a cohesive narrative that connects your academic background, career aspirations, and why specific programs align with your goals."
         
         elif is_asking_improvement:
             # Provide actionable improvement steps
-            message = f"To strengthen your candidacy for {profile.field_of_study} programs, I'd recommend focusing on three key areas. First, aim for standardized test scores that put you in the competitive range, typically GRE 320 plus or GMAT 700 plus, along with IELTS 7.5 or higher. Second, build tangible evidence of your expertise through two to three substantial projects or research work that demonstrates both technical skills and problem-solving ability. Third, secure strong recommendations from professors or supervisors who can provide specific examples of your capabilities and potential. Beyond these, your personal statement should articulate a clear narrative about why you're pursuing this field and how specific programs align with your goals. Which of these areas would you like to discuss in more detail?"
+            message = f"To strengthen your candidacy for {pv['field']} programs, I'd recommend focusing on three key areas. First, aim for standardized test scores that put you in the competitive range, typically GRE 320 plus or GMAT 700 plus, along with IELTS 7.5 or higher. Second, build tangible evidence of your expertise through two to three substantial projects or research work that demonstrates both technical skills and problem-solving ability. Third, secure strong recommendations from professors or supervisors who can provide specific examples of your capabilities and potential. Beyond these, your personal statement should articulate a clear narrative about why you're pursuing this field and how specific programs align with your goals. Which of these areas would you like to discuss in more detail?"
         
         elif is_asking_budget:
             # Focus only on budget strategy
-            budget_val = profile.budget_per_year or 0
-            message = f"Your budget of ${budget_val:,} per year gives you solid coverage for tuition at many universities in {', '.join(countries)}. To optimize your costs, I'd suggest applying for merit-based scholarships, which can reduce your expenses by twenty to fifty percent depending on your profile strength. Graduate assistantships are another avenue worth exploring, as they often cover tuition plus provide a stipend. Beyond tuition, plan for living expenses of around fifteen to twenty thousand annually, health insurance of two to three thousand, and maintain an emergency fund of roughly five thousand. Universities in smaller cities or specific regions can also offer comparable education quality at lower living costs. Would you like me to suggest specific scholarship opportunities or discuss cost-effective university locations?"
+            message = f"Your budget of {pv['budget']} per year gives you solid coverage for tuition at many universities in {pv['countries']}. To optimize your costs, I'd suggest applying for merit-based scholarships, which can reduce your expenses by twenty to fifty percent depending on your profile strength. Graduate assistantships are another avenue worth exploring, as they often cover tuition plus provide a stipend. Beyond tuition, plan for living expenses of around fifteen to twenty thousand annually, health insurance of two to three thousand, and maintain an emergency fund of roughly five thousand. Universities in smaller cities or specific regions can also offer comparable education quality at lower living costs. Would you like me to suggest specific scholarship opportunities or discuss cost-effective university locations?"
         
         else:
             # Answer the user's specific question directly
             # Use profile as supporting context, not the main answer
             if current_stage == "DISCOVERY":
-                message = f"I can help you with that. Given your background in {profile.field_of_study}, what specific aspect are you most interested in? For example, I can walk you through application timelines, discuss standardized test requirements, help you evaluate program curricula, or explain how to position your profile for specific universities. Let me know what would be most useful right now."
+                message = f"I can help you with that. Given your background in {pv['field']}, what specific aspect are you most interested in? For example, I can walk you through application timelines, discuss standardized test requirements, help you evaluate program curricula, or explain how to position your profile for specific universities. Let me know what would be most useful right now."
             
             elif current_stage == "SHORTLIST":
                 if shortlist_count > 0:
@@ -726,6 +879,9 @@ async def counsel(
             
             else:
                 message = f"I'm here to help with your question. Could you give me a bit more context about what you're looking for? For instance, are you interested in understanding your profile competitiveness, exploring university options, discussing application strategy, or planning your budget? That will help me provide more targeted guidance."
+        
+        # 9. Sanitize response (CRITICAL: Remove markdown, check for template leaks)
+        message = sanitize_response(message)
         
         return schemas.CounselResponse(
             message=message,
