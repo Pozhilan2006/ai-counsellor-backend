@@ -666,66 +666,66 @@ async def counsel(
         if is_asking_for_universities:
             # Only mention universities when explicitly asked
             if len(available_unis) > 0:
-                message = f"Based on your profile (GPA: {profile.gpa}, Budget: ${profile.budget_per_year:,}, Field: {profile.field_of_study}), I found {len(available_unis)} universities in {', '.join(countries)} that match your criteria. Would you like me to categorize them into Dream, Target, and Safe options?"
+                message = f"Based on your GPA of {profile.gpa} and budget of ${profile.budget_per_year:,} per year, I've identified {len(available_unis)} universities in {', '.join(countries)} that align with your profile in {profile.field_of_study}. I can help you categorize these into reach, target, and safety options if you'd like. This would give you a balanced application strategy across different selectivity tiers."
             else:
-                message = f"With your budget of ${profile.budget_per_year:,} in {', '.join(countries)}, I'm finding limited exact matches. However, I can suggest universities just slightly above your budget or explore alternative countries with similar quality education. What would you prefer?"
+                message = f"With your budget of ${profile.budget_per_year:,} in {', '.join(countries)}, I'm seeing limited exact matches at the moment. However, there are a few paths we could explore. We could look at universities slightly above your budget that offer strong scholarship opportunities, or we could expand to countries with comparable education quality but lower costs. Which direction interests you more?"
         
         elif is_asking_profile_analysis:
             # Provide profile strength analysis
             gpa_val = float(profile.gpa) if profile.gpa else 0
             if gpa_val >= 9.0:
-                strength = "excellent"
-                tier = "top-tier universities (Ivy League, Oxbridge, etc.)"
+                strength_desc = "Your GPA of {profile.gpa} positions you very competitively for top-tier programs globally, including Ivy League and Oxbridge institutions"
+                next_steps = "Focus on differentiating yourself through research publications, strong recommendation letters, and a compelling personal statement that showcases unique perspectives or experiences"
             elif gpa_val >= 8.0:
-                strength = "strong"
-                tier = "highly competitive universities (Top 50 globally)"
+                strength_desc = f"Your GPA of {profile.gpa} is strong and puts you in good standing for highly competitive universities in the top 50 globally"
+                next_steps = "Strengthen your profile with relevant projects, aim for GRE scores above 320, and secure recommendations from faculty who can speak to your research or academic potential"
             elif gpa_val >= 7.0:
-                strength = "good"
-                tier = "reputable universities (Top 100-200 globally)"
+                strength_desc = f"Your GPA of {profile.gpa} gives you solid options among reputable universities ranked in the top 100-200 globally"
+                next_steps = "Build your profile with internships or research experience in {profile.field_of_study}, target strong standardized test scores, and craft essays that highlight your growth trajectory and career goals"
             else:
-                strength = "developing"
-                tier = "universities with holistic admissions"
+                strength_desc = f"Your current GPA opens doors to universities with holistic admissions processes that value diverse experiences beyond academics"
+                next_steps = "Focus on demonstrating professional experience, relevant projects, and clear career objectives. Consider programs that emphasize practical skills and industry connections in {profile.field_of_study}"
             
-            message = f"**Profile Analysis:**\n\n**Academic Strength:** Your GPA of {profile.gpa} is {strength}. This positions you well for {tier}.\n\n**Budget:** ${profile.budget_per_year:,}/year gives you solid options in {', '.join(countries)}.\n\n**Field:** {profile.field_of_study} is in high demand globally.\n\n**Overall:** You have a competitive profile. Focus on building strong essays, relevant projects, and test scores to maximize your chances."
+            message = f"{strength_desc}. With your budget of ${profile.budget_per_year:,} annually in {', '.join(countries)}, you have good financial flexibility. {next_steps}. The key is presenting a cohesive narrative that connects your academic background, career aspirations, and why specific programs align with your goals."
         
         elif is_asking_improvement:
             # Provide actionable improvement steps
-            message = f"**To strengthen your profile for {profile.field_of_study}:**\n\n1. **Standardized Tests:** Aim for GRE 320+ (or GMAT 700+) and IELTS 7.5+\n2. **Projects:** Build 2-3 relevant projects showcasing technical skills\n3. **Experience:** Gain internships or research experience in your field\n4. **Essays:** Craft compelling personal statements highlighting unique perspectives\n5. **Recommendations:** Secure strong letters from professors/supervisors who know your work well\n\nWhich area would you like specific guidance on?"
+            message = f"To strengthen your candidacy for {profile.field_of_study} programs, I'd recommend focusing on three key areas. First, aim for standardized test scores that put you in the competitive range, typically GRE 320 plus or GMAT 700 plus, along with IELTS 7.5 or higher. Second, build tangible evidence of your expertise through two to three substantial projects or research work that demonstrates both technical skills and problem-solving ability. Third, secure strong recommendations from professors or supervisors who can provide specific examples of your capabilities and potential. Beyond these, your personal statement should articulate a clear narrative about why you're pursuing this field and how specific programs align with your goals. Which of these areas would you like to discuss in more detail?"
         
         elif is_asking_budget:
             # Focus only on budget strategy
             budget_val = profile.budget_per_year or 0
-            message = f"**Budget Strategy for ${budget_val:,}/year:**\n\n**Tuition Coverage:** This budget covers tuition at many universities in {', '.join(countries)}.\n\n**Cost Optimization:**\n- Apply for merit scholarships (can reduce costs by 20-50%)\n- Consider universities in lower-cost cities\n- Look for graduate assistantships (can cover tuition + stipend)\n\n**Financial Planning:**\n- Budget for living expenses (~$15-20k/year)\n- Factor in health insurance (~$2-3k/year)\n- Keep emergency fund (~$5k)\n\nWould you like me to suggest scholarship opportunities?"
+            message = f"Your budget of ${budget_val:,} per year gives you solid coverage for tuition at many universities in {', '.join(countries)}. To optimize your costs, I'd suggest applying for merit-based scholarships, which can reduce your expenses by twenty to fifty percent depending on your profile strength. Graduate assistantships are another avenue worth exploring, as they often cover tuition plus provide a stipend. Beyond tuition, plan for living expenses of around fifteen to twenty thousand annually, health insurance of two to three thousand, and maintain an emergency fund of roughly five thousand. Universities in smaller cities or specific regions can also offer comparable education quality at lower living costs. Would you like me to suggest specific scholarship opportunities or discuss cost-effective university locations?"
         
         else:
             # Answer the user's specific question directly
             # Use profile as supporting context, not the main answer
             if current_stage == "DISCOVERY":
-                message = f"Regarding your question: '{request.message}' - I can provide specific guidance based on your profile in {profile.field_of_study}. What specific aspect would you like to know more about? (e.g., application timeline, test requirements, program selection, etc.)"
+                message = f"I can help you with that. Given your background in {profile.field_of_study}, what specific aspect are you most interested in? For example, I can walk you through application timelines, discuss standardized test requirements, help you evaluate program curricula, or explain how to position your profile for specific universities. Let me know what would be most useful right now."
             
             elif current_stage == "SHORTLIST":
                 if shortlist_count > 0:
                     category_breakdown = []
                     if dream_count > 0:
-                        category_breakdown.append(f"{dream_count} dream")
+                        category_breakdown.append(f"{dream_count} reach")
                     if target_count > 0:
                         category_breakdown.append(f"{target_count} target")
                     if safe_count > 0:
-                        category_breakdown.append(f"{safe_count} safe")
+                        category_breakdown.append(f"{safe_count} safety")
                     
                     breakdown_text = ", ".join(category_breakdown) if category_breakdown else "universities"
-                    message = f"You've shortlisted {shortlist_count} universities ({breakdown_text}). About '{request.message}' - I can help you compare specific aspects like program curriculum, research opportunities, placement rates, or campus culture. What would you like to evaluate?"
+                    message = f"You've shortlisted {shortlist_count} universities, including {breakdown_text} options. I can help you compare these across several dimensions like program structure, faculty research areas, career outcomes, campus culture, or funding opportunities. What factors are most important to you in making your final decision?"
                 else:
-                    message = f"Regarding '{request.message}' - I can provide detailed guidance. Since you haven't shortlisted universities yet, would you like recommendations first, or do you have specific questions about the application process?"
+                    message = f"I can provide guidance on that. Since you haven't shortlisted any universities yet, would you like me to suggest some options first, or do you have specific questions about the application process or program selection criteria? Either way, I'm here to help."
             
             elif current_stage == "LOCKED":
                 if locked_uni_id:
-                    message = f"You've locked your university choice! About '{request.message}' - I can guide you on application essays, document preparation, deadlines, visa process, or interview prep. What do you need help with?"
+                    message = f"You've committed to a university choice, which is a significant milestone. I can now help you with the application execution, whether that's crafting your statement of purpose, preparing supporting documents, understanding deadlines, navigating the visa process, or preparing for interviews if required. What part of the application would you like to tackle first?"
                 else:
-                    message = f"About '{request.message}' - I'm here to help. You're at the decision stage. Would you like help comparing your shortlisted options, or do you have other questions?"
+                    message = f"You're at the decision stage now. I can help you evaluate your shortlisted options more deeply or address any other questions you have about the process. What would be most helpful at this point?"
             
             else:
-                message = f"I'm here to help with '{request.message}'. Could you provide more context or specify what aspect you'd like guidance on? (e.g., profile evaluation, university selection, application strategy, budget planning, etc.)"
+                message = f"I'm here to help with your question. Could you give me a bit more context about what you're looking for? For instance, are you interested in understanding your profile competitiveness, exploring university options, discussing application strategy, or planning your budget? That will help me provide more targeted guidance."
         
         return schemas.CounselResponse(
             message=message,
