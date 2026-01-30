@@ -259,8 +259,8 @@ async def onboarding(
         
         # UPSERT user_states (get-or-create pattern)
         if profile.profile_complete:
-            print(f"[LOGIC] Upserting user_states to DISCOVERY")
-            crud.update_user_stage(db, profile.id, "DISCOVERY")
+            print(f"[LOGIC] Upserting user_states to DISCOVERING_UNIVERSITIES")
+            crud.update_user_stage(db, profile.id, StageEnum.DISCOVERING_UNIVERSITIES)
             # NOTE: Tasks are now only created after university lock, not during onboarding
         
         # Get current stage
