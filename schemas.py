@@ -2,9 +2,16 @@
 Pydantic schemas for API requests and responses.
 """
 
-from pydantic import BaseModel, EmailStr
-from typing import List, Optional, Dict
+from pydantic import BaseModel, EmailStr, Field
+from typing import List, Optional, Dict, Generic, TypeVar
 from models import StageEnum, CategoryEnum
+
+# Generic Wrapper
+T = TypeVar('T')
+
+class ApiResponse(BaseModel, Generic[T]):
+    status: str = "OK"  # OK | EMPTY | LOCKED | ERROR
+    data: T
 
 # User Profile Schemas
 class UserProfileCreate(BaseModel):
@@ -27,9 +34,9 @@ class UserProfileCreate(BaseModel):
 
 class UserProfileResponse(BaseModel):
     id: int
-    name: Optional[str]
+    name: str = ""
     email: str
-    profile_complete: bool
+    profile_complete: bool = False
     
     class Config:
         from_attributes = True
@@ -39,11 +46,11 @@ class UniversityResponse(BaseModel):
     id: int
     name: str
     country: str
-    rank: Optional[int]
-    estimated_tuition_usd: int
-    competitiveness: Optional[str]
-    match_percentage: Optional[int] = None # Added match_percentage
-    category: Optional[str] = None # Added category (Dream/Target/Safe)
+    rank: int = 999 # Safe default
+    estimated_tuition_usd: int = 0
+    competitiveness: str = "MEDIUM"
+    match_percentage: int = 0 # Added match_percentage
+    category: str = "TARGET" # Added category (Dream/Target/Safe)
 
 class CategorizedUniversities(BaseModel):
     dream: List[UniversityResponse] = []
@@ -52,14 +59,21 @@ class CategorizedUniversities(BaseModel):
 
 # Profile Strength Schemas
 class SectionStrength(BaseModel):
-    status: str # strong / average / weak / missing
-    score: int
-    max_score: int
+    status: str = "missing" # strong / average / weak / missing
+    score: int = 0
+    max_score: int = 0
+
+class ProfileSections(BaseModel):
+    academics: SectionStrength = Field(default_factory=lambda: SectionStrength(max_score=30))
+    exams: SectionStrength = Field(default_factory=lambda: SectionStrength(max_score=25))
+    sop: SectionStrength = Field(default_factory=lambda: SectionStrength(max_score=20))
+    documents: SectionStrength = Field(default_factory=lambda: SectionStrength(max_score=15))
+    preferences: SectionStrength = Field(default_factory=lambda: SectionStrength(max_score=10))
 
 class ProfileStrengthResponse(BaseModel):
-    overall_score: int # 0-100
-    sections: Dict[str, SectionStrength]
-    next_actions: List[str]
+    overall_score: int = 0
+    sections: ProfileSections = Field(default_factory=ProfileSections)
+    next_actions: List[str] = []
 
     class Config:
         from_attributes = True
@@ -68,9 +82,9 @@ class ProfileStrengthResponse(BaseModel):
 class TaskResponse(BaseModel):
     id: int
     title: str
-    description: Optional[str]
+    description: str = ""
     stage: StageEnum
-    completed: bool
+    completed: bool = False
     
     class Config:
         from_attributes = True
@@ -79,9 +93,9 @@ class TaskResponse(BaseModel):
 class DashboardResponse(BaseModel):
     profile_summary: UserProfileResponse
     current_stage: StageEnum
-    tasks: List[TaskResponse]
-    universities: Optional[CategorizedUniversities] = None
-    profile_strength: Optional[ProfileStrengthResponse] = None # Added profile strength to dashboard
+    tasks: List[TaskResponse] = []
+    universities: CategorizedUniversities = Field(default_factory=CategorizedUniversities)
+    profile_strength: ProfileStrengthResponse = Field(default_factory=ProfileStrengthResponse) # Added profile strength to dashboard
 
 # Onboarding Schema
 class OnboardingResponse(BaseModel):
@@ -97,6 +111,8 @@ class ShortlistRequest(BaseModel):
 class ShortlistResponse(BaseModel):
     success: bool
     message: str
+    shortlists: List[Dict] = [] # Fallback for get_shortlist wrapper
+    count: int = 0
 
 # Lock Schema
 class LockRequest(BaseModel):
@@ -105,7 +121,7 @@ class LockRequest(BaseModel):
 class LockResponse(BaseModel):
     success: bool
     message: str
-    locked_university: Optional[UniversityResponse] = None
+    locked_university_id: Optional[int] = None
 
 # Application Schema
 class ApplicationResponse(BaseModel):
@@ -128,10 +144,11 @@ class CounselResponse(BaseModel):
     actions: CounselActions
 
 class MatchesResponse(BaseModel):
-    matches: CategorizedUniversities
-    count: int
+    matches: CategorizedUniversities = Field(default_factory=CategorizedUniversities)
+    count: int = 0
 
 # Error Schema
 class ErrorResponse(BaseModel):
+    status: str = "ERROR"
     error: str
     message: str
