@@ -76,10 +76,10 @@ async def onboarding(
     db: Session = Depends(get_db)
 ):
     """
-    Deterministic onboarding with state management.
-    - Looks up user by email (must exist)
-    - Updates profile data
-    - Sets profile_complete = true
+    Deterministic onboarding with state management (UPSERT).
+    - If user exists: UPDATE profile data
+    - If user doesn't exist: CREATE new user
+    - Sets profile_complete = true on final_submit
     - UPSERTS user_states to DISCOVERY stage
     """
     print(f"[ENDPOINT] /onboarding called for {profile_data.email}")
@@ -88,33 +88,28 @@ async def onboarding(
         # Look up user by email
         profile = db.query(UserProfile).filter(UserProfile.email == profile_data.email).first()
         
-        if not profile:
-            # User doesn't exist - return structured error
-            print(f"[ERROR] User not found: {profile_data.email}")
-            raise HTTPException(
-                status_code=404,
-                detail={
-                    "error": "USER_NOT_FOUND",
-                    "message": "No user found with this email. Please register first."
-                }
-            )
-        
         # Prepare data (exclude final_submit from DB fields)
         profile_dict = profile_data.model_dump(exclude={'final_submit'})
         
-        # UPDATE existing profile
-        print(f"[LOGIC] Updating profile for {profile_data.email}")
-        for key, value in profile_dict.items():
-            if hasattr(profile, key):
-                setattr(profile, key, value)
-        
-        # Always mark complete on final submit
-        if profile_data.final_submit:
-            profile.profile_complete = True
-            print(f"[LOGIC] Marking profile as complete")
-        
-        db.commit()
-        db.refresh(profile)
+        if profile:
+            # UPDATE existing profile
+            print(f"[LOGIC] Updating existing profile for {profile_data.email}")
+            for key, value in profile_dict.items():
+                if hasattr(profile, key):
+                    setattr(profile, key, value)
+            
+            # Mark complete on final submit
+            if profile_data.final_submit:
+                profile.profile_complete = True
+                print(f"[LOGIC] Marking profile as complete")
+            
+            db.commit()
+            db.refresh(profile)
+        else:
+            # CREATE new user
+            print(f"[LOGIC] Creating new user for {profile_data.email}")
+            profile_dict["profile_complete"] = profile_data.final_submit
+            profile = crud.create_user_profile(db, profile_dict)
         
         # UPSERT user_states (get-or-create pattern)
         if profile.profile_complete:
@@ -130,7 +125,7 @@ async def onboarding(
         state = crud.get_or_create_user_state(db, profile.id)
         current_stage = state.current_stage
         
-        print(f"[SUCCESS] Profile updated. Complete: {profile.profile_complete}, Stage: {current_stage}")
+        print(f"[SUCCESS] Profile saved. Complete: {profile.profile_complete}, Stage: {current_stage}")
         
         return schemas.OnboardingResponse(
             profile_complete=profile.profile_complete,
