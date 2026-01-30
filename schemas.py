@@ -42,11 +42,27 @@ class UniversityResponse(BaseModel):
     rank: Optional[int]
     estimated_tuition_usd: int
     competitiveness: Optional[str]
+    match_percentage: Optional[int] = None # Added match_percentage
+    category: Optional[str] = None # Added category (Dream/Target/Safe)
 
 class CategorizedUniversities(BaseModel):
     dream: List[UniversityResponse] = []
     target: List[UniversityResponse] = []
     safe: List[UniversityResponse] = []
+
+# Profile Strength Schemas
+class SectionStrength(BaseModel):
+    status: str # strong / average / weak / missing
+    score: int
+    max_score: int
+
+class ProfileStrengthResponse(BaseModel):
+    overall_score: int # 0-100
+    sections: Dict[str, SectionStrength]
+    next_actions: List[str]
+
+    class Config:
+        from_attributes = True
 
 # Task Schemas
 class TaskResponse(BaseModel):
@@ -65,6 +81,7 @@ class DashboardResponse(BaseModel):
     current_stage: StageEnum
     tasks: List[TaskResponse]
     universities: Optional[CategorizedUniversities] = None
+    profile_strength: Optional[ProfileStrengthResponse] = None # Added profile strength to dashboard
 
 # Onboarding Schema
 class OnboardingResponse(BaseModel):
@@ -112,7 +129,7 @@ class CounselResponse(BaseModel):
 
 class MatchesResponse(BaseModel):
     matches: CategorizedUniversities
-    count: int # Added count field
+    count: int
 
 # Error Schema
 class ErrorResponse(BaseModel):

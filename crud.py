@@ -248,58 +248,79 @@ def complete_task(db: Session, task_id: int):
 #     # This function is deprecated - tasks are now only created after lock
 #     return []
 
+def sync_profile_tasks(db: Session, user_id: int):
+    """
+    Sync tasks for BUILDING_PROFILE stage.
+    Auto-generates tasks for missing profile sections.
+    """
+    profile = get_user_profile(db, user_id)
+    if not profile: return
+
+    # Define profile rules
+    profile_rules = [
+        ("Upload IELTS/TOEFL score", not profile.ielts_status or profile.ielts_status == "NOT_STARTED"),
+        ("Upload GRE/GMAT score", not profile.gre_gmat_status or profile.gre_gmat_status == "NOT_STARTED"),
+        ("Finalize Statement of Purpose", not profile.sop_status or profile.sop_status == "NOT_STARTED"),
+        ("Set funding plan", not profile.funding_plan),
+        ("Select preferred countries", not profile.preferred_countries or len(profile.preferred_countries) == 0)
+    ]
+
+    # Get current profile tasks
+    current_tasks = db.query(Task).filter(
+        and_(Task.user_id == user_id, Task.stage == StageEnum.BUILDING_PROFILE)
+    ).all()
+    current_titles = {t.title for t in current_tasks}
+
+    for title, condition in profile_rules:
+        if condition and title not in current_titles:
+            # Create task if missing
+            create_task(db, user_id, title, "Complete this profile section", StageEnum.BUILDING_PROFILE)
+        elif not condition and title in current_titles:
+            # Remove task if completed
+            db.query(Task).filter(
+                and_(Task.user_id == user_id, Task.title == title)
+            ).delete()
+    
+    db.commit()
+
 def generate_university_tasks(db: Session, user_id: int, university_id: int) -> List[Task]:
     """
     Generate university-specific tasks after lock.
-    Tasks are stage-aware and actionable.
-    Clears existing tasks before generating new ones.
+    Uses PREPARING_APPLICATIONS stage.
     """
     try:
         # Clear existing tasks for this user
         db.query(Task).filter(Task.user_id == user_id).delete()
         
-        # University-specific tasks for APPLICATION stage
         tasks_data = [
             {
                 "title": "Complete Statement of Purpose",
                 "description": "Draft your SOP highlighting why this university aligns with your goals",
-                "stage": StageEnum.APPLICATION,
+                "stage": StageEnum.PREPARING_APPLICATIONS,
                 "university_id": university_id
             },
             {
                 "title": "Gather Recommendation Letters",
-                "description": "Request 2-3 letters from professors or supervisors who know your work well",
-                "stage": StageEnum.APPLICATION,
+                "description": "Request 2-3 letters from professors",
+                "stage": StageEnum.PREPARING_APPLICATIONS,
                 "university_id": university_id
             },
             {
                 "title": "Prepare Official Transcripts",
-                "description": "Get official transcripts from your institution, sealed and stamped",
-                "stage": StageEnum.APPLICATION,
+                "description": "Get official transcripts from your institution",
+                "stage": StageEnum.PREPARING_APPLICATIONS,
                 "university_id": university_id
             },
             {
                 "title": "Check Application Deadlines",
-                "description": "Verify all deadlines for this university and set calendar reminders",
-                "stage": StageEnum.APPLICATION,
-                "university_id": university_id
-            },
-            {
-                "title": "Prepare Financial Documents",
-                "description": "Gather bank statements and financial proof for visa application",
-                "stage": StageEnum.APPLICATION,
+                "description": "Verify deadlines and set reminders",
+                "stage": StageEnum.PREPARING_APPLICATIONS,
                 "university_id": university_id
             },
             {
                 "title": "Complete Standardized Tests",
-                "description": "Ensure GRE/GMAT and IELTS/TOEFL scores meet university requirements",
-                "stage": StageEnum.APPLICATION,
-                "university_id": university_id
-            },
-            {
-                "title": "Prepare Resume/CV",
-                "description": "Update your resume highlighting relevant experience and achievements",
-                "stage": StageEnum.APPLICATION,
+                "description": "Ensure scores align with requirements",
+                "stage": StageEnum.PREPARING_APPLICATIONS,
                 "university_id": university_id
             }
         ]
@@ -311,7 +332,6 @@ def generate_university_tasks(db: Session, user_id: int, university_id: int) -> 
             tasks.append(task)
         
         db.commit()
-        print(f"[TASKS] Generated {len(tasks)} university-specific tasks for user {user_id}, university {university_id}")
         return tasks
     except Exception as e:
         print(f"[ERROR] generate_university_tasks failed: {str(e)}")
@@ -355,19 +375,11 @@ def normalize_status(status: str | None) -> str:
     print(f"[WARNING] Unknown status value: '{status}', defaulting to IN_PROGRESS")
     return "IN_PROGRESS"
 
-# Profile Strength Calculation (Enhanced with Debug Logging)
+# Profile Strength Calculation (Standardized)
 def calculate_profile_strength(db: Session, profile: UserProfile) -> Dict:
     """
     Calculate profile completion using point-based scoring (100 points total).
-    
-    Scoring Model:
-    - Academics (30%): GPA, degree, graduation year
-    - Exams (25%): IELTS/GRE status + scores
-    - SOP (20%): SOP status
-    - Documents (15%): Funding plan, transcripts
-    - Preferences (10%): Countries, budget, field
-    
-    Returns structured breakdown with scores, statuses, and next actions.
+    Standardized Statuses: strong | average | weak | missing
     """
     print(f"\n[PROFILE_STRENGTH] Calculating for user_id={profile.id}, email={profile.email}")
     
@@ -375,238 +387,125 @@ def calculate_profile_strength(db: Session, profile: UserProfile) -> Dict:
     sections = {}
     next_actions = []
     
+    # Helper to map score to standard status
+    def get_status(score: int, max_score: int) -> str:
+        if score == 0: return "missing"
+        if score >= max_score * 0.8: return "strong"
+        if score >= max_score * 0.4: return "average"
+        return "weak"
+
     # ========================================
     # ACADEMICS (30 points)
     # ========================================
     academics_score = 0
     academics_max = 30
     
-    # GPA → 15 points
     if profile.gpa and float(profile.gpa) > 0:
         academics_score += 15
-        print(f"  [ACADEMICS] GPA present: {profile.gpa} → +15")
     else:
-        print(f"  [ACADEMICS] GPA missing → +0")
         next_actions.append("Add your GPA")
     
-    # Degree → 10 points
     if profile.degree and profile.degree.strip():
         academics_score += 10
-        print(f"  [ACADEMICS] Degree present: {profile.degree} → +10")
     else:
-        print(f"  [ACADEMICS] Degree missing → +0")
         next_actions.append("Add your degree")
-    
-    # Graduation year → 5 points
+        
     if profile.graduation_year and profile.graduation_year > 0:
         academics_score += 5
-        print(f"  [ACADEMICS] Graduation year present: {profile.graduation_year} → +5")
-    else:
-        print(f"  [ACADEMICS] Graduation year missing → +0")
     
-    total_score += academics_score
-    
-    # Determine status
-    if academics_score == 0:
-        academics_status = "missing"
-    elif academics_score >= 25:
-        academics_status = "strong"
-    elif academics_score >= 15:
-        academics_status = "partial"
-    else:
-        academics_status = "weak"
-    
+    academics_status = get_status(academics_score, academics_max)
     sections["academics"] = {
+        "status": academics_status,
         "score": academics_score,
-        "max": academics_max,
-        "status": academics_status
+        "max_score": academics_max
     }
-    print(f"  [ACADEMICS] Total: {academics_score}/{academics_max} → {academics_status}")
-    
+    total_score += academics_score
+
     # ========================================
     # EXAMS (25 points)
     # ========================================
     exams_score = 0
     exams_max = 25
     
-    # IELTS → 12 points
-    ielts_normalized = normalize_status(profile.ielts_status)
-    if ielts_normalized == "COMPLETED":
-        exams_score += 12
-        print(f"  [EXAMS] IELTS completed: {profile.ielts_status} → +12")
-    elif ielts_normalized == "IN_PROGRESS":
-        exams_score += 6
-        print(f"  [EXAMS] IELTS in progress: {profile.ielts_status} → +6")
-    else:
-        print(f"  [EXAMS] IELTS not started → +0")
-        next_actions.append("Complete IELTS exam")
+    # IELTS Logic
+    ielts_norm = normalize_status(profile.ielts_status)
+    if ielts_norm == "COMPLETED": exams_score += 12
+    elif ielts_norm == "IN_PROGRESS": exams_score += 6
+    else: next_actions.append("Complete IELTS")
     
-    # GRE/GMAT → 13 points
-    gre_normalized = normalize_status(profile.gre_gmat_status)
-    if gre_normalized == "COMPLETED":
-        exams_score += 13
-        print(f"  [EXAMS] GRE/GMAT completed: {profile.gre_gmat_status} → +13")
-    elif gre_normalized == "IN_PROGRESS":
-        exams_score += 6
-        print(f"  [EXAMS] GRE/GMAT in progress: {profile.gre_gmat_status} → +6")
-    else:
-        print(f"  [EXAMS] GRE/GMAT not started → +0")
-        next_actions.append("Complete GRE/GMAT exam")
-    
-    total_score += exams_score
-    
-    # Determine status
-    if exams_score == 0:
-        exams_status = "missing"
-    elif exams_score >= 20:
-        exams_status = "complete"
-    elif exams_score >= 10:
-        exams_status = "partial"
-    else:
-        exams_status = "weak"
-    
+    # GRE Logic
+    gre_norm = normalize_status(profile.gre_gmat_status)
+    if gre_norm == "COMPLETED": exams_score += 13
+    elif gre_norm == "IN_PROGRESS": exams_score += 6
+    elif gre_norm == "NOT_STARTED": next_actions.append("Complete GRE/GMAT")
+
+    exams_status = get_status(exams_score, exams_max)
     sections["exams"] = {
+        "status": exams_status,
         "score": exams_score,
-        "max": exams_max,
-        "status": exams_status
+        "max_score": exams_max
     }
-    print(f"  [EXAMS] Total: {exams_score}/{exams_max} → {exams_status}")
-    
+    total_score += exams_score
+
     # ========================================
     # SOP (20 points)
     # ========================================
     sop_score = 0
     sop_max = 20
+    sop_norm = normalize_status(profile.sop_status)
     
-    sop_normalized = normalize_status(profile.sop_status)
-    if sop_normalized == "COMPLETED":
-        sop_score = 20
-        print(f"  [SOP] Completed: {profile.sop_status} → +20")
-    elif sop_normalized == "IN_PROGRESS":
-        sop_score = 10
-        print(f"  [SOP] In progress: {profile.sop_status} → +10")
-    else:
-        print(f"  [SOP] Not started → +0")
-        next_actions.append("Complete your SOP")
-    
-    total_score += sop_score
-    
-    # Determine status
-    if sop_score == 0:
-        sop_status = "missing"
-    elif sop_score >= 15:
-        sop_status = "ready"
-    else:
-        sop_status = "drafting"
-    
+    if sop_norm == "COMPLETED": sop_score = 20
+    elif sop_norm == "IN_PROGRESS": sop_score = 10
+    else: next_actions.append("Draft your SOP")
+
+    sop_status = get_status(sop_score, sop_max)
     sections["sop"] = {
+        "status": sop_status,
         "score": sop_score,
-        "max": sop_max,
-        "status": sop_status
+        "max_score": sop_max
     }
-    print(f"  [SOP] Total: {sop_score}/{sop_max} → {sop_status}")
-    
+    total_score += sop_score
+
     # ========================================
     # DOCUMENTS (15 points)
     # ========================================
-    documents_score = 0
-    documents_max = 15
+    docs_score = 0
+    docs_max = 15
+    if profile.funding_plan: docs_score = 15
+    else: next_actions.append("Add funding plan")
     
-    # Funding plan → 15 points
-    if profile.funding_plan and profile.funding_plan.strip():
-        documents_score += 15
-        print(f"  [DOCUMENTS] Funding plan present → +15")
-    else:
-        print(f"  [DOCUMENTS] Funding plan missing → +0")
-        next_actions.append("Define your funding plan")
-    
-    total_score += documents_score
-    
-    # Determine status
-    if documents_score == 0:
-        documents_status = "missing"
-    elif documents_score >= 10:
-        documents_status = "complete"
-    else:
-        documents_status = "partial"
-    
+    docs_status = get_status(docs_score, docs_max)
     sections["documents"] = {
-        "score": documents_score,
-        "max": documents_max,
-        "status": documents_status
+        "status": docs_status,
+        "score": docs_score,
+        "max_score": docs_max
     }
-    print(f"  [DOCUMENTS] Total: {documents_score}/{documents_max} → {documents_status}")
-    
+    total_score += docs_score
+
     # ========================================
     # PREFERENCES (10 points)
     # ========================================
-    preferences_score = 0
-    preferences_max = 10
+    prefs_score = 0
+    prefs_max = 10
     
-    # Countries → 4 points
-    if profile.preferred_countries and len(profile.preferred_countries) > 0:
-        preferences_score += 4
-        print(f"  [PREFERENCES] Countries present: {profile.preferred_countries} → +4")
-    else:
-        print(f"  [PREFERENCES] Countries missing → +0")
-        next_actions.append("Select preferred countries")
+    if profile.preferred_countries: prefs_score += 4
+    else: next_actions.append("Select countries")
     
-    # Budget → 3 points
-    if profile.budget_per_year and profile.budget_per_year > 0:
-        preferences_score += 3
-        print(f"  [PREFERENCES] Budget present: {profile.budget_per_year} → +3")
-    else:
-        print(f"  [PREFERENCES] Budget missing → +0")
+    if profile.budget_per_year: prefs_score += 3
     
-    # Field of study → 3 points
-    if profile.field_of_study and profile.field_of_study.strip():
-        preferences_score += 3
-        print(f"  [PREFERENCES] Field present: {profile.field_of_study} → +3")
-    else:
-        print(f"  [PREFERENCES] Field missing → +0")
-    
-    total_score += preferences_score
-    
-    # Determine status
-    if preferences_score == 0:
-        preferences_status = "missing"
-    elif preferences_score >= 8:
-        preferences_status = "complete"
-    else:
-        preferences_status = "partial"
-    
+    if profile.field_of_study: prefs_score += 3
+    else: next_actions.append("Select field of study")
+
+    prefs_status = get_status(prefs_score, prefs_max)
     sections["preferences"] = {
-        "score": preferences_score,
-        "max": preferences_max,
-        "status": preferences_status
+        "status": prefs_status,
+        "score": prefs_score,
+        "max_score": prefs_max
     }
-    print(f"  [PREFERENCES] Total: {preferences_score}/{preferences_max} → {preferences_status}")
-    
-    # ========================================
-    # CALCULATE FINAL PERCENTAGE
-    # ========================================
-    overall = round(total_score, 1)
-    
-    print(f"\n[PROFILE_STRENGTH] FINAL SCORE: {overall}/100")
-    print(f"[PROFILE_STRENGTH] Next actions: {next_actions}\n")
-    
+    total_score += prefs_score
+
     return {
-        "overall": overall,
-        "academics": {
-            "value": academics_score,
-            "status": academics_status
-        },
-        "exams": {
-            "status": exams_status
-        },
-        "sop": {
-            "status": sop_status
-        },
-        "documents": {
-            "status": documents_status
-        },
-        "preferences": {
-            "status": preferences_status
-        },
+        "overall_score": int(total_score),
+        "sections": sections,
         "next_actions": next_actions[:3]
     }
