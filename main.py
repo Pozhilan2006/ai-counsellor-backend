@@ -118,42 +118,193 @@ async def health():
 @app.get("/tasks")
 async def get_tasks(email: str, db: Session = Depends(get_db)):
     """
-    Get tasks for a user.
-    Auto-syncs profile tasks for BUILDING_PROFILE stage.
+    Get tasks for a user with standardized response.
     """
     print(f"[ENDPOINT] GET /tasks called for {email}")
     
     try:
         profile = db.query(UserProfile).filter(UserProfile.email == email).first()
         if not profile:
-            return {"tasks": [], "locked_university_id": None}
+            return {"status": "OK", "data": {"tasks": [], "locked_university_id": None}}
         
-        # Sync profile tasks (Auto-generation logic)
         crud.sync_profile_tasks(db, profile.id)
-        
-        # Get tasks (handles locked university filtering inside)
         tasks, locked_university_id = crud.get_all_tasks(db, profile.id)
         
-        # Format response
         result = []
         for task in tasks:
             result.append({
                 "id": task.id,
                 "title": task.title,
-                "description": task.description,
+                "description": task.description or "",
                 "completed": task.completed,
                 "university_id": task.university_id,
                 "stage": task.stage
             })
         
         return {
-            "tasks": result,
-            "locked_university_id": locked_university_id
+            "status": "OK",
+            "data": {
+                "tasks": result,
+                "locked_university_id": locked_university_id
+            }
         }
-        
     except Exception as e:
         print(f"[ERROR] get_tasks failed: {str(e)}")
-        return {"tasks": [], "locked_university_id": None}
+        return {"status": "ERROR", "data": {"tasks": [], "locked_university_id": None}}
+
+@app.get("/user/stage")
+async def get_user_stage(email: str, db: Session = Depends(get_db)):
+    try:
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            # Safe default
+            return {
+                "status": "OK",
+                "data": {
+                    "email": email,
+                    "current_stage": StageEnum.BUILDING_PROFILE,
+                    "profile_complete": False
+                }
+            }
+        
+        state = crud.get_or_create_user_state(db, profile.id, default_stage=StageEnum.BUILDING_PROFILE)
+        return {
+            "status": "OK",
+            "data": {
+                "email": email,
+                "current_stage": state.current_stage,
+                "profile_complete": profile.profile_complete
+            }
+        }
+    except Exception as e:
+        print(f"[ERROR] get_user_stage failed: {str(e)}")
+        return {
+            "status": "ERROR",
+            "data": {
+                "email": email,
+                "current_stage": StageEnum.BUILDING_PROFILE,
+                "profile_complete": False
+            }
+        }
+
+@app.get("/profile/strength")
+async def get_profile_strength(email: str, db: Session = Depends(get_db)):
+    try:
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+             # Safe default for missing user
+             return {
+                 "status": "OK",
+                 "data": schemas.ProfileStrengthResponse()
+             }
+        
+        strength = crud.calculate_profile_strength(db, profile)
+        return {"status": "OK", "data": strength}
+    except Exception as e:
+        print(f"[ERROR] get_profile_strength failed: {str(e)}")
+        # Safe default on error
+        return {"status": "ERROR", "data": schemas.ProfileStrengthResponse()}
+
+@app.get("/recommendations")
+async def get_deterministic_recommendations(email: str, db: Session = Depends(get_db)):
+    print(f"[ENDPOINT] /recommendations called for {email}")
+    
+    try: 
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            # Return empty response instead of 404
+            return {"status": "OK", "data": schemas.MatchesResponse(matches=schemas.CategorizedUniversities(), count=0)}
+        
+        if not profile.profile_complete:
+             # Return empty, manageable on frontend
+             return {"status": "OK", "data": schemas.MatchesResponse(matches=schemas.CategorizedUniversities(), count=0)}
+
+        countries = profile.preferred_countries if profile.preferred_countries else ["USA"]
+        budget = profile.budget_per_year or 0
+        
+        try:
+            unis = query_universities(
+                countries=countries,
+                max_budget=float(budget),
+                limit=20
+            )
+        except Exception:
+            unis = []
+        
+        dream = []
+        target = []
+        safe = []
+
+        for uni in unis:
+            uni_obj = schemas.UniversityResponse(
+                id=uni["id"],
+                name=uni["name"],
+                country=uni["country"],
+                rank=uni["rank"] or 999,
+                estimated_tuition_usd=uni["estimated_tuition_usd"],
+                competitiveness=uni.get("competitiveness", "MEDIUM"),
+                match_percentage=0, # Need to keep consistent
+                category="TARGET"
+            )
+            # Re-apply categorization logic strictly if needed, or rely on crud/scoring return 
+            # (Here we reconstruct because query_universities creates raw dicts)
+            # Simplification:
+            rank = uni["rank"] or 999
+            if rank <= 100: dream.append(uni_obj)
+            elif rank <= 300: target.append(uni_obj)
+            else: safe.append(uni_obj)
+            
+        total_count = len(dream) + len(target) + len(safe)
+        
+        return {
+            "status": "OK", 
+            "data": schemas.MatchesResponse(
+                matches=schemas.CategorizedUniversities(
+                    dream=dream,
+                    target=target,
+                    safe=safe
+                ),
+                count=total_count
+            )
+        }
+    except Exception as e:
+        print(f"[ERROR] recommendations failed: {str(e)}")
+        return {"status": "ERROR", "data": schemas.MatchesResponse(matches=schemas.CategorizedUniversities(), count=0)}
+
+@app.get("/shortlist")
+async def get_shortlist(email: str, db: Session = Depends(get_db)):
+    try:
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            return {"status": "OK", "data": {"shortlists": [], "count": 0}}
+        
+        shortlists = crud.get_user_shortlists(db, profile.id)
+        if not shortlists:
+            return {"status": "OK", "data": {"shortlists": [], "count": 0}}
+            
+        result = []
+        for shortlist in shortlists:
+            unis = query_universities(university_ids=[shortlist.university_id], limit=1)
+            if unis:
+                uni = unis[0]
+                result.append({
+                    "id": shortlist.id,
+                    "university": {
+                        "id": uni["id"],
+                        "name": uni["name"],
+                        "country": uni["country"],
+                        "rank": uni["rank"] or 999,
+                        "estimated_tuition_usd": uni["estimated_tuition_usd"] or 0
+                    },
+                    "category": shortlist.category or "TARGET",
+                    "locked": shortlist.locked,
+                    "created_at": shortlist.created_at.isoformat() if shortlist.created_at else ""
+                })
+        
+        return {"status": "OK", "data": {"shortlists": result, "count": len(result)}}
+    except Exception as e:
+        print(f"[ERROR] get_shortlist failed: {str(e)}")
+        return {"status": "ERROR", "data": {"shortlists": [], "count": 0}}
 
 @app.post("/tasks/{task_id}/complete")
 async def complete_task_endpoint(task_id: int, db: Session = Depends(get_db)):
