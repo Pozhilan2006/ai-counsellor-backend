@@ -254,16 +254,130 @@ async def get_deterministic_recommendations(
         count=total_count
     )
 
+# ============================================
+# SHORTLIST ENDPOINTS
+# ============================================
+
+@app.get("/shortlist")
+async def get_shortlist(email: str, db: Session = Depends(get_db)):
+    """
+    Get user's shortlisted universities.
+    Returns empty list if user not found or no shortlists.
+    """
+    print(f"[ENDPOINT] GET /shortlist called for {email}")
+    
+    try:
+        # Get user profile
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            return {"shortlists": [], "count": 0}
+        
+        # Get shortlists
+        shortlists = crud.get_user_shortlists(db, profile.id)
+        
+        # Fetch university details for each shortlist
+        result = []
+        for shortlist in shortlists:
+            # Query university details
+            unis = query_universities(university_ids=[shortlist.university_id], limit=1)
+            if unis:
+                uni = unis[0]
+                result.append({
+                    "id": shortlist.id,
+                    "university": {
+                        "id": uni["id"],
+                        "name": uni["name"],
+                        "country": uni["country"],
+                        "rank": uni["rank"],
+                        "estimated_tuition_usd": uni["estimated_tuition_usd"]
+                    },
+                    "category": shortlist.category,
+                    "locked": shortlist.locked,
+                    "created_at": shortlist.created_at.isoformat() if shortlist.created_at else None
+                })
+        
+        return {"shortlists": result, "count": len(result)}
+    except Exception as e:
+        print(f"[ERROR] get_shortlist failed: {str(e)}")
+        raise HTTPException(status_code=500, detail={"error": "SHORTLIST_FETCH_FAILED", "message": str(e)})
+
+@app.post("/shortlist")
+async def add_shortlist(
+    email: str,
+    university_id: int,
+    category: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Add university to user's shortlist.
+    """
+    print(f"[ENDPOINT] POST /shortlist called for {email}, university_id={university_id}")
+    
+    try:
+        # Get user profile
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            raise HTTPException(status_code=404, detail={"error": "USER_NOT_FOUND", "message": "User not found"})
+        
+        # Add to shortlist
+        shortlist = crud.add_to_shortlist(db, profile.id, university_id, category)
+        
+        return {
+            "success": True,
+            "message": "University added to shortlist",
+            "shortlist_id": shortlist.id
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] add_shortlist failed: {str(e)}")
+        raise HTTPException(status_code=400, detail={"error": "SHORTLIST_ADD_FAILED", "message": str(e)})
+
+@app.patch("/shortlist/lock")
+async def lock_shortlist(
+    email: str,
+    university_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Lock a university for application (unlocks all others).
+    """
+    print(f"[ENDPOINT] PATCH /shortlist/lock called for {email}, university_id={university_id}")
+    
+    try:
+        # Get user profile
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            raise HTTPException(status_code=404, detail={"error": "USER_NOT_FOUND", "message": "User not found"})
+        
+        # Lock university
+        shortlist = crud.lock_university(db, profile.id, university_id)
+        
+        # Update user stage to LOCKED
+        crud.update_user_stage(db, profile.id, "LOCKED")
+        
+        return {
+            "success": True,
+            "message": "University locked for application",
+            "locked_university_id": shortlist.university_id
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail={"error": "LOCK_FAILED", "message": str(e)})
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] lock_shortlist failed: {str(e)}")
+        raise HTTPException(status_code=500, detail={"error": "LOCK_FAILED", "message": str(e)})
+
 @app.post("/counsel", response_model=schemas.CounselResponse)
 async def counsel(
     request: schemas.CounselRequest,
     db: Session = Depends(get_db)
 ):
     """
-    Deterministic AI counsellor endpoint.
-    - Loads user profile and state
-    - Classifies intent
-    - Returns stage-aware, context-specific responses
+    Context-aware AI counsellor endpoint.
+    Loads: user profile, current stage, shortlisted universities
+    Returns: Stage-specific, personalized responses (NO static text)
     """
     print(f"[ENDPOINT] /counsel called for {request.email}")
     
@@ -288,20 +402,28 @@ async def counsel(
         state = crud.get_or_create_user_state(db, profile.id)
         current_stage = state.current_stage
         
-        # 4. Get universities for context
+        # 4. Load shortlisted universities
+        shortlists = crud.get_user_shortlists(db, profile.id)
+        shortlist_count = len(shortlists)
+        
+        # Get locked university if any
+        locked = crud.get_locked_university(db, profile.id)
+        locked_uni_id = locked.university_id if locked else None
+        
+        # 5. Get available universities for context
         countries = profile.preferred_countries if profile.preferred_countries else ["USA"]
         budget = profile.budget_per_year or 0
         
         try:
-            unis = query_universities(
+            available_unis = query_universities(
                 countries=countries,
                 max_budget=float(budget),
                 limit=10
             )
         except Exception:
-            unis = []
+            available_unis = []
         
-        # 5. Build AI context
+        # 6. Build rich context
         context = {
             "profile": {
                 "name": profile.name,
@@ -311,20 +433,35 @@ async def counsel(
                 "field": profile.field_of_study
             },
             "current_stage": current_stage,
-            "available_universities": len(unis),
+            "shortlist_count": shortlist_count,
+            "locked_university_id": locked_uni_id,
+            "available_universities_count": len(available_unis),
             "question": request.message
         }
         
-        print(f"[LOGIC] Stage: {current_stage}, Universities: {len(unis)}")
+        print(f"[LOGIC] Stage: {current_stage}, Shortlists: {shortlist_count}, Available: {len(available_unis)}")
         
-        # 6. Generate stage-aware response
-        # TODO: Replace with actual Gemini AI call
+        # 7. Generate stage-aware, context-specific response (NO STATIC TEXT)
         if current_stage == "DISCOVERY":
-            message = f"Based on your profile (GPA: {profile.gpa}, Budget: ${profile.budget_per_year}), I found {len(unis)} universities that match your criteria. {request.message}"
+            if len(available_unis) > 0:
+                message = f"Based on your profile (GPA: {profile.gpa}, Budget: ${profile.budget_per_year:,}), I found {len(available_unis)} universities matching your criteria in {', '.join(countries)}. Regarding your question: '{request.message}' - I can help you understand which universities align best with your goals in {profile.field_of_study}."
+            else:
+                message = f"I notice there are limited universities matching your budget of ${profile.budget_per_year:,} in {', '.join(countries)}. About your question: '{request.message}' - Let me help you explore alternative options or adjust your search criteria."
+        
         elif current_stage == "SHORTLIST":
-            message = f"Great question! As you're in the shortlisting phase, let me help you evaluate your options. {request.message}"
+            if shortlist_count > 0:
+                message = f"Great! You've shortlisted {shortlist_count} universities. Regarding '{request.message}' - I can help you compare these options and determine which ones best fit your profile in {profile.field_of_study}. What specific aspects would you like to evaluate?"
+            else:
+                message = f"You're in the shortlisting phase but haven't added any universities yet. About '{request.message}' - I recommend reviewing the {len(available_unis)} universities I found for you and shortlisting your top choices."
+        
+        elif current_stage == "LOCKED":
+            if locked_uni_id:
+                message = f"You've locked a university for your application! Regarding '{request.message}' - I can guide you through the application requirements, deadlines, and preparation steps for your chosen university."
+            else:
+                message = f"You're ready to lock in your final choice. About '{request.message}' - Let me help you make this important decision from your {shortlist_count} shortlisted universities."
+        
         else:
-            message = f"I'm here to help with your question: '{request.message}'. Based on your current stage ({current_stage}), I can provide specific guidance."
+            message = f"I'm here to help with your question: '{request.message}'. Based on your current stage ({current_stage}) and profile, I can provide specific guidance tailored to your situation."
         
         return schemas.CounselResponse(
             message=message,

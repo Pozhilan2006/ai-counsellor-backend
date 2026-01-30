@@ -4,7 +4,7 @@ CRUD operations for database models.
 
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
-from models import UserProfile, UserState, UserUniversity, Task, StageEnum, CategoryEnum
+from models import UserProfile, UserState, Shortlist, Task, StageEnum, CategoryEnum
 from typing import List, Optional, Dict
 from datetime import datetime
 
@@ -71,75 +71,82 @@ def update_user_stage(db: Session, user_id: int, stage: str):
         print(f"[ERROR] update_user_stage failed: {str(e)}")
         db.rollback()
 
-# UserUniversity operations
-def get_user_universities(db: Session, user_id: int, shortlisted: Optional[bool] = None) -> List[UserUniversity]:
-    """Get user's universities, optionally filtered by shortlist status."""
-    query = db.query(UserUniversity).filter(UserUniversity.user_id == user_id)
-    if shortlisted is not None:
-        query = query.filter(UserUniversity.shortlisted == shortlisted)
-    return query.all()
+# Shortlist operations
+def get_user_shortlists(db: Session, user_id: int) -> List[Shortlist]:
+    """Get all shortlisted universities for a user."""
+    return db.query(Shortlist).filter(Shortlist.user_id == user_id).all()
 
-def shortlist_university(db: Session, user_id: int, university_id: int, category: CategoryEnum) -> UserUniversity:
-    """Add university to user's shortlist."""
-    # Check if already exists
-    existing = db.query(UserUniversity).filter(
-        and_(
-            UserUniversity.user_id == user_id,
-            UserUniversity.university_id == university_id
+def add_to_shortlist(db: Session, user_id: int, university_id: int, category: Optional[str] = None) -> Shortlist:
+    """Add university to user's shortlist (UPSERT)."""
+    try:
+        # Check if already exists
+        existing = db.query(Shortlist).filter(
+            and_(
+                Shortlist.user_id == user_id,
+                Shortlist.university_id == university_id
+            )
+        ).first()
+        
+        if existing:
+            # Update category if provided
+            if category:
+                existing.category = category
+            db.commit()
+            db.refresh(existing)
+            return existing
+        
+        # Create new entry
+        shortlist = Shortlist(
+            user_id=user_id,
+            university_id=university_id,
+            category=category
         )
-    ).first()
-    
-    if existing:
-        existing.shortlisted = True
-        existing.category = category
+        db.add(shortlist)
         db.commit()
-        db.refresh(existing)
-        return existing
-    
-    # Create new entry
-    user_uni = UserUniversity(
-        user_id=user_id,
-        university_id=university_id,
-        category=category,
-        shortlisted=True
-    )
-    db.add(user_uni)
-    db.commit()
-    db.refresh(user_uni)
-    return user_uni
+        db.refresh(shortlist)
+        return shortlist
+    except Exception as e:
+        print(f"[ERROR] add_to_shortlist failed: {str(e)}")
+        db.rollback()
+        raise
 
-def lock_university(db: Session, user_id: int, university_id: int) -> UserUniversity:
-    """Lock a university for application."""
-    # Unlock any previously locked universities
-    db.query(UserUniversity).filter(
-        and_(
-            UserUniversity.user_id == user_id,
-            UserUniversity.locked == True
-        )
-    ).update({"locked": False})
-    
-    # Lock the selected university
-    user_uni = db.query(UserUniversity).filter(
-        and_(
-            UserUniversity.user_id == user_id,
-            UserUniversity.university_id == university_id
-        )
-    ).first()
-    
-    if user_uni:
-        user_uni.locked = True
+def lock_university(db: Session, user_id: int, university_id: int) -> Shortlist:
+    """Lock a university for application (unlock others)."""
+    try:
+        # Unlock all previously locked universities
+        db.query(Shortlist).filter(
+            and_(
+                Shortlist.user_id == user_id,
+                Shortlist.locked == True
+            )
+        ).update({"locked": False})
+        
+        # Lock the selected university
+        shortlist = db.query(Shortlist).filter(
+            and_(
+                Shortlist.user_id == user_id,
+                Shortlist.university_id == university_id
+            )
+        ).first()
+        
+        if not shortlist:
+            raise ValueError("University not in shortlist")
+        
+        shortlist.locked = True
         db.commit()
-        db.refresh(user_uni)
-        return user_uni
-    
-    raise ValueError("University not found in user's list")
+        db.refresh(shortlist)
+        return shortlist
+    except Exception as e:
+        print(f"[ERROR] lock_university failed: {str(e)}")
+        db.rollback()
+        raise
 
-def get_locked_university(db: Session, user_id: int) -> Optional[UserUniversity]:
+def get_locked_university(db: Session, user_id: int) -> Optional[Shortlist]:
     """Get user's locked university."""
-    return db.query(UserUniversity).filter(
+    return db.query(Shortlist).filter(
         and_(
-            UserUniversity.user_id == user_id,
-            UserUniversity.locked == True
+            Shortlist.user_id == user_id,
+            Shortlist.locked == True
         )
     ).first()
 

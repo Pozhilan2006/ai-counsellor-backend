@@ -48,14 +48,13 @@ class UserState(Base):
     current_stage = Column(String(50), nullable=False, default="ONBOARDING")
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
-class UserUniversity(Base):
-    __tablename__ = "user_universities"
+class Shortlist(Base):
+    __tablename__ = "shortlists"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user_profiles.id"), nullable=False)
-    university_id = Column(Integer, nullable=False)  # References universities table
-    category = Column(Enum(CategoryEnum))
-    shortlisted = Column(Boolean, default=False)
+    user_id = Column(Integer, ForeignKey("user_profiles.id", ondelete="CASCADE"), nullable=False)
+    university_id = Column(Integer, nullable=False)
+    category = Column(String(50))
     locked = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
