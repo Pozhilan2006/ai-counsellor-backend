@@ -351,6 +351,58 @@ async def add_shortlist(
         print(f"[ERROR] add_shortlist failed: {str(e)}")
         raise HTTPException(status_code=400, detail={"error": "SHORTLIST_ADD_FAILED", "message": str(e)})
 
+@app.post("/shortlist/add")
+async def add_shortlist_alt(
+    email: str,
+    university_id: int,
+    category: str = "General",
+    db: Session = Depends(get_db)
+):
+    """
+    Alternative endpoint for adding to shortlist (frontend compatibility).
+    Maps category names: Dream/Target/Safe → DREAM/TARGET/SAFE
+    """
+    print(f"[ENDPOINT] POST /shortlist/add called for {email}, university_id={university_id}, category={category}")
+    
+    # Map frontend category names to backend
+    category_map = {
+        "Dream": "DREAM",
+        "Target": "TARGET",
+        "Safe": "SAFE",
+        "General": "TARGET",  # Default mapping
+        "DREAM": "DREAM",
+        "TARGET": "TARGET",
+        "SAFE": "SAFE"
+    }
+    
+    backend_category = category_map.get(category, "TARGET")
+    
+    try:
+        # Get user profile
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            raise HTTPException(
+                status_code=400,
+                detail={"error": "USER_NOT_FOUND", "message": "User not found"}
+            )
+        
+        # Add to shortlist (idempotent - won't fail on duplicates)
+        shortlist = crud.add_to_shortlist(db, profile.id, university_id, backend_category)
+        
+        return {
+            "success": True,
+            "message": "University added to shortlist"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] add_shortlist_alt failed: {str(e)}")
+        # Never return 500 - always return success or 400
+        raise HTTPException(
+            status_code=400,
+            detail={"error": "SHORTLIST_ADD_FAILED", "message": str(e)}
+        )
+
 @app.patch("/shortlist")
 async def update_shortlist(
     email: str,
