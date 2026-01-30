@@ -63,6 +63,7 @@ class Task(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("user_profiles.id"), nullable=False)
+    university_id = Column(Integer, nullable=True)  # Links task to locked university
     title = Column(String(255), nullable=False)
     description = Column(Text)
     stage = Column(Enum(StageEnum))

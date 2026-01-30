@@ -564,6 +564,9 @@ async def remove_shortlist(
         
         # Check if locked
         if shortlist.locked:
+            # Clear tasks before preventing removal
+            crud.clear_user_tasks(db, profile.id)
+            
             raise HTTPException(
                 status_code=400,
                 detail={
@@ -780,12 +783,16 @@ async def lock_university_for_application(
         # Update user stage to LOCKED
         crud.update_user_stage(db, profile.id, "LOCKED")
         
-        print(f"[SUCCESS] University {university_id} locked for {email}, stage updated to LOCKED")
+        # Generate university-specific tasks
+        tasks = crud.generate_university_tasks(db, profile.id, university_id)
+        
+        print(f"[SUCCESS] University {university_id} locked for {email}, stage updated to LOCKED, {len(tasks)} tasks generated")
         
         return {
             "success": True,
             "locked_university_id": shortlist.university_id,
             "stage": "LOCKED",
+            "tasks_generated": len(tasks),
             "message": "University locked for application"
         }
     except HTTPException:

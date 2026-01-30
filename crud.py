@@ -235,3 +235,176 @@ def generate_initial_tasks(db: Session, user_id: int) -> List[Task]:
         print(f"[WARNING] generate_initial_tasks failed (table may not exist): {str(e)}")
         db.rollback()
         return []
+
+def generate_university_tasks(db: Session, user_id: int, university_id: int) -> List[Task]:
+    """
+    Generate university-specific tasks after lock.
+    Tasks are stage-aware and actionable.
+    Clears existing tasks before generating new ones.
+    """
+    try:
+        # Clear existing tasks for this user
+        db.query(Task).filter(Task.user_id == user_id).delete()
+        
+        # University-specific tasks for APPLICATION stage
+        tasks_data = [
+            {
+                "title": "Complete Statement of Purpose",
+                "description": "Draft your SOP highlighting why this university aligns with your goals",
+                "stage": StageEnum.APPLICATION,
+                "university_id": university_id
+            },
+            {
+                "title": "Gather Recommendation Letters",
+                "description": "Request 2-3 letters from professors or supervisors who know your work well",
+                "stage": StageEnum.APPLICATION,
+                "university_id": university_id
+            },
+            {
+                "title": "Prepare Official Transcripts",
+                "description": "Get official transcripts from your institution, sealed and stamped",
+                "stage": StageEnum.APPLICATION,
+                "university_id": university_id
+            },
+            {
+                "title": "Check Application Deadlines",
+                "description": "Verify all deadlines for this university and set calendar reminders",
+                "stage": StageEnum.APPLICATION,
+                "university_id": university_id
+            },
+            {
+                "title": "Prepare Financial Documents",
+                "description": "Gather bank statements and financial proof for visa application",
+                "stage": StageEnum.APPLICATION,
+                "university_id": university_id
+            },
+            {
+                "title": "Complete Standardized Tests",
+                "description": "Ensure GRE/GMAT and IELTS/TOEFL scores meet university requirements",
+                "stage": StageEnum.APPLICATION,
+                "university_id": university_id
+            },
+            {
+                "title": "Prepare Resume/CV",
+                "description": "Update your resume highlighting relevant experience and achievements",
+                "stage": StageEnum.APPLICATION,
+                "university_id": university_id
+            }
+        ]
+        
+        tasks = []
+        for task_data in tasks_data:
+            task = Task(user_id=user_id, **task_data)
+            db.add(task)
+            tasks.append(task)
+        
+        db.commit()
+        print(f"[TASKS] Generated {len(tasks)} university-specific tasks for user {user_id}, university {university_id}")
+        return tasks
+    except Exception as e:
+        print(f"[ERROR] generate_university_tasks failed: {str(e)}")
+        db.rollback()
+        return []
+
+def clear_user_tasks(db: Session, user_id: int):
+    """Clear all tasks when university is unlocked or changed."""
+    try:
+        deleted_count = db.query(Task).filter(Task.user_id == user_id).delete()
+        db.commit()
+        print(f"[TASKS] Cleared {deleted_count} tasks for user {user_id}")
+    except Exception as e:
+        print(f"[ERROR] clear_user_tasks failed: {str(e)}")
+        db.rollback()
+
+# Profile Strength Calculation
+def calculate_profile_strength(profile: UserProfile) -> Dict:
+    """
+    Calculate profile completion percentage.
+    Returns overall and category-wise breakdown.
+    
+    Categories:
+    - Academic (30%): GPA, test scores
+    - Basic Info (25%): Name, email, field, countries, budget
+    - Experience (25%): Work experience, projects (future fields)
+    - Documents (20%): SOP, recommendations, resume (future fields)
+    """
+    # Academic (30%)
+    academic_fields = {
+        "gpa": profile.gpa is not None and profile.gpa > 0,
+        "gre_gmat": profile.gre_gmat_status not in [None, "", "Not Started"],
+        "ielts": profile.ielts_status not in [None, "", "Not Started"]
+    }
+    academic_completed = sum(academic_fields.values())
+    academic_total = len(academic_fields)
+    academic_score = (academic_completed / academic_total) * 30 if academic_total > 0 else 0
+    
+    # Basic Info (25%)
+    basic_fields = {
+        "name": bool(profile.name and profile.name.strip()),
+        "email": bool(profile.email and profile.email.strip()),
+        "field_of_study": bool(profile.field_of_study and profile.field_of_study.strip()),
+        "preferred_countries": bool(profile.preferred_countries and len(profile.preferred_countries) > 0),
+        "budget": profile.budget_per_year is not None and profile.budget_per_year > 0
+    }
+    basic_completed = sum(basic_fields.values())
+    basic_total = len(basic_fields)
+    basic_score = (basic_completed / basic_total) * 25 if basic_total > 0 else 0
+    
+    # Education Details (25%)
+    education_fields = {
+        "education_level": bool(profile.education_level and profile.education_level.strip()),
+        "degree": bool(profile.degree and profile.degree.strip()),
+        "graduation_year": profile.graduation_year is not None and profile.graduation_year > 0,
+        "intended_degree": bool(profile.intended_degree and profile.intended_degree.strip()),
+        "intake_year": profile.intake_year is not None and profile.intake_year > 0
+    }
+    education_completed = sum(education_fields.values())
+    education_total = len(education_fields)
+    education_score = (education_completed / education_total) * 25 if education_total > 0 else 0
+    
+    # Documents (20%)
+    document_fields = {
+        "sop": profile.sop_status not in [None, "", "Not Started"],
+        "funding_plan": bool(profile.funding_plan and profile.funding_plan.strip())
+    }
+    document_completed = sum(document_fields.values())
+    document_total = len(document_fields)
+    document_score = (document_completed / document_total) * 20 if document_total > 0 else 0
+    
+    # Calculate overall
+    overall = academic_score + basic_score + education_score + document_score
+    
+    # Collect missing fields
+    missing_fields = []
+    for field, present in {**academic_fields, **basic_fields, **education_fields, **document_fields}.items():
+        if not present:
+            missing_fields.append(field)
+    
+    return {
+        "overall_percentage": round(overall, 1),
+        "categories": {
+            "academic": {
+                "percentage": round((academic_completed / academic_total) * 100, 1) if academic_total > 0 else 0,
+                "completed": academic_completed,
+                "total": academic_total
+            },
+            "basic_info": {
+                "percentage": round((basic_completed / basic_total) * 100, 1) if basic_total > 0 else 0,
+                "completed": basic_completed,
+                "total": basic_total
+            },
+            "education": {
+                "percentage": round((education_completed / education_total) * 100, 1) if education_total > 0 else 0,
+                "completed": education_completed,
+                "total": education_total
+            },
+            "documents": {
+                "percentage": round((document_completed / document_total) * 100, 1) if document_total > 0 else 0,
+                "completed": document_completed,
+                "total": document_total
+            }
+        },
+        "missing_fields": missing_fields,
+        "total_fields_completed": academic_completed + basic_completed + education_completed + document_completed,
+        "total_fields": academic_total + basic_total + education_total + document_total
+    }
