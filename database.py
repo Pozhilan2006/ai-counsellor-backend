@@ -80,50 +80,105 @@ def verify_tables_exist():
             conn.commit()
 
 def query_universities(
-    countries: Union[str, List[str]],
-    max_budget: float,
+    countries: Union[str, List[str], None] = None,
+    max_budget: float | None = None,
+    university_ids: List[int] | None = None,
     limit: int = 20
 ) -> List[Dict]:
     """
     Query universities from database with proper filtering.
-    Supports multiple countries.
+    
+    Supports two modes:
+    1. Discovery mode: Filter by countries + budget
+    2. Shortlist mode: Fetch by university IDs only
+    
+    Args:
+        countries: List of country names (discovery mode)
+        max_budget: Maximum budget in USD (discovery mode)
+        university_ids: List of university IDs (shortlist mode)
+        limit: Maximum results to return
+    
+    Returns:
+        List of university dictionaries
     """
     engine = get_db_connection()
     
-    # Normalize countries
-    if isinstance(countries, str):
-        countries = [countries]
-    
-    normalized_countries = []
-    for c in countries:
-        norm = normalize_country(c)
-        if norm:
-            normalized_countries.append(f"%{norm}%")
-    
-    # If no valid countries, default to generic or fail?
-    # Requirement: "preferred_countries" from frontend.
-    if not normalized_countries:
-        # Fallback to wildcard if none provided (shouldn't happen with proper frontend)
-        normalized_countries = ["%"]
-
-    query = text("""
-        SELECT 
-            id,
-            name,
-            country,
-            rank,
-            ranking_band,
-            competitiveness,
-            estimated_tuition_usd
-        FROM universities
-        WHERE 
-            country ILIKE ANY(:countries)
-            AND estimated_tuition_usd <= :max_budget
-        ORDER BY rank ASC NULLS LAST
-        LIMIT :limit
-    """)
-    
     try:
+        # ========================================
+        # SHORTLIST MODE: Fetch by IDs
+        # ========================================
+        if university_ids is not None and len(university_ids) > 0:
+            query = text("""
+                SELECT 
+                    id,
+                    name,
+                    country,
+                    rank,
+                    ranking_band,
+                    competitiveness,
+                    estimated_tuition_usd
+                FROM universities
+                WHERE id = ANY(:ids)
+                ORDER BY rank ASC NULLS LAST
+            """)
+            
+            with engine.connect() as conn:
+                result = conn.execute(query, {"ids": university_ids})
+                
+                universities = []
+                for row in result:
+                    universities.append({
+                        "id": row.id,
+                        "name": row.name,
+                        "country": row.country,
+                        "rank": row.rank,
+                        "ranking_band": row.ranking_band,
+                        "competitiveness": row.competitiveness,
+                        "estimated_tuition_usd": row.estimated_tuition_usd
+                    })
+                
+                logger.info(f"Query (ID mode): ids={university_ids}, found={len(universities)}")
+                return universities
+        
+        # ========================================
+        # DISCOVERY MODE: Filter by countries + budget
+        # ========================================
+        if countries is None or max_budget is None:
+            logger.warning("query_universities called without countries/budget or university_ids")
+            return []
+        
+        # Normalize countries
+        if isinstance(countries, str):
+            countries = [countries]
+        
+        normalized_countries = []
+        for c in countries:
+            norm = normalize_country(c)
+            if norm:
+                normalized_countries.append(f"%{norm}%")
+        
+        # If no valid countries, return empty
+        if not normalized_countries:
+            logger.warning("No valid countries provided")
+            return []
+
+        query = text("""
+            SELECT 
+                id,
+                name,
+                country,
+                rank,
+                ranking_band,
+                competitiveness,
+                estimated_tuition_usd
+            FROM universities
+            WHERE 
+                country ILIKE ANY(:countries)
+                AND estimated_tuition_usd <= :max_budget
+            ORDER BY rank ASC NULLS LAST
+            LIMIT :limit
+        """)
+        
         with engine.connect() as conn:
             result = conn.execute(
                 query,
@@ -146,10 +201,10 @@ def query_universities(
                     "estimated_tuition_usd": row.estimated_tuition_usd
                 })
             
-            logger.info(f"Query: countries={normalized_countries}, budget={max_budget}, found={len(universities)}")
+            logger.info(f"Query (discovery mode): countries={normalized_countries}, budget={max_budget}, found={len(universities)}")
             return universities
             
     except Exception as e:
         logger.error(f"Database query failed: {str(e)}")
-        # Return empty list instead of crashing, but verify connection first
+        # Return empty list instead of crashing
         return []

@@ -115,6 +115,43 @@ async def health():
     """Health check endpoint."""
     return {"status": "ok", "service": "ai-counsellor-backend"}
 
+@app.get("/tasks")
+async def get_tasks(email: str, db: Session = Depends(get_db)):
+    """
+    Get all tasks for a user.
+    DEFENSIVE: Always returns array, never 404 or 500.
+    """
+    print(f"[ENDPOINT] GET /tasks called for {email}")
+    
+    try:
+        # Get user profile
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            print(f"[INFO] User not found: {email}, returning empty tasks")
+            return []
+        
+        # Get tasks
+        tasks = crud.get_all_tasks(db, profile.id)
+        
+        # Format tasks
+        result = []
+        for task in tasks:
+            result.append({
+                "id": task.id,
+                "title": task.title,
+                "description": task.description,
+                "stage": task.stage.value if task.stage else None,
+                "completed": task.completed,
+                "university_id": task.university_id,
+                "created_at": task.created_at.isoformat() if task.created_at else None
+            })
+        
+        return result
+    except Exception as e:
+        print(f"[ERROR] get_tasks failed: {str(e)}")
+        # DEFENSIVE: Return empty array instead of error
+        return []
+
 @app.get("/user/stage")
 async def get_user_stage(email: str, db: Session = Depends(get_db)):
     """
@@ -339,6 +376,7 @@ async def get_shortlist(email: str, db: Session = Depends(get_db)):
     """
     Get user's shortlisted universities.
     Returns empty list if user not found or no shortlists.
+    DEFENSIVE: Always returns 200 with empty array on error.
     """
     print(f"[ENDPOINT] GET /shortlist called for {email}")
     
@@ -346,10 +384,13 @@ async def get_shortlist(email: str, db: Session = Depends(get_db)):
         # Get user profile
         profile = db.query(UserProfile).filter(UserProfile.email == email).first()
         if not profile:
+            print(f"[INFO] User not found: {email}, returning empty shortlist")
             return {"shortlists": [], "count": 0}
         
         # Get shortlists
         shortlists = crud.get_user_shortlists(db, profile.id)
+        if not shortlists:
+            return {"shortlists": [], "count": 0}
         
         # Fetch university details for each shortlist
         result = []
@@ -375,7 +416,8 @@ async def get_shortlist(email: str, db: Session = Depends(get_db)):
         return {"shortlists": result, "count": len(result)}
     except Exception as e:
         print(f"[ERROR] get_shortlist failed: {str(e)}")
-        raise HTTPException(status_code=500, detail={"error": "SHORTLIST_FETCH_FAILED", "message": str(e)})
+        # DEFENSIVE: Return empty array instead of 500
+        return {"shortlists": [], "count": 0}
 
 @app.post("/shortlist")
 async def add_shortlist(
