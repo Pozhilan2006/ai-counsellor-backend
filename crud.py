@@ -213,28 +213,12 @@ def complete_task(db: Session, task_id: int):
     db.query(Task).filter(Task.id == task_id).update({"completed": True})
     db.commit()
 
-def generate_initial_tasks(db: Session, user_id: int) -> List[Task]:
-    """Generate initial tasks for a user. Safe if table doesn't exist."""
-    try:
-        # Default tasks for DISCOVERY stage
-        default_tasks = [
-            {"title": "Complete your profile", "description": "Fill in all required information", "stage": StageEnum.DISCOVERY},
-            {"title": "Review university recommendations", "description": "Browse through matched universities", "stage": StageEnum.DISCOVERY},
-            {"title": "Shortlist universities", "description": "Add universities to your shortlist", "stage": StageEnum.SHORTLIST},
-        ]
-        
-        tasks = []
-        for task_data in default_tasks:
-            task = Task(user_id=user_id, **task_data)
-            db.add(task)
-            tasks.append(task)
-        
-        db.commit()
-        return tasks
-    except Exception as e:
-        print(f"[WARNING] generate_initial_tasks failed (table may not exist): {str(e)}")
-        db.rollback()
-        return []
+# DEPRECATED: Do not create tasks during DISCOVERY
+# Tasks should only be created after university is locked
+# def generate_initial_tasks(db: Session, user_id: int) -> List[Task]:
+#     """Generate initial tasks for a user. Safe if table doesn't exist."""
+#     # This function is deprecated - tasks are now only created after lock
+#     return []
 
 def generate_university_tasks(db: Session, user_id: int, university_id: int) -> List[Task]:
     """
@@ -321,147 +305,122 @@ def calculate_profile_strength(db: Session, profile: UserProfile) -> Dict:
     """
     Calculate profile completion using point-based scoring (100 points total).
     
-    Scoring Breakdown:
-    - Academics (30 points): GPA (20) + Degree/Field (10)
-    - Exams (20 points): IELTS/TOEFL (10) + GRE/GMAT (10)
-    - Documents (25 points): SOP (15 max) + Resume (10)
-    - Preferences (15 points): Budget (5) + Countries (5) + Course (5)
-    - Decision Progress (10 points): Shortlist (5) OR Lock (10)
+    Scoring Model:
+    - Academics (40 points): GPA (25) + Degree/Field (10) + Graduation Year (5)
+    - Tests (20 points): IELTS (10) + GRE/GMAT (10)
+    - Documents (20 points): SOP (10) + Funding Plan (10)
+    - Strategy (20 points): Countries (10) + University Locked (10)
     
     Returns dynamic calculation, NOT static values.
     """
     total_points = 0
-    sections = {}
+    breakdown = {}
     
     # ========================================
-    # ACADEMICS (30 points)
+    # ACADEMICS (40 points)
     # ========================================
     academics_points = 0
     
-    # GPA present → +20
+    # GPA present → +25
     if profile.gpa and float(profile.gpa) > 0:
-        academics_points += 20
+        academics_points += 25
     
-    # Degree / field present → +10
-    if (profile.degree and profile.degree.strip()) or (profile.field_of_study and profile.field_of_study.strip()):
+    # Degree + field present → +10
+    if (profile.degree and profile.degree.strip()) and (profile.field_of_study and profile.field_of_study.strip()):
         academics_points += 10
     
+    # Graduation year present → +5
+    if profile.graduation_year and profile.graduation_year > 0:
+        academics_points += 5
+    
     total_points += academics_points
-    sections["academics"] = {
-        "points": academics_points,
-        "max_points": 30,
-        "percentage": round((academics_points / 30) * 100, 1),
-        "status": "strong" if academics_points >= 25 else "moderate" if academics_points >= 15 else "weak"
-    }
+    
+    # Determine status
+    if academics_points >= 35:
+        breakdown["academics"] = "strong"
+    elif academics_points >= 20:
+        breakdown["academics"] = "moderate"
+    else:
+        breakdown["academics"] = "weak"
     
     # ========================================
-    # EXAMS (20 points)
+    # TESTS (20 points)
     # ========================================
-    exams_points = 0
+    tests_points = 0
     
-    # IELTS/TOEFL status + score → +10
-    if profile.ielts_status and profile.ielts_status not in ["", "Not Started", "Planning"]:
-        exams_points += 10
+    # IELTS completed → +10
+    if profile.ielts_status and profile.ielts_status.lower() in ["completed", "done", "ready"]:
+        tests_points += 10
     
-    # GRE/GMAT status + score → +10
-    if profile.gre_gmat_status and profile.gre_gmat_status not in ["", "Not Started", "Planning"]:
-        exams_points += 10
+    # GRE/GMAT completed → +10
+    if profile.gre_gmat_status and profile.gre_gmat_status.lower() in ["completed", "done", "ready"]:
+        tests_points += 10
     
-    total_points += exams_points
-    sections["exams"] = {
-        "points": exams_points,
-        "max_points": 20,
-        "percentage": round((exams_points / 20) * 100, 1),
-        "status": "complete" if exams_points >= 15 else "in_progress" if exams_points >= 5 else "not_started"
-    }
+    total_points += tests_points
+    
+    # Determine status
+    if tests_points >= 15:
+        breakdown["tests"] = "complete"
+    elif tests_points >= 5:
+        breakdown["tests"] = "in_progress"
+    else:
+        breakdown["tests"] = "incomplete"
     
     # ========================================
-    # DOCUMENTS (25 points)
+    # DOCUMENTS (20 points)
     # ========================================
     documents_points = 0
     
-    # SOP status
-    if profile.sop_status:
-        if profile.sop_status.lower() in ["ready", "completed", "done"]:
-            documents_points += 15
-        elif profile.sop_status.lower() in ["draft", "drafting", "in progress"]:
-            documents_points += 10
+    # SOP ready → +10
+    if profile.sop_status and profile.sop_status.lower() in ["ready", "completed", "done"]:
+        documents_points += 10
+    elif profile.sop_status and profile.sop_status.lower() in ["draft", "drafting", "in progress"]:
+        documents_points += 5  # Partial credit for draft
     
-    # Resume uploaded → +10 (check if field exists, future enhancement)
-    # For now, we'll use a placeholder check
-    # documents_points += 10  # Add when resume field exists
+    # Funding plan defined → +10
+    if profile.funding_plan and profile.funding_plan.strip():
+        documents_points += 10
     
     total_points += documents_points
-    sections["documents"] = {
-        "points": documents_points,
-        "max_points": 25,
-        "percentage": round((documents_points / 25) * 100, 1),
-        "status": "complete" if documents_points >= 20 else "incomplete"
-    }
+    
+    # Determine status
+    if documents_points >= 15:
+        breakdown["documents"] = "ready"
+    elif documents_points >= 5:
+        breakdown["documents"] = "drafting"
+    else:
+        breakdown["documents"] = "pending"
     
     # ========================================
-    # PREFERENCES & PLANNING (15 points)
+    # STRATEGY (20 points)
     # ========================================
-    preferences_points = 0
+    strategy_points = 0
     
-    # Budget set → +5
-    if profile.budget_per_year and profile.budget_per_year > 0:
-        preferences_points += 5
-    
-    # Country preferences set → +5
+    # Preferred countries selected → +10
     if profile.preferred_countries and len(profile.preferred_countries) > 0:
-        preferences_points += 5
+        strategy_points += 10
     
-    # Course preference set → +5
-    if profile.field_of_study and profile.field_of_study.strip():
-        preferences_points += 5
-    
-    total_points += preferences_points
-    sections["preferences"] = {
-        "points": preferences_points,
-        "max_points": 15,
-        "percentage": round((preferences_points / 15) * 100, 1),
-        "status": "complete" if preferences_points >= 12 else "partial" if preferences_points >= 5 else "incomplete"
-    }
-    
-    # ========================================
-    # DECISION PROGRESS (10 points)
-    # ========================================
-    decision_points = 0
-    
-    # Check if university is locked (overrides shortlist)
+    # University locked → +10
     locked_uni = get_locked_university(db, profile.id)
     if locked_uni:
-        decision_points = 10
-    else:
-        # Check shortlist count
-        shortlists = get_user_shortlists(db, profile.id)
-        if len(shortlists) >= 1:
-            decision_points = 5
+        strategy_points += 10
     
-    total_points += decision_points
-    sections["decision_progress"] = {
-        "points": decision_points,
-        "max_points": 10,
-        "percentage": round((decision_points / 10) * 100, 1),
-        "status": "locked" if decision_points == 10 else "shortlisted" if decision_points == 5 else "exploring"
-    }
+    total_points += strategy_points
+    
+    # Determine status
+    if strategy_points >= 15:
+        breakdown["strategy"] = "locked"
+    elif strategy_points >= 10:
+        breakdown["strategy"] = "planning"
+    else:
+        breakdown["strategy"] = "pending"
     
     # ========================================
     # CALCULATE FINAL PERCENTAGE
     # ========================================
-    total_percentage = round(total_points, 1)  # Out of 100
+    percentage = round(total_points, 1)  # Out of 100
     
     return {
-        "percentage": total_percentage,
-        "total_points": total_points,
-        "max_points": 100,
-        "sections": sections,
-        "breakdown": {
-            "academics": sections["academics"]["status"],
-            "exams": sections["exams"]["status"],
-            "documents": sections["documents"]["status"],
-            "preferences": sections["preferences"]["status"],
-            "decision": sections["decision_progress"]["status"]
-        }
+        "percentage": percentage,
+        "breakdown": breakdown
     }

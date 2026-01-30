@@ -260,11 +260,7 @@ async def onboarding(
         if profile.profile_complete:
             print(f"[LOGIC] Upserting user_states to DISCOVERY")
             crud.update_user_stage(db, profile.id, "DISCOVERY")
-            
-            # Generate initial tasks for newly completed profiles
-            existing_tasks = crud.get_all_tasks(db, profile.id)
-            if not existing_tasks:
-                crud.generate_initial_tasks(db, profile.id)
+            # NOTE: Tasks are now only created after university lock, not during onboarding
         
         # Get current stage
         state = crud.get_or_create_user_state(db, profile.id)
