@@ -3,7 +3,7 @@ Pydantic schemas for API requests and responses.
 """
 
 from pydantic import BaseModel, EmailStr
-from typing import List, Optional
+from typing import List, Optional, Dict
 from models import StageEnum, CategoryEnum
 
 # User Profile Schemas
