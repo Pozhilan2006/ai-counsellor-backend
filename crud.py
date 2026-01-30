@@ -8,7 +8,30 @@ from models import UserProfile, UserState, Shortlist, Task, StageEnum, CategoryE
 from typing import List, Optional, Dict
 from datetime import datetime
 
-# UserProfile operations
+# User Profile operations
+def get_or_create_user_profile(db: Session, email: str, profile_data: Optional[Dict] = None) -> UserProfile:
+    """
+    Get or create user profile (UPSERT pattern).
+    Never crashes - always returns a profile.
+    """
+    try:
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if profile:
+            return profile
+        
+        # Create new profile
+        profile_dict = profile_data or {}
+        profile_dict["email"] = email
+        profile = UserProfile(**profile_dict)
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
+        return profile
+    except Exception as e:
+        print(f"[ERROR] get_or_create_user_profile failed: {str(e)}")
+        db.rollback()
+        raise
+
 def create_user_profile(db: Session, profile_data: dict) -> UserProfile:
     """Create a new user profile."""
     profile = UserProfile(**profile_data)
@@ -73,8 +96,12 @@ def update_user_stage(db: Session, user_id: int, stage: str):
 
 # Shortlist operations
 def get_user_shortlists(db: Session, user_id: int) -> List[Shortlist]:
-    """Get all shortlisted universities for a user."""
-    return db.query(Shortlist).filter(Shortlist.user_id == user_id).all()
+    """Get all shortlisted universities for a user. Returns empty list if table doesn't exist."""
+    try:
+        return db.query(Shortlist).filter(Shortlist.user_id == user_id).all()
+    except Exception as e:
+        print(f"[WARNING] get_user_shortlists failed (table may not exist): {str(e)}")
+        return []
 
 def add_to_shortlist(db: Session, user_id: int, university_id: int, category: Optional[str] = "TARGET") -> Shortlist:
     """Add university to user's shortlist (UPSERT)."""
@@ -174,33 +201,37 @@ def get_tasks_by_stage(db: Session, user_id: int, stage: StageEnum) -> List[Task
     ).all()
 
 def get_all_tasks(db: Session, user_id: int) -> List[Task]:
-    """Get all tasks for a user."""
-    return db.query(Task).filter(Task.user_id == user_id).all()
+    """Get all tasks for a user. Returns empty list if table doesn't exist."""
+    try:
+        return db.query(Task).filter(Task.user_id == user_id).all()
+    except Exception as e:
+        print(f"[WARNING] get_all_tasks failed (table may not exist): {str(e)}")
+        return []
 
 def complete_task(db: Session, task_id: int):
     """Mark a task as completed."""
     db.query(Task).filter(Task.id == task_id).update({"completed": True})
     db.commit()
 
-def generate_initial_tasks(db: Session, user_id: int):
-    """Generate initial tasks for a new user."""
-    initial_tasks = [
-        {
-            "title": "Explore university recommendations",
-            "description": "Review the personalized university recommendations based on your profile",
-            "stage": StageEnum.DISCOVERY
-        },
-        {
-            "title": "Research universities",
-            "description": "Learn more about the recommended universities and their programs",
-            "stage": StageEnum.DISCOVERY
-        },
-        {
-            "title": "Shortlist universities",
-            "description": "Select universities that best match your goals and preferences",
-            "stage": StageEnum.DISCOVERY
-        }
-    ]
-    
-    for task_data in initial_tasks:
-        create_task(db, user_id, **task_data)
+def generate_initial_tasks(db: Session, user_id: int) -> List[Task]:
+    """Generate initial tasks for a user. Safe if table doesn't exist."""
+    try:
+        # Default tasks for DISCOVERY stage
+        default_tasks = [
+            {"title": "Complete your profile", "description": "Fill in all required information", "stage": StageEnum.DISCOVERY},
+            {"title": "Review university recommendations", "description": "Browse through matched universities", "stage": StageEnum.DISCOVERY},
+            {"title": "Shortlist universities", "description": "Add universities to your shortlist", "stage": StageEnum.SHORTLIST},
+        ]
+        
+        tasks = []
+        for task_data in default_tasks:
+            task = Task(user_id=user_id, **task_data)
+            db.add(task)
+            tasks.append(task)
+        
+        db.commit()
+        return tasks
+    except Exception as e:
+        print(f"[WARNING] generate_initial_tasks failed (table may not exist): {str(e)}")
+        db.rollback()
+        return []

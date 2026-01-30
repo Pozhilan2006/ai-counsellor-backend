@@ -74,7 +74,7 @@ async def health():
 async def get_user_stage(email: str, db: Session = Depends(get_db)):
     """
     Get user's current stage by email.
-    Returns 404 if user not found.
+    Returns default ONBOARDING stage if user not found (graceful fallback).
     """
     print(f"[ENDPOINT] /user/stage called for {email}")
     
@@ -83,10 +83,12 @@ async def get_user_stage(email: str, db: Session = Depends(get_db)):
         profile = db.query(UserProfile).filter(UserProfile.email == email).first()
         
         if not profile:
-            raise HTTPException(
-                status_code=404,
-                detail={"error": "USER_NOT_FOUND", "message": "User not found"}
-            )
+            # Graceful fallback - return default stage
+            return {
+                "email": email,
+                "current_stage": "ONBOARDING",
+                "profile_complete": False
+            }
         
         # Get or create state
         state = crud.get_or_create_user_state(db, profile.id)
@@ -96,11 +98,14 @@ async def get_user_stage(email: str, db: Session = Depends(get_db)):
             "current_stage": state.current_stage,
             "profile_complete": profile.profile_complete
         }
-    except HTTPException:
-        raise
     except Exception as e:
         print(f"[ERROR] get_user_stage failed: {str(e)}")
-        raise HTTPException(status_code=500, detail={"error": "STAGE_FETCH_FAILED", "message": str(e)})
+        # Graceful fallback even on error
+        return {
+            "email": email,
+            "current_stage": "ONBOARDING",
+            "profile_complete": False
+        }
 
 @app.post("/onboarding", response_model=schemas.OnboardingResponse)
 async def onboarding(
@@ -465,19 +470,22 @@ async def counsel(
 ):
     """
     Context-aware AI counsellor endpoint.
-    Loads: user profile, current stage, shortlisted universities (grouped by category)
-    Returns: Stage-specific, personalized responses (NO static text)
+    NEVER CRASHES - always returns a helpful response even if data is missing.
     """
     print(f"[ENDPOINT] /counsel called for {request.email}")
     
     try:
-        # 1. Load user profile
-        profile = db.query(UserProfile).filter(UserProfile.email == request.email).first()
+        # 1. Load user profile (graceful fallback)
+        try:
+            profile = db.query(UserProfile).filter(UserProfile.email == request.email).first()
+        except Exception as e:
+            print(f"[WARNING] Failed to load profile: {str(e)}")
+            profile = None
         
         if not profile:
-            raise HTTPException(
-                status_code=404,
-                detail={"error": "USER_NOT_FOUND", "message": "User not found"}
+            return schemas.CounselResponse(
+                message=f"I'd be happy to help with your question: '{request.message}'. However, I don't have your profile information yet. Please complete your onboarding first so I can provide personalized guidance.",
+                actions=schemas.CounselActions()
             )
         
         # 2. Check profile completeness
@@ -487,60 +495,54 @@ async def counsel(
                 actions=schemas.CounselActions()
             )
         
-        # 3. Load user state
-        state = crud.get_or_create_user_state(db, profile.id)
-        current_stage = state.current_stage
-        
-        # 4. Load shortlisted universities (grouped by category)
-        shortlists = crud.get_user_shortlists(db, profile.id)
-        shortlist_count = len(shortlists)
-        
-        # Group by category
-        dream_count = len([s for s in shortlists if s.category == "DREAM"])
-        target_count = len([s for s in shortlists if s.category == "TARGET"])
-        safe_count = len([s for s in shortlists if s.category == "SAFE"])
-        
-        # Get locked university if any
-        locked = crud.get_locked_university(db, profile.id)
-        locked_uni_id = locked.university_id if locked else None
-        
-        # 5. Get available universities for context
-        countries = profile.preferred_countries if profile.preferred_countries else ["USA"]
-        budget = profile.budget_per_year or 0
-        
+        # 3. Load user state (graceful fallback)
         try:
+            state = crud.get_or_create_user_state(db, profile.id)
+            current_stage = state.current_stage
+        except Exception as e:
+            print(f"[WARNING] Failed to load state: {str(e)}")
+            current_stage = "DISCOVERY"
+        
+        # 4. Load shortlisted universities (graceful fallback - empty list OK)
+        try:
+            shortlists = crud.get_user_shortlists(db, profile.id)
+            shortlist_count = len(shortlists)
+            
+            # Group by category
+            dream_count = len([s for s in shortlists if s.category == "DREAM"])
+            target_count = len([s for s in shortlists if s.category == "TARGET"])
+            safe_count = len([s for s in shortlists if s.category == "SAFE"])
+        except Exception as e:
+            print(f"[WARNING] Failed to load shortlists: {str(e)}")
+            shortlists = []
+            shortlist_count = 0
+            dream_count = target_count = safe_count = 0
+        
+        # Get locked university if any (graceful fallback)
+        try:
+            locked = crud.get_locked_university(db, profile.id)
+            locked_uni_id = locked.university_id if locked else None
+        except Exception as e:
+            print(f"[WARNING] Failed to load locked university: {str(e)}")
+            locked_uni_id = None
+        
+        # 5. Get available universities for context (graceful fallback)
+        try:
+            countries = profile.preferred_countries if profile.preferred_countries else ["USA"]
+            budget = profile.budget_per_year or 0
+            
             available_unis = query_universities(
                 countries=countries,
                 max_budget=float(budget),
                 limit=10
             )
-        except Exception:
+        except Exception as e:
+            print(f"[WARNING] Failed to load universities: {str(e)}")
             available_unis = []
-        
-        # 6. Build rich context
-        context = {
-            "profile": {
-                "name": profile.name,
-                "gpa": float(profile.gpa) if profile.gpa else None,
-                "budget": profile.budget_per_year,
-                "countries": profile.preferred_countries,
-                "field": profile.field_of_study
-            },
-            "current_stage": current_stage,
-            "shortlist_count": shortlist_count,
-            "shortlist_by_category": {
-                "dream": dream_count,
-                "target": target_count,
-                "safe": safe_count
-            },
-            "locked_university_id": locked_uni_id,
-            "available_universities_count": len(available_unis),
-            "question": request.message
-        }
         
         print(f"[LOGIC] Stage: {current_stage}, Shortlists: {shortlist_count} (D:{dream_count}, T:{target_count}, S:{safe_count}), Available: {len(available_unis)}")
         
-        # 7. Generate stage-aware, context-specific response (NO STATIC TEXT)
+        # 6. Generate stage-aware, context-specific response (NO STATIC TEXT)
         if current_stage == "DISCOVERY":
             if len(available_unis) > 0:
                 message = f"Based on your profile (GPA: {profile.gpa}, Budget: ${profile.budget_per_year:,}), I found {len(available_unis)} universities matching your criteria in {', '.join(countries)}. Regarding your question: '{request.message}' - I can help you understand which universities align best with your goals in {profile.field_of_study}."
@@ -579,13 +581,12 @@ async def counsel(
             actions=schemas.CounselActions()
         )
         
-    except HTTPException:
-        raise
     except Exception as e:
-        print(f"[ERROR] Counsel failed: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail={"error": "COUNSEL_FAILED", "message": "Failed to process your question"}
+        # Ultimate fallback - NEVER crash
+        print(f"[ERROR] Counsel failed catastrophically: {str(e)}")
+        return schemas.CounselResponse(
+            message=f"I'm here to help with your question: '{request.message}'. However, I'm experiencing some technical difficulties accessing your data. Please try again in a moment, or contact support if the issue persists.",
+            actions=schemas.CounselActions()
         )
 
 if __name__ == "__main__":
