@@ -612,6 +612,71 @@ async def add_shortlist(
         print(f"[ERROR] add_shortlist failed: {str(e)}")
         raise HTTPException(status_code=400, detail={"error": "SHORTLIST_ADD_FAILED", "message": str(e)})
 
+@app.post("/tasks/{task_id}/complete")
+async def complete_task_endpoint(task_id: int, db: Session = Depends(get_db)):
+    """Mark a task as complete."""
+    try:
+        crud.complete_task(db, task_id)
+        return {"status": "OK", "data": {"success": True}}
+    except Exception as e:
+        print(f"[ERROR] complete_task failed: {str(e)}")
+        return {"status": "ERROR", "data": {"success": False, "message": str(e)}}
+
+@app.post("/onboarding", response_model=schemas.ApiResponse[schemas.OnboardingResponse])
+async def onboarding(
+    profile_data: schemas.UserProfileCreate,
+    db: Session = Depends(get_db)
+):
+    print(f"[ENDPOINT] /onboarding called for {profile_data.email}")
+    
+    try:
+        # Ops logic ... (kept same)
+        profile = db.query(UserProfile).filter(UserProfile.email == profile_data.email).first()
+        profile_dict = profile_data.model_dump(exclude={'final_submit'})
+        
+        if profile:
+            for key, value in profile_dict.items():
+                if hasattr(profile, key): setattr(profile, key, value)
+            if profile_data.final_submit: profile.profile_complete = True
+            db.commit()
+            db.refresh(profile)
+        else:
+            profile_dict["profile_complete"] = profile_data.final_submit
+            profile = crud.create_user_profile(db, profile_dict)
+        
+        if profile.profile_complete:
+            crud.update_user_stage(db, profile.id, StageEnum.DISCOVERING_UNIVERSITIES)
+        
+        state = crud.get_or_create_user_state(db, profile.id)
+        
+        return {
+            "status": "OK",
+            "data": schemas.OnboardingResponse(
+                profile_complete=profile.profile_complete,
+                current_stage=state.current_stage,
+                user_id=profile.id
+            )
+        }
+    except Exception as e:
+        print(f"[ERROR] Onboarding failed: {str(e)}")
+        db.rollback()
+        # Return error wrapped in ApiResponse structure (though schema might expect data to be OnboardingResponse, on error we might relax or use ErrorResponse if we change return type annotation, but keeping it simple for now implies returning a "failed" object or raising HTTPException with safe detail?)
+        # Better: Raise HTTPException but Ensure Global Exception Handler wraps it?
+        # User requested "Clear error messages". "Always return {status, data}".
+        # So I should return JSONResponse with status=ERROR.
+        return JSONResponse(
+            status_code=400,
+            content={
+                "status": "ERROR",
+                "data": {
+                    "profile_complete": False,
+                    "current_stage": StageEnum.BUILDING_PROFILE,
+                    "user_id": 0
+                },
+                "message": str(e)
+            }
+        )
+
 @app.post("/shortlist/add")
 async def add_shortlist_alt(
     request: Request,
@@ -706,193 +771,58 @@ async def add_shortlist_alt(
         }
 
 @app.post("/shortlist/remove")
-async def remove_shortlist(
-    request: Request,
-    db: Session = Depends(get_db)
-):
-    """
-    Remove a university from user's shortlist.
-    
-    Rules:
-    - Cannot remove locked universities
-    - Recalculates stage if shortlist becomes empty
-    """
-    # Parse JSON body
+async def remove_shortlist(request: Request, db: Session = Depends(get_db)):
     try:
         body = await request.json()
-    except Exception as e:
-        print(f"[ERROR] Failed to parse JSON: {str(e)}")
-        raise HTTPException(
-            status_code=400,
-            detail={"error": "INVALID_JSON", "message": "Invalid JSON payload"}
-        )
-    
-    email = body.get("email")
-    university_id = body.get("university_id")
-    
-    # Validate required fields
-    if not email:
-        raise HTTPException(
-            status_code=400,
-            detail={"error": "MISSING_EMAIL", "message": "Email is required"}
-        )
-    
-    if university_id is None:
-        raise HTTPException(
-            status_code=400,
-            detail={"error": "MISSING_UNIVERSITY_ID", "message": "University ID is required"}
-        )
-    
-    # Trim and cast
-    email = str(email).strip()
-    try:
-        university_id = int(university_id)
-    except (ValueError, TypeError):
-        raise HTTPException(
-            status_code=400,
-            detail={"error": "INVALID_UNIVERSITY_ID", "message": "University ID must be a number"}
-        )
-    
-    print(f"[ENDPOINT] POST /shortlist/remove called for {email}, university_id={university_id}")
-    
-    try:
-        # Get user profile
+        email = body.get("email")
+        university_id = body.get("university_id")
+        
+        if not email or not university_id:
+             return {"status": "ERROR", "data": {"success": False, "message": "Missing email or university_id"}}
+             
         profile = db.query(UserProfile).filter(UserProfile.email == email).first()
-        if not profile:
-            raise HTTPException(
-                status_code=400,
-                detail={"error": "USER_NOT_FOUND", "message": "User not found"}
-            )
+        if not profile: return {"status": "ERROR", "data": {"success": False, "message": "User not found"}}
         
-        # Find shortlist entry
-        shortlist = db.query(Shortlist).filter(
-            and_(
-                Shortlist.user_id == profile.id,
-                Shortlist.university_id == university_id
-            )
-        ).first()
+        shortlist = db.query(Shortlist).filter(and_(Shortlist.user_id == profile.id, Shortlist.university_id == int(university_id))).first()
         
-        if not shortlist:
-            raise HTTPException(
-                status_code=404,
-                detail={"error": "NOT_IN_SHORTLIST", "message": "University not in shortlist"}
-            )
-        
-        # Check if locked
-        if shortlist.locked:
-            # Clear tasks before preventing removal
-            crud.clear_user_tasks(db, profile.id)
+        if shortlist:
+            if shortlist.locked:
+                 return {"status": "ERROR", "data": {"success": False, "message": "Cannot remove locked university"}}
+            db.delete(shortlist)
+            db.commit()
             
-            raise HTTPException(
-                status_code=400,
-                detail={
-                    "success": False,
-                    "error": "UNIVERSITY_LOCKED",
-                    "message": "This university is locked. Unlock it before removing from shortlist."
-                }
-            )
+            # Check empty
+            count = db.query(Shortlist).filter(Shortlist.user_id == profile.id).count()
+            if count == 0:
+                crud.update_user_stage(db, profile.id, StageEnum.DISCOVERING_UNIVERSITIES)
+                
+            return {"status": "OK", "data": {"success": True, "message": "Removed"}}
         
-        # Delete the shortlist entry
-        db.delete(shortlist)
-        db.commit()
-        
-        print(f"[SUCCESS] University {university_id} removed from shortlist for {email}")
-        
-        # Check if shortlist is now empty - recalculate stage
-        remaining_shortlists = db.query(Shortlist).filter(Shortlist.user_id == profile.id).count()
-        
-        if remaining_shortlists == 0:
-            # Move back to DISCOVERY stage
-            crud.update_user_stage(db, profile.id, "DISCOVERY")
-            print(f"[STAGE] User {email} moved back to DISCOVERY (no shortlists remaining)")
-        
-        return {
-            "success": True,
-            "message": "University removed from shortlist"
-        }
-    except HTTPException:
-        raise
+        return {"status": "ERROR", "data": {"success": False, "message": "Not found in shortlist"}}
     except Exception as e:
-        print(f"[ERROR] remove_shortlist failed: {str(e)}")
-        raise HTTPException(
-            status_code=400,
-            detail={"success": False, "error": "REMOVE_FAILED", "message": str(e)}
-        )
+        return {"status": "ERROR", "data": {"success": False, "message": str(e)}}
 
 @app.patch("/shortlist")
-async def update_shortlist(
-    email: str,
-    university_id: int,
-    category: Optional[str] = None,
-    locked: Optional[bool] = None,
-    db: Session = Depends(get_db)
-):
-    """
-    Update shortlist entry (category and/or locked status).
-    """
-    print(f"[ENDPOINT] PATCH /shortlist called for {email}, university_id={university_id}")
-    
-    # Validate category if provided
-    if category:
-        valid_categories = ["DREAM", "TARGET", "SAFE"]
-        if category not in valid_categories:
-            raise HTTPException(
-                status_code=400,
-                detail={
-                    "error": "INVALID_CATEGORY",
-                    "message": f"Category must be one of: {', '.join(valid_categories)}"
-                }
-            )
-    
+async def update_shortlist(email: str, university_id: int, category: Optional[str] = None, locked: Optional[bool] = None, db: Session = Depends(get_db)):
     try:
-        # Get user profile
         profile = db.query(UserProfile).filter(UserProfile.email == email).first()
-        if not profile:
-            raise HTTPException(status_code=404, detail={"error": "USER_NOT_FOUND", "message": "User not found"})
+        if not profile: return {"status": "ERROR", "data": {"success": False}}
         
-        # Find shortlist entry
-        shortlist = db.query(Shortlist).filter(
-            and_(
-                Shortlist.user_id == profile.id,
-                Shortlist.university_id == university_id
-            )
-        ).first()
+        shortlist = db.query(Shortlist).filter(and_(Shortlist.user_id == profile.id, Shortlist.university_id == university_id)).first()
+        if not shortlist: return {"status": "ERROR", "data": {"success": False, "message": "Not found"}}
         
-        if not shortlist:
-            raise HTTPException(
-                status_code=404,
-                detail={"error": "SHORTLIST_NOT_FOUND", "message": "University not in shortlist"}
-            )
-        
-        # Update fields
-        if category:
-            shortlist.category = category
+        if category: shortlist.category = category
         if locked is not None:
-            # If locking this one, unlock all others
             if locked:
-                db.query(Shortlist).filter(
-                    and_(
-                        Shortlist.user_id == profile.id,
-                        Shortlist.locked == True
-                    )
-                ).update({"locked": False})
-                crud.update_user_stage(db, profile.id, "LOCKED")
+                 # Unlock others
+                 db.query(Shortlist).filter(and_(Shortlist.user_id == profile.id, Shortlist.locked == True)).update({"locked": False})
+                 crud.update_user_stage(db, profile.id, StageEnum.PREPARING_APPLICATIONS)
             shortlist.locked = locked
         
         db.commit()
-        db.refresh(shortlist)
-        
-        return {
-            "success": True,
-            "message": "Shortlist updated",
-            "category": shortlist.category,
-            "locked": shortlist.locked
-        }
-    except HTTPException:
-        raise
+        return {"status": "OK", "data": {"success": True, "category": shortlist.category, "locked": shortlist.locked}}
     except Exception as e:
-        print(f"[ERROR] update_shortlist failed: {str(e)}")
-        raise HTTPException(status_code=400, detail={"error": "SHORTLIST_UPDATE_FAILED", "message": str(e)})
+        return {"status": "ERROR", "data": {"success": False, "message": str(e)}}
 
 @app.patch("/shortlist/lock")
 async def lock_shortlist(
