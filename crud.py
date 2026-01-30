@@ -300,127 +300,270 @@ def clear_user_tasks(db: Session, user_id: int):
         print(f"[ERROR] clear_user_tasks failed: {str(e)}")
         db.rollback()
 
-# Profile Strength Calculation (Point-Based System)
+# Status Normalization Helper
+def normalize_status(status: str | None) -> str:
+    """
+    Normalize status values to enum: NOT_STARTED | IN_PROGRESS | COMPLETED
+    Handles all common variations and NULL values.
+    """
+    if not status or status.strip() == "":
+        return "NOT_STARTED"
+    
+    status_lower = status.lower().strip()
+    
+    # Completed variations
+    if status_lower in ["completed", "done", "ready", "finished"]:
+        return "COMPLETED"
+    
+    # In progress variations
+    if status_lower in ["in progress", "in_progress", "draft", "drafting", "started", "planning"]:
+        return "IN_PROGRESS"
+    
+    # Not started variations
+    if status_lower in ["not started", "not_started", "pending", "todo", "none"]:
+        return "NOT_STARTED"
+    
+    # Default to IN_PROGRESS if unknown
+    print(f"[WARNING] Unknown status value: '{status}', defaulting to IN_PROGRESS")
+    return "IN_PROGRESS"
+
+# Profile Strength Calculation (Enhanced with Debug Logging)
 def calculate_profile_strength(db: Session, profile: UserProfile) -> Dict:
     """
     Calculate profile completion using point-based scoring (100 points total).
     
     Scoring Model:
-    - Academics (40 points): GPA (25) + Degree/Field (10) + Graduation Year (5)
-    - Tests (20 points): IELTS (10) + GRE/GMAT (10)
-    - Documents (20 points): SOP (10) + Funding Plan (10)
-    - Strategy (20 points): Countries (10) + University Locked (10)
+    - Academics (30%): GPA, degree, graduation year
+    - Exams (25%): IELTS/GRE status + scores
+    - SOP (20%): SOP status
+    - Documents (15%): Funding plan, transcripts
+    - Preferences (10%): Countries, budget, field
     
-    Returns dynamic calculation, NOT static values.
+    Returns structured breakdown with scores, statuses, and next actions.
     """
-    total_points = 0
-    breakdown = {}
+    print(f"\n[PROFILE_STRENGTH] Calculating for user_id={profile.id}, email={profile.email}")
+    
+    total_score = 0
+    sections = {}
+    next_actions = []
     
     # ========================================
-    # ACADEMICS (40 points)
+    # ACADEMICS (30 points)
     # ========================================
-    academics_points = 0
+    academics_score = 0
+    academics_max = 30
     
-    # GPA present → +25
+    # GPA → 15 points
     if profile.gpa and float(profile.gpa) > 0:
-        academics_points += 25
+        academics_score += 15
+        print(f"  [ACADEMICS] GPA present: {profile.gpa} → +15")
+    else:
+        print(f"  [ACADEMICS] GPA missing → +0")
+        next_actions.append("Add your GPA")
     
-    # Degree + field present → +10
-    if (profile.degree and profile.degree.strip()) and (profile.field_of_study and profile.field_of_study.strip()):
-        academics_points += 10
+    # Degree → 10 points
+    if profile.degree and profile.degree.strip():
+        academics_score += 10
+        print(f"  [ACADEMICS] Degree present: {profile.degree} → +10")
+    else:
+        print(f"  [ACADEMICS] Degree missing → +0")
+        next_actions.append("Add your degree")
     
-    # Graduation year present → +5
+    # Graduation year → 5 points
     if profile.graduation_year and profile.graduation_year > 0:
-        academics_points += 5
+        academics_score += 5
+        print(f"  [ACADEMICS] Graduation year present: {profile.graduation_year} → +5")
+    else:
+        print(f"  [ACADEMICS] Graduation year missing → +0")
     
-    total_points += academics_points
+    total_score += academics_score
     
     # Determine status
-    if academics_points >= 35:
-        breakdown["academics"] = "strong"
-    elif academics_points >= 20:
-        breakdown["academics"] = "moderate"
+    if academics_score == 0:
+        academics_status = "missing"
+    elif academics_score >= 25:
+        academics_status = "strong"
+    elif academics_score >= 15:
+        academics_status = "partial"
     else:
-        breakdown["academics"] = "weak"
+        academics_status = "weak"
+    
+    sections["academics"] = {
+        "score": academics_score,
+        "max": academics_max,
+        "status": academics_status
+    }
+    print(f"  [ACADEMICS] Total: {academics_score}/{academics_max} → {academics_status}")
     
     # ========================================
-    # TESTS (20 points)
+    # EXAMS (25 points)
     # ========================================
-    tests_points = 0
+    exams_score = 0
+    exams_max = 25
     
-    # IELTS completed → +10
-    if profile.ielts_status and profile.ielts_status.lower() in ["completed", "done", "ready"]:
-        tests_points += 10
+    # IELTS → 12 points
+    ielts_normalized = normalize_status(profile.ielts_status)
+    if ielts_normalized == "COMPLETED":
+        exams_score += 12
+        print(f"  [EXAMS] IELTS completed: {profile.ielts_status} → +12")
+    elif ielts_normalized == "IN_PROGRESS":
+        exams_score += 6
+        print(f"  [EXAMS] IELTS in progress: {profile.ielts_status} → +6")
+    else:
+        print(f"  [EXAMS] IELTS not started → +0")
+        next_actions.append("Complete IELTS exam")
     
-    # GRE/GMAT completed → +10
-    if profile.gre_gmat_status and profile.gre_gmat_status.lower() in ["completed", "done", "ready"]:
-        tests_points += 10
+    # GRE/GMAT → 13 points
+    gre_normalized = normalize_status(profile.gre_gmat_status)
+    if gre_normalized == "COMPLETED":
+        exams_score += 13
+        print(f"  [EXAMS] GRE/GMAT completed: {profile.gre_gmat_status} → +13")
+    elif gre_normalized == "IN_PROGRESS":
+        exams_score += 6
+        print(f"  [EXAMS] GRE/GMAT in progress: {profile.gre_gmat_status} → +6")
+    else:
+        print(f"  [EXAMS] GRE/GMAT not started → +0")
+        next_actions.append("Complete GRE/GMAT exam")
     
-    total_points += tests_points
+    total_score += exams_score
     
     # Determine status
-    if tests_points >= 15:
-        breakdown["tests"] = "complete"
-    elif tests_points >= 5:
-        breakdown["tests"] = "in_progress"
+    if exams_score == 0:
+        exams_status = "missing"
+    elif exams_score >= 20:
+        exams_status = "complete"
+    elif exams_score >= 10:
+        exams_status = "partial"
     else:
-        breakdown["tests"] = "incomplete"
+        exams_status = "weak"
+    
+    sections["exams"] = {
+        "score": exams_score,
+        "max": exams_max,
+        "status": exams_status
+    }
+    print(f"  [EXAMS] Total: {exams_score}/{exams_max} → {exams_status}")
     
     # ========================================
-    # DOCUMENTS (20 points)
+    # SOP (20 points)
     # ========================================
-    documents_points = 0
+    sop_score = 0
+    sop_max = 20
     
-    # SOP ready → +10
-    if profile.sop_status and profile.sop_status.lower() in ["ready", "completed", "done"]:
-        documents_points += 10
-    elif profile.sop_status and profile.sop_status.lower() in ["draft", "drafting", "in progress"]:
-        documents_points += 5  # Partial credit for draft
+    sop_normalized = normalize_status(profile.sop_status)
+    if sop_normalized == "COMPLETED":
+        sop_score = 20
+        print(f"  [SOP] Completed: {profile.sop_status} → +20")
+    elif sop_normalized == "IN_PROGRESS":
+        sop_score = 10
+        print(f"  [SOP] In progress: {profile.sop_status} → +10")
+    else:
+        print(f"  [SOP] Not started → +0")
+        next_actions.append("Complete your SOP")
     
-    # Funding plan defined → +10
+    total_score += sop_score
+    
+    # Determine status
+    if sop_score == 0:
+        sop_status = "missing"
+    elif sop_score >= 15:
+        sop_status = "ready"
+    else:
+        sop_status = "drafting"
+    
+    sections["sop"] = {
+        "score": sop_score,
+        "max": sop_max,
+        "status": sop_status
+    }
+    print(f"  [SOP] Total: {sop_score}/{sop_max} → {sop_status}")
+    
+    # ========================================
+    # DOCUMENTS (15 points)
+    # ========================================
+    documents_score = 0
+    documents_max = 15
+    
+    # Funding plan → 15 points
     if profile.funding_plan and profile.funding_plan.strip():
-        documents_points += 10
+        documents_score += 15
+        print(f"  [DOCUMENTS] Funding plan present → +15")
+    else:
+        print(f"  [DOCUMENTS] Funding plan missing → +0")
+        next_actions.append("Define your funding plan")
     
-    total_points += documents_points
+    total_score += documents_score
     
     # Determine status
-    if documents_points >= 15:
-        breakdown["documents"] = "ready"
-    elif documents_points >= 5:
-        breakdown["documents"] = "drafting"
+    if documents_score == 0:
+        documents_status = "missing"
+    elif documents_score >= 10:
+        documents_status = "complete"
     else:
-        breakdown["documents"] = "pending"
+        documents_status = "partial"
+    
+    sections["documents"] = {
+        "score": documents_score,
+        "max": documents_max,
+        "status": documents_status
+    }
+    print(f"  [DOCUMENTS] Total: {documents_score}/{documents_max} → {documents_status}")
     
     # ========================================
-    # STRATEGY (20 points)
+    # PREFERENCES (10 points)
     # ========================================
-    strategy_points = 0
+    preferences_score = 0
+    preferences_max = 10
     
-    # Preferred countries selected → +10
+    # Countries → 4 points
     if profile.preferred_countries and len(profile.preferred_countries) > 0:
-        strategy_points += 10
+        preferences_score += 4
+        print(f"  [PREFERENCES] Countries present: {profile.preferred_countries} → +4")
+    else:
+        print(f"  [PREFERENCES] Countries missing → +0")
+        next_actions.append("Select preferred countries")
     
-    # University locked → +10
-    locked_uni = get_locked_university(db, profile.id)
-    if locked_uni:
-        strategy_points += 10
+    # Budget → 3 points
+    if profile.budget_per_year and profile.budget_per_year > 0:
+        preferences_score += 3
+        print(f"  [PREFERENCES] Budget present: {profile.budget_per_year} → +3")
+    else:
+        print(f"  [PREFERENCES] Budget missing → +0")
     
-    total_points += strategy_points
+    # Field of study → 3 points
+    if profile.field_of_study and profile.field_of_study.strip():
+        preferences_score += 3
+        print(f"  [PREFERENCES] Field present: {profile.field_of_study} → +3")
+    else:
+        print(f"  [PREFERENCES] Field missing → +0")
+    
+    total_score += preferences_score
     
     # Determine status
-    if strategy_points >= 15:
-        breakdown["strategy"] = "locked"
-    elif strategy_points >= 10:
-        breakdown["strategy"] = "planning"
+    if preferences_score == 0:
+        preferences_status = "missing"
+    elif preferences_score >= 8:
+        preferences_status = "complete"
     else:
-        breakdown["strategy"] = "pending"
+        preferences_status = "partial"
+    
+    sections["preferences"] = {
+        "score": preferences_score,
+        "max": preferences_max,
+        "status": preferences_status
+    }
+    print(f"  [PREFERENCES] Total: {preferences_score}/{preferences_max} → {preferences_status}")
     
     # ========================================
     # CALCULATE FINAL PERCENTAGE
     # ========================================
-    percentage = round(total_points, 1)  # Out of 100
+    overall = round(total_score, 1)
+    
+    print(f"\n[PROFILE_STRENGTH] FINAL SCORE: {overall}/100")
+    print(f"[PROFILE_STRENGTH] Next actions: {next_actions}\n")
     
     return {
-        "percentage": percentage,
-        "breakdown": breakdown
+        "overall": overall,
+        "sections": sections,
+        "next_actions": next_actions[:3]  # Limit to top 3 actions
     }
