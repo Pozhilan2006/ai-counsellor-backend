@@ -54,7 +54,7 @@ class Shortlist(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("user_profiles.id", ondelete="CASCADE"), nullable=False)
     university_id = Column(Integer, nullable=False)
-    category = Column(String(50))
+    category = Column(String(50), default="TARGET")  # DREAM | TARGET | SAFE
     locked = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

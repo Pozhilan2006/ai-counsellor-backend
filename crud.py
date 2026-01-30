@@ -76,7 +76,7 @@ def get_user_shortlists(db: Session, user_id: int) -> List[Shortlist]:
     """Get all shortlisted universities for a user."""
     return db.query(Shortlist).filter(Shortlist.user_id == user_id).all()
 
-def add_to_shortlist(db: Session, user_id: int, university_id: int, category: Optional[str] = None) -> Shortlist:
+def add_to_shortlist(db: Session, user_id: int, university_id: int, category: Optional[str] = "TARGET") -> Shortlist:
     """Add university to user's shortlist (UPSERT)."""
     try:
         # Check if already exists
@@ -95,11 +95,11 @@ def add_to_shortlist(db: Session, user_id: int, university_id: int, category: Op
             db.refresh(existing)
             return existing
         
-        # Create new entry
+        # Create new entry with default category
         shortlist = Shortlist(
             user_id=user_id,
             university_id=university_id,
-            category=category
+            category=category or "TARGET"
         )
         db.add(shortlist)
         db.commit()

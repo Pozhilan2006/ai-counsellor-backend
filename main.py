@@ -3,12 +3,12 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, and_
 from sqlalchemy.orm import sessionmaker
 from typing import Optional, List
 
 from config import settings
-from models import Base, StageEnum, UserProfile
+from models import Base, StageEnum, UserProfile, Shortlist
 import crud
 import schemas
 from database import query_universities, verify_tables_exist
@@ -305,13 +305,25 @@ async def get_shortlist(email: str, db: Session = Depends(get_db)):
 async def add_shortlist(
     email: str,
     university_id: int,
-    category: Optional[str] = None,
+    category: str = "TARGET",
     db: Session = Depends(get_db)
 ):
     """
     Add university to user's shortlist.
+    Category must be one of: DREAM, TARGET, SAFE (default: TARGET)
     """
-    print(f"[ENDPOINT] POST /shortlist called for {email}, university_id={university_id}")
+    print(f"[ENDPOINT] POST /shortlist called for {email}, university_id={university_id}, category={category}")
+    
+    # Validate category
+    valid_categories = ["DREAM", "TARGET", "SAFE"]
+    if category not in valid_categories:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "INVALID_CATEGORY",
+                "message": f"Category must be one of: {', '.join(valid_categories)}"
+            }
+        )
     
     try:
         # Get user profile
@@ -325,13 +337,89 @@ async def add_shortlist(
         return {
             "success": True,
             "message": "University added to shortlist",
-            "shortlist_id": shortlist.id
+            "shortlist_id": shortlist.id,
+            "category": shortlist.category
         }
     except HTTPException:
         raise
     except Exception as e:
         print(f"[ERROR] add_shortlist failed: {str(e)}")
         raise HTTPException(status_code=400, detail={"error": "SHORTLIST_ADD_FAILED", "message": str(e)})
+
+@app.patch("/shortlist")
+async def update_shortlist(
+    email: str,
+    university_id: int,
+    category: Optional[str] = None,
+    locked: Optional[bool] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Update shortlist entry (category and/or locked status).
+    """
+    print(f"[ENDPOINT] PATCH /shortlist called for {email}, university_id={university_id}")
+    
+    # Validate category if provided
+    if category:
+        valid_categories = ["DREAM", "TARGET", "SAFE"]
+        if category not in valid_categories:
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "error": "INVALID_CATEGORY",
+                    "message": f"Category must be one of: {', '.join(valid_categories)}"
+                }
+            )
+    
+    try:
+        # Get user profile
+        profile = db.query(UserProfile).filter(UserProfile.email == email).first()
+        if not profile:
+            raise HTTPException(status_code=404, detail={"error": "USER_NOT_FOUND", "message": "User not found"})
+        
+        # Find shortlist entry
+        shortlist = db.query(Shortlist).filter(
+            and_(
+                Shortlist.user_id == profile.id,
+                Shortlist.university_id == university_id
+            )
+        ).first()
+        
+        if not shortlist:
+            raise HTTPException(
+                status_code=404,
+                detail={"error": "SHORTLIST_NOT_FOUND", "message": "University not in shortlist"}
+            )
+        
+        # Update fields
+        if category:
+            shortlist.category = category
+        if locked is not None:
+            # If locking this one, unlock all others
+            if locked:
+                db.query(Shortlist).filter(
+                    and_(
+                        Shortlist.user_id == profile.id,
+                        Shortlist.locked == True
+                    )
+                ).update({"locked": False})
+                crud.update_user_stage(db, profile.id, "LOCKED")
+            shortlist.locked = locked
+        
+        db.commit()
+        db.refresh(shortlist)
+        
+        return {
+            "success": True,
+            "message": "Shortlist updated",
+            "category": shortlist.category,
+            "locked": shortlist.locked
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] update_shortlist failed: {str(e)}")
+        raise HTTPException(status_code=400, detail={"error": "SHORTLIST_UPDATE_FAILED", "message": str(e)})
 
 @app.patch("/shortlist/lock")
 async def lock_shortlist(
@@ -341,6 +429,7 @@ async def lock_shortlist(
 ):
     """
     Lock a university for application (unlocks all others).
+    DEPRECATED: Use PATCH /shortlist with locked=true instead.
     """
     print(f"[ENDPOINT] PATCH /shortlist/lock called for {email}, university_id={university_id}")
     
@@ -362,7 +451,7 @@ async def lock_shortlist(
             "locked_university_id": shortlist.university_id
         }
     except ValueError as e:
-        raise HTTPException(status_code=400, detail={"error": "LOCK_FAILED", "message": str(e)})
+        raise HTTPException(status_code=404, detail={"error": "LOCK_FAILED", "message": str(e)})
     except HTTPException:
         raise
     except Exception as e:
@@ -376,7 +465,7 @@ async def counsel(
 ):
     """
     Context-aware AI counsellor endpoint.
-    Loads: user profile, current stage, shortlisted universities
+    Loads: user profile, current stage, shortlisted universities (grouped by category)
     Returns: Stage-specific, personalized responses (NO static text)
     """
     print(f"[ENDPOINT] /counsel called for {request.email}")
@@ -402,9 +491,14 @@ async def counsel(
         state = crud.get_or_create_user_state(db, profile.id)
         current_stage = state.current_stage
         
-        # 4. Load shortlisted universities
+        # 4. Load shortlisted universities (grouped by category)
         shortlists = crud.get_user_shortlists(db, profile.id)
         shortlist_count = len(shortlists)
+        
+        # Group by category
+        dream_count = len([s for s in shortlists if s.category == "DREAM"])
+        target_count = len([s for s in shortlists if s.category == "TARGET"])
+        safe_count = len([s for s in shortlists if s.category == "SAFE"])
         
         # Get locked university if any
         locked = crud.get_locked_university(db, profile.id)
@@ -434,12 +528,17 @@ async def counsel(
             },
             "current_stage": current_stage,
             "shortlist_count": shortlist_count,
+            "shortlist_by_category": {
+                "dream": dream_count,
+                "target": target_count,
+                "safe": safe_count
+            },
             "locked_university_id": locked_uni_id,
             "available_universities_count": len(available_unis),
             "question": request.message
         }
         
-        print(f"[LOGIC] Stage: {current_stage}, Shortlists: {shortlist_count}, Available: {len(available_unis)}")
+        print(f"[LOGIC] Stage: {current_stage}, Shortlists: {shortlist_count} (D:{dream_count}, T:{target_count}, S:{safe_count}), Available: {len(available_unis)}")
         
         # 7. Generate stage-aware, context-specific response (NO STATIC TEXT)
         if current_stage == "DISCOVERY":
@@ -450,15 +549,27 @@ async def counsel(
         
         elif current_stage == "SHORTLIST":
             if shortlist_count > 0:
-                message = f"Great! You've shortlisted {shortlist_count} universities. Regarding '{request.message}' - I can help you compare these options and determine which ones best fit your profile in {profile.field_of_study}. What specific aspects would you like to evaluate?"
+                category_breakdown = []
+                if dream_count > 0:
+                    category_breakdown.append(f"{dream_count} dream")
+                if target_count > 0:
+                    category_breakdown.append(f"{target_count} target")
+                if safe_count > 0:
+                    category_breakdown.append(f"{safe_count} safe")
+                
+                breakdown_text = ", ".join(category_breakdown) if category_breakdown else "universities"
+                message = f"Great! You've shortlisted {shortlist_count} universities ({breakdown_text}). Regarding '{request.message}' - I can help you compare these options and determine which ones best fit your profile in {profile.field_of_study}. What specific aspects would you like to evaluate?"
             else:
-                message = f"You're in the shortlisting phase but haven't added any universities yet. About '{request.message}' - I recommend reviewing the {len(available_unis)} universities I found for you and shortlisting your top choices."
+                message = f"You're in the shortlisting phase but haven't added any universities yet. About '{request.message}' - I recommend reviewing the {len(available_unis)} universities I found for you and shortlisting your top choices across dream, target, and safe categories."
         
         elif current_stage == "LOCKED":
             if locked_uni_id:
                 message = f"You've locked a university for your application! Regarding '{request.message}' - I can guide you through the application requirements, deadlines, and preparation steps for your chosen university."
             else:
-                message = f"You're ready to lock in your final choice. About '{request.message}' - Let me help you make this important decision from your {shortlist_count} shortlisted universities."
+                if shortlist_count > 0:
+                    message = f"You're ready to lock in your final choice. About '{request.message}' - Let me help you make this important decision from your {shortlist_count} shortlisted universities."
+                else:
+                    message = f"About '{request.message}' - You'll need to shortlist some universities first before locking one for application. Let me help you find the right options."
         
         else:
             message = f"I'm here to help with your question: '{request.message}'. Based on your current stage ({current_stage}) and profile, I can provide specific guidance tailored to your situation."
