@@ -114,30 +114,36 @@ def categorize_universities(
     }
     
     # Categorize based on rank and competitiveness
+    # Categorize based on rank and competitiveness
     for uni, score in scored:
-        rank = uni.get("rank", 500)
+        ranking_rank = uni.get("rank", 500)
         competitiveness = uni.get("competitiveness", "MEDIUM")
         
-        # DREAM: Top ranked, highly competitive
-        if rank <= 50 and competitiveness == "HIGH":
-            if len(categorized["dream"]) < 5:
-                categorized["dream"].append(uni)
+        # Inject match percentage
+        uni["match_percentage"] = int(score)
         
-        # TARGET: Mid-tier, good match
-        elif rank <= 100 and competitiveness in ["HIGH", "MEDIUM"]:
-            if len(categorized["target"]) < 5:
-                categorized["target"].append(uni)
+        # Determine Category
+        category = "TARGET" # Default
+        
+        # DREAM: Top ranked, highly competitive
+        if ranking_rank <= 50 and competitiveness == "HIGH":
+            category = "DREAM"
         
         # SAFE: Lower ranked, less competitive
-        elif rank > 100 or competitiveness in ["LOW", "VERY_LOW"]:
-            if len(categorized["safe"]) < 5:
-                categorized["safe"].append(uni)
+        elif ranking_rank > 100 or competitiveness in ["LOW", "VERY_LOW"]:
+            category = "SAFE"
+            
+        # TARGET: Mid-tier
+        elif ranking_rank <= 100 and competitiveness in ["HIGH", "MEDIUM"]:
+            category = "TARGET"
+            
+        uni["category"] = category
         
-        # Fallback: distribute remaining
-        else:
-            if len(categorized["target"]) < 5:
-                categorized["target"].append(uni)
-            elif len(categorized["safe"]) < 5:
-                categorized["safe"].append(uni)
+        # Add to respective list (Max 5 per category)
+        target_list = categorized[category.lower()]
+        if len(target_list) < 5:
+            target_list.append(uni)
+        # Fallback distribution if full? 
+        # For simplicity, we stick to strict limits to ensure quality recommendations
     
     return categorized

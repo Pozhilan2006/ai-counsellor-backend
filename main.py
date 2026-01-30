@@ -119,24 +119,19 @@ async def health():
 async def get_tasks(email: str, db: Session = Depends(get_db)):
     """
     Get tasks for a user.
-    
-    Rules:
-    - Before university lock: Returns empty array
-    - After university lock: Returns tasks for that university
-    - Always returns 200 with consistent structure
+    Auto-syncs profile tasks for BUILDING_PROFILE stage.
     """
     print(f"[ENDPOINT] GET /tasks called for {email}")
     
     try:
         profile = db.query(UserProfile).filter(UserProfile.email == email).first()
         if not profile:
-            print(f"[INFO] User not found: {email}, returning empty tasks")
-            return {
-                "tasks": [],
-                "locked_university_id": None
-            }
+            return {"tasks": [], "locked_university_id": None}
         
-        # Get tasks filtered by locked university
+        # Sync profile tasks (Auto-generation logic)
+        crud.sync_profile_tasks(db, profile.id)
+        
+        # Get tasks (handles locked university filtering inside)
         tasks, locked_university_id = crud.get_all_tasks(db, profile.id)
         
         # Format response
@@ -148,10 +143,8 @@ async def get_tasks(email: str, db: Session = Depends(get_db)):
                 "description": task.description,
                 "completed": task.completed,
                 "university_id": task.university_id,
-                "stage": task.stage.value if task.stage else None
+                "stage": task.stage
             })
-        
-        print(f"[SUCCESS] Returning {len(result)} tasks for user {profile.id}, locked_university={locked_university_id}")
         
         return {
             "tasks": result,
@@ -160,34 +153,29 @@ async def get_tasks(email: str, db: Session = Depends(get_db)):
         
     except Exception as e:
         print(f"[ERROR] get_tasks failed: {str(e)}")
-        # DEFENSIVE: Return empty array instead of error
-        return {
-            "tasks": [],
-            "locked_university_id": None
-        }
+        return {"tasks": [], "locked_university_id": None}
+
+@app.post("/tasks/{task_id}/complete")
+async def complete_task_endpoint(task_id: int, db: Session = Depends(get_db)):
+    """Mark a task as complete."""
+    crud.complete_task(db, task_id)
+    return {"success": True}
 
 @app.get("/user/stage")
 async def get_user_stage(email: str, db: Session = Depends(get_db)):
-    """
-    Get user's current stage by email.
-    Returns default ONBOARDING stage if user not found (graceful fallback).
-    """
-    print(f"[ENDPOINT] /user/stage called for {email}")
-    
+    """Get user's current stage."""
     try:
-        # Look up user
         profile = db.query(UserProfile).filter(UserProfile.email == email).first()
         
         if not profile:
-            # Graceful fallback - return default stage
             return {
                 "email": email,
-                "current_stage": "ONBOARDING",
+                "current_stage": StageEnum.BUILDING_PROFILE,
                 "profile_complete": False
             }
         
         # Get or create state
-        state = crud.get_or_create_user_state(db, profile.id)
+        state = crud.get_or_create_user_state(db, profile.id, default_stage=StageEnum.BUILDING_PROFILE)
         
         return {
             "email": email,
@@ -196,10 +184,9 @@ async def get_user_stage(email: str, db: Session = Depends(get_db)):
         }
     except Exception as e:
         print(f"[ERROR] get_user_stage failed: {str(e)}")
-        # Graceful fallback even on error
         return {
             "email": email,
-            "current_stage": "ONBOARDING",
+            "current_stage": StageEnum.BUILDING_PROFILE,
             "profile_complete": False
         }
 
