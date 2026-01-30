@@ -41,6 +41,13 @@ class UserProfile(Base):
     profile_complete = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
+class UserState(Base):
+    __tablename__ = "user_states"
+    
+    user_id = Column(Integer, ForeignKey("user_profiles.id", ondelete="CASCADE"), primary_key=True)
+    current_stage = Column(String(50), nullable=False, default="ONBOARDING")
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
 class UserUniversity(Base):
     __tablename__ = "user_universities"
     

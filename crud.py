@@ -4,7 +4,7 @@ CRUD operations for database models.
 
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
-from models import UserProfile, UserUniversity, Task, StageEnum, CategoryEnum
+from models import UserProfile, UserState, UserUniversity, Task, StageEnum, CategoryEnum
 from typing import List, Optional, Dict
 from datetime import datetime
 
@@ -31,6 +31,45 @@ def update_profile_complete(db: Session, user_id: int, complete: bool = True):
         {"profile_complete": complete}
     )
     db.commit()
+
+# UserState operations (GET-OR-CREATE pattern)
+def get_or_create_user_state(db: Session, user_id: int, default_stage: str = "ONBOARDING") -> UserState:
+    """
+    Get user state, create if doesn't exist (UPSERT pattern).
+    This is self-healing - never assumes the table or row exists.
+    """
+    try:
+        state = db.query(UserState).filter(UserState.user_id == user_id).first()
+        if state:
+            return state
+        
+        # Create new state
+        state = UserState(user_id=user_id, current_stage=default_stage)
+        db.add(state)
+        db.commit()
+        db.refresh(state)
+        return state
+    except Exception as e:
+        print(f"[ERROR] get_or_create_user_state failed: {str(e)}")
+        db.rollback()
+        # Return a temporary state object (not persisted)
+        return UserState(user_id=user_id, current_stage=default_stage)
+
+def update_user_stage(db: Session, user_id: int, stage: str):
+    """Update user's current stage (UPSERT)."""
+    try:
+        state = db.query(UserState).filter(UserState.user_id == user_id).first()
+        if state:
+            state.current_stage = stage
+            state.updated_at = datetime.utcnow()
+        else:
+            # Create if doesn't exist
+            state = UserState(user_id=user_id, current_stage=stage)
+            db.add(state)
+        db.commit()
+    except Exception as e:
+        print(f"[ERROR] update_user_stage failed: {str(e)}")
+        db.rollback()
 
 # UserUniversity operations
 def get_user_universities(db: Session, user_id: int, shortlisted: Optional[bool] = None) -> List[UserUniversity]:

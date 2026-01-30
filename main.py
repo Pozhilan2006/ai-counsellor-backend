@@ -76,48 +76,61 @@ async def onboarding(
     db: Session = Depends(get_db)
 ):
     """
-    Complete user onboarding with UPSERT logic.
-    Stage is derived from profile_complete, NOT stored in a table.
+    Deterministic onboarding with state management.
+    - Looks up user by email (must exist)
+    - Updates profile data
+    - Sets profile_complete = true
+    - UPSERTS user_states to DISCOVERY stage
     """
     print(f"[ENDPOINT] /onboarding called for {profile_data.email}")
     
     try:
-        # Check if user already exists
-        existing_user = db.query(UserProfile).filter(UserProfile.email == profile_data.email).first()
+        # Look up user by email
+        profile = db.query(UserProfile).filter(UserProfile.email == profile_data.email).first()
+        
+        if not profile:
+            # User doesn't exist - return structured error
+            print(f"[ERROR] User not found: {profile_data.email}")
+            raise HTTPException(
+                status_code=404,
+                detail={
+                    "error": "USER_NOT_FOUND",
+                    "message": "No user found with this email. Please register first."
+                }
+            )
         
         # Prepare data (exclude final_submit from DB fields)
         profile_dict = profile_data.model_dump(exclude={'final_submit'})
         
-        if existing_user:
-            # UPDATE existing profile
-            print(f"[LOGIC] Updating existing profile for {profile_data.email}")
-            for key, value in profile_dict.items():
-                if hasattr(existing_user, key):
-                    setattr(existing_user, key, value)
+        # UPDATE existing profile
+        print(f"[LOGIC] Updating profile for {profile_data.email}")
+        for key, value in profile_dict.items():
+            if hasattr(profile, key):
+                setattr(profile, key, value)
+        
+        # Always mark complete on final submit
+        if profile_data.final_submit:
+            profile.profile_complete = True
+            print(f"[LOGIC] Marking profile as complete")
+        
+        db.commit()
+        db.refresh(profile)
+        
+        # UPSERT user_states (get-or-create pattern)
+        if profile.profile_complete:
+            print(f"[LOGIC] Upserting user_states to DISCOVERY")
+            crud.update_user_stage(db, profile.id, "DISCOVERY")
             
-            # Mark complete if final_submit is true
-            if profile_data.final_submit:
-                existing_user.profile_complete = True
-                print(f"[LOGIC] Marking profile as complete")
-            
-            db.commit()
-            db.refresh(existing_user)
-            profile = existing_user
-                
-        else:
-            # INSERT new user
-            print(f"[LOGIC] Creating new profile for {profile_data.email}")
-            profile_dict["profile_complete"] = profile_data.final_submit
-            profile = crud.create_user_profile(db, profile_dict)
-            
-            # Generate initial tasks only for new users with complete profile
-            if profile_data.final_submit:
+            # Generate initial tasks for newly completed profiles
+            existing_tasks = crud.get_all_tasks(db, profile.id)
+            if not existing_tasks:
                 crud.generate_initial_tasks(db, profile.id)
         
-        # Derive stage from profile_complete (NO TABLE QUERY)
-        current_stage = StageEnum.DISCOVERY if profile.profile_complete else StageEnum.ONBOARDING
+        # Get current stage
+        state = crud.get_or_create_user_state(db, profile.id)
+        current_stage = state.current_stage
         
-        print(f"[SUCCESS] Profile saved. Complete: {profile.profile_complete}, Stage: {current_stage}")
+        print(f"[SUCCESS] Profile updated. Complete: {profile.profile_complete}, Stage: {current_stage}")
         
         return schemas.OnboardingResponse(
             profile_complete=profile.profile_complete,
@@ -125,10 +138,18 @@ async def onboarding(
             user_id=profile.id
         )
         
+    except HTTPException:
+        raise
     except Exception as e:
         print(f"[ERROR] Onboarding failed: {str(e)}")
         db.rollback()
-        raise HTTPException(status_code=400, detail=f"Failed to save profile: {str(e)}")
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "ONBOARDING_FAILED",
+                "message": str(e)
+            }
+        )
 
 @app.get("/recommendations", response_model=schemas.MatchesResponse)
 async def get_deterministic_recommendations(
@@ -212,33 +233,85 @@ async def counsel(
     db: Session = Depends(get_db)
 ):
     """
-    AI counsellor endpoint.
-    Accepts: email, message
-    Never fails on incomplete profile - provides guidance instead.
-    Does NOT depend on OpenAI success to respond.
+    Deterministic AI counsellor endpoint.
+    - Loads user profile and state
+    - Classifies intent
+    - Returns stage-aware, context-specific responses
     """
     print(f"[ENDPOINT] /counsel called for {request.email}")
     
-    # 1. Fetch user profile (optional - don't fail if missing)
-    profile = db.query(UserProfile).filter(UserProfile.email == request.email).first()
-    
-    # 2. If profile incomplete, provide guidance
-    if not profile or not profile.profile_complete:
-        print(f"[LOGIC] Profile incomplete, providing guidance")
+    try:
+        # 1. Load user profile
+        profile = db.query(UserProfile).filter(UserProfile.email == request.email).first()
+        
+        if not profile:
+            raise HTTPException(
+                status_code=404,
+                detail={"error": "USER_NOT_FOUND", "message": "User not found"}
+            )
+        
+        # 2. Check profile completeness
+        if not profile.profile_complete:
+            return schemas.CounselResponse(
+                message="I'd be happy to help! However, I notice your profile isn't complete yet. Please finish your onboarding so I can provide personalized university recommendations and guidance.",
+                actions=schemas.CounselActions()
+            )
+        
+        # 3. Load user state
+        state = crud.get_or_create_user_state(db, profile.id)
+        current_stage = state.current_stage
+        
+        # 4. Get universities for context
+        countries = profile.preferred_countries if profile.preferred_countries else ["USA"]
+        budget = profile.budget_per_year or 0
+        
+        try:
+            unis = query_universities(
+                countries=countries,
+                max_budget=float(budget),
+                limit=10
+            )
+        except Exception:
+            unis = []
+        
+        # 5. Build AI context
+        context = {
+            "profile": {
+                "name": profile.name,
+                "gpa": float(profile.gpa) if profile.gpa else None,
+                "budget": profile.budget_per_year,
+                "countries": profile.preferred_countries,
+                "field": profile.field_of_study
+            },
+            "current_stage": current_stage,
+            "available_universities": len(unis),
+            "question": request.message
+        }
+        
+        print(f"[LOGIC] Stage: {current_stage}, Universities: {len(unis)}")
+        
+        # 6. Generate stage-aware response
+        # TODO: Replace with actual Gemini AI call
+        if current_stage == "DISCOVERY":
+            message = f"Based on your profile (GPA: {profile.gpa}, Budget: ${profile.budget_per_year}), I found {len(unis)} universities that match your criteria. {request.message}"
+        elif current_stage == "SHORTLIST":
+            message = f"Great question! As you're in the shortlisting phase, let me help you evaluate your options. {request.message}"
+        else:
+            message = f"I'm here to help with your question: '{request.message}'. Based on your current stage ({current_stage}), I can provide specific guidance."
+        
         return schemas.CounselResponse(
-            message="I'd be happy to help! However, I notice your profile isn't complete yet. Please finish your onboarding so I can provide personalized university recommendations and guidance.",
+            message=message,
             actions=schemas.CounselActions()
         )
-    
-    # 3. AI Logic (Placeholder - does not depend on OpenAI)
-    print(f"[LOG] Message received: {request.message}")
-    
-    # TODO: Implement actual AI logic here
-    # For now, return a helpful response
-    return schemas.CounselResponse(
-        message=f"Thank you for your question: '{request.message}'. As your AI counsellor, I'm here to help guide you through the university application process. Based on your profile, I can provide personalized advice.",
-        actions=schemas.CounselActions()
-    )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] Counsel failed: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail={"error": "COUNSEL_FAILED", "message": "Failed to process your question"}
+        )
 
 if __name__ == "__main__":
     import uvicorn
